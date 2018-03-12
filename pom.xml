@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>processor</module>
+    <module>convert</module>
     <module>web</module>
   </modules>
 
