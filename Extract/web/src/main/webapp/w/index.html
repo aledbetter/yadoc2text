@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Convert file</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html">
+	<meta http-equiv="cache-control" content="no-cache">
+
+</head>
+
+<body style='background:#FFF'>
+
+<div style='float:left;width:100%'>
+<h1 style='text-align:center;margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #555'>Upload file to convert</h1>
+
+	<div style='float:left;margin-left:50px;margin-top:20px'>
+		<form action="/api/data/convert" enctype="multipart/form-data" method="post">
+		  <input type="file" name="file" accept="*.doc|*.docx|*.pdf|*.htm|*.html">
+		  <br/><br/><br/>
+		  <input type="submit">
+		</form>
+	</div>
+	
+</div>
+
+</body>
+</html>
