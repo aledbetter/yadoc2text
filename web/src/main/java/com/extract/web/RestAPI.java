@@ -39,13 +39,10 @@ public class RestAPI extends RestBase {
         if (uploadedInputStream == null) {
             return Response.status(404).build();
         }
-        System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
-
+        //System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
-
         Converter converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
-
         if (converter == null) {
             return Response.status(500).build();
         }

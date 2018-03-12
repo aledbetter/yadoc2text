@@ -13,11 +13,13 @@ public class ConverterFactory {
                 pdf2Html.setFileName(fileName);
                 return pdf2Html;
             }
+            case "doc":
             case "docx": {
                 Word2Html word2Html = new Word2Html();
                 word2Html.setFileName(fileName);
                 return word2Html;
             }
+            case "htm"
             case "html": {
                 Html2Html html2Html = new Html2Html();
                 html2Html.setFileName(fileName);

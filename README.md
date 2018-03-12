@@ -30,7 +30,8 @@ Converted file html tags
 	Text: <b>, <u>, <i>
 	Structure: <p>, <header>, <footer>
 	Lists: <ol>, <ul>
-	
+	Sections: <section>  TODO
+	Tables: TBD
 	
 Converted meta info
 
@@ -44,6 +45,9 @@ Converted meta info
 		<meta name="doc-modified" content="xxx">
 	Author
 		<meta name="doc-author" content="Bober Simthsonsons">
+	Language
+		<meta name="doc-language" content="en">	
+		
 		
 		
 		
