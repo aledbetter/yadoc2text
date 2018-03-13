@@ -54,6 +54,7 @@ public class HtmlUtils {
         ignoredTags.add("svg");
         ignoredTags.add("button");
         ignoredTags.add("input");
+        ignoredTags.add("nav");
         containerTags = new HashSet<>();
         containerTags.add("div");
         containerTags.add("nav");
@@ -74,7 +75,7 @@ public class HtmlUtils {
                     }
                 } else if (tagName.equals("title")) {
                     simpleHtml.setTitle(child.text());
-                } else if (tagName.equals("header") || tagName.equals("nav")) {
+                } else if (tagName.equals("header")) {// || tagName.equals("nav")) {
                     simplify(child, simpleHtml.getHeaderList());
                 } else if (tagName.equals("footer")) {
                     simplify(child, simpleHtml.getFooterList());
