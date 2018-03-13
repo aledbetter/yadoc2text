@@ -31,7 +31,6 @@ public class RestAPI extends RestBase {
                                        @FormDataParam("file") FormDataContentDisposition fileDetail,
                                        @FormDataParam("atok") String access_key,
                                        @CookieParam("atok") String cookie_access_key) {
-
         if (qquploadedInputStream != null) {
             uploadedInputStream = qquploadedInputStream;
             fileDetail = qqfileDetail;
@@ -39,14 +38,17 @@ public class RestAPI extends RestBase {
         if (uploadedInputStream == null) {
             return Response.status(404).build();
         }
-        //System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
+        System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         Converter converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
         if (converter == null) {
             return Response.status(500).build();
         }
-
+		/* TODO set headers for cross-site scripting	 	
+		 * "Access-Control-Allow-Origin", "https://www.testing.com http://localhost:8080"
+		 * "Access-Control-Allow-Methods", "POST, OPTIONS"
+		 */
         try {
             converter.convert(uploadedInputStream, data);
         } catch (Exception e) {

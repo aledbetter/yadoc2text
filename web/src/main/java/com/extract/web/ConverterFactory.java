@@ -19,7 +19,7 @@ public class ConverterFactory {
                 word2Html.setFileName(fileName);
                 return word2Html;
             }
-            case "htm"
+            case "htm":
             case "html": {
                 Html2Html html2Html = new Html2Html();
                 html2Html.setFileName(fileName);
