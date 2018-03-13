@@ -17,11 +17,13 @@
 			$("#status").html('');
 			$("#docconvert").html('');
 			$("#save-filename").val('');
+			$("#docconvert_data").val('');
 			$("#saveas").hide();
 			
 		    $('#fileupload').fileupload({
 		        add: function (e, data) {
 		        	$("#docconvert").html('');
+		        	$("#docconvert_data").val('');
 		        	$("#saveas").hide();
 			    	var uploadErrors = [];
 			    	var acceptFileTypes = /(doc)|(docx)|(pdf)|(htm)|(html)|(txt)$/i;
@@ -43,6 +45,7 @@
 		            if (lfn.endsWith(".html")) $("#save-filename").val(lfn);
 		            else $("#save-filename").val(lfn+".html");
 		            $("#docconvert").html(data.result);
+		            $("#docconvert_data").val(data.result);
 		            $("#saveas").show();
 		        }
 		    });
@@ -51,7 +54,7 @@
 		    $("#save-as").submit(function(event) {
 				event.preventDefault();	
 				var sfn = $("#save-filename").val();
-				var file = new File([$("#docconvert").html()], sfn, {type: "text/html;charset=utf-8"});
+				var file = new File([$("#docconvert_data").val()], sfn, {type: "text/html;charset=utf-8"});
 				saveAs(file, sfn);
 			});
 		});
@@ -74,6 +77,8 @@
         </form>
     </div>
 	<div style='float:left;width:100%;margin-top:20px;font-size:12px' id="docconvert"></div>
+	<input id="docconvert_data" type="hidden" />
+	
 </div>
 
 </body>
