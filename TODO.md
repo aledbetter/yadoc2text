@@ -14,19 +14,21 @@ docx
 pdf
 1) all text has spaces striped
 2) ul not identified each set to start with: <p>§
+3) Mar 13, 2018 4:06:58 PM org.apache.pdfbox.cos.COSDocument finalize
+   WARNING: Warning: You did not close a PDF Document
 
 
-html: https://en.wikipedia.org/wiki/Precession
+html: 
 1) <nav> content in under nav should just be removed (configurable)
 2) meta lang tag from page indicated language 
-3) <p></p> still found in docs
+3) <p></p> still found in docs (https://en.wikipedia.org/wiki/Precession)
 4) html annotations should be ignored if not in encoding != html/text
        <annotation encoding="application/x-tex">{\displaystyle {\boldsymbol {\omega }}_{\mathrm {p} }={\frac {{\boldsymbol {I}}_{\mathrm {s} }{\boldsymbol 	{\omega }}_{\mathrm {s} }}{{\boldsymbol {I}}_{\mathrm {p} }\cos({\boldsymbol {\alpha }})}}}</annotation>
 5) don't include any items or their children if taged with: role=[navigation, menu, menubar, menuitem]
 6) if attribute: id=footer OR role=footer then consider the item and children to be in footer
 7) list of string to remove / not put in final:
    // "[edit]"
-   
+8) much missing content (test2.html)
    
 txt
 1) support .txt files and produce simplified html
