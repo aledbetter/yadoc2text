@@ -53,22 +53,22 @@ public class SimpleHtmlRender {
         if (simpleHtml.getType() != null) {
             result
                     .append("<meta name=\"doc-type\" content=\"")
-                    .append(simpleHtml.getType()).append("\">");
+                    .append(simpleHtml.getType()).append("\"/>");
         }
         if (simpleHtml.getName() != null) {
             result
                     .append("<meta name=\"doc-name\" content=\"")
-                    .append(simpleHtml.getName()).append("\">");
+                    .append(simpleHtml.getName()).append("\"/>");
         }
         if (simpleHtml.getCreated() != null) {
             result
                     .append("<meta name=\"doc-created\" content=\"")
-                    .append(simpleHtml.getCreated()).append("\">");
+                    .append(simpleHtml.getCreated()).append("\"/>");
         }
         if (simpleHtml.getModified() != null) {
             result
                     .append("<meta name=\"doc-modified\" content=\"")
-                    .append(simpleHtml.getModified()).append("\">");
+                    .append(simpleHtml.getModified()).append("\"/>");
         }
         result.append("</head><body>");
         if (simpleHtml.getHeaderList() != null && simpleHtml.getHeaderList().size() > 0) {
