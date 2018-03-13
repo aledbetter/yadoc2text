@@ -29,21 +29,9 @@ HTML (.htm, .html)
 7) list of string to remove / not put in final:
    // "[edit]"
 8) much missing content (test2.html)
-9) issue with very small html files (under 2k)
-	 CONVERT FILE: input.html SIZE: -1
-	CONVERT FILE ERROR:
-	java.lang.IllegalStateException: Stream already closed
-		at org.jvnet.mimepull.DataHead$ReadMultiStream.fetch(DataHead.java:237)
-		at org.jvnet.mimepull.DataHead$ReadMultiStream.read(DataHead.java:212)
-		at java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
-		at java.io.BufferedInputStream.read(BufferedInputStream.java:265)
-		at org.jsoup.helper.DataUtil.parseInputStream(DataUtil.java:104)
-		at org.jsoup.helper.DataUtil.load(DataUtil.java:63)
-		at org.jsoup.Jsoup.parse(Jsoup.java:118)
-		at com.extract.processor.parse.Html2Html.convert(Html2Html.java:38)
-		at com.extract.web.RestAPI.uploadDocumentPost(RestAPI.java:53)
-		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) 
+9) issue with very small html files (under 2k) java.lang.IllegalStateException: Stream already closed
+	<html><head><title>3rd nor'easter in 2 weeks to hit East Coast - ABC News</title><meta name="doc-type" content="html"/><meta name="doc-name" content="story?id=53678598.html"/></head><body>this is just plain text so nothing raw should come around or around</body></html>
+	
   
   
    
