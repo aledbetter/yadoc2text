@@ -31,13 +31,13 @@ HTML (.htm, .html)
 	       <annotation encoding="application/x-tex">{\displaystyle {\boldsymbol {\omega }}_{\mathrm {p} }={\frac {{\boldsymbol {I}}_{\mathrm {s} }{\boldsymbol 	{\omega }}_{\mathrm {s} }}{{\boldsymbol {I}}_{\mathrm {p} }\cos({\boldsymbol {\alpha }})}}}</annotation>
 	5) don't include any items or their children if taged with: role=[navigation, menu, menubar, menuitem]
 	6) if attribute: id=footer OR role=footer then consider the item and children to be in footer
-	7) list of string to remove / not put in final:
-	   // "[edit]"
 	8) much missing content (test2.html)
-	9) issue with very small html files (under 2k) java.lang.IllegalStateException: Stream already closed
+	9) issue with processing the output html files: java.lang.IllegalStateException: Stream already closed
 		<html><head><title>3rd nor'easter in 2 weeks to hit East Coast - ABC News</title><meta name="doc-type" content="html"/><meta name="doc-name" content="story?id=53678598.html"/></head><body>this is just plain text so nothing raw should come around or around</body></html>
-		
-   
+	10) apostrophe"’" converts to 2 unreadable special chars in output (test6.html)
+	11) <em> tag content as italic <i> (test6.html)
+	12) <strong> tag content as bold <b>
+ 
  
 TEXT (.txt)
 
