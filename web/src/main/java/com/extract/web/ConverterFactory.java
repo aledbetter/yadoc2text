@@ -7,7 +7,7 @@ import com.extract.processor.parse.Word2Html;
 
 public class ConverterFactory {
     public static Converter getConverterByFileName(String fileName) {
-        switch (Gtil.getFileExtension(fileName).toLowerCase()) {
+        switch (getFileExtension(fileName).toLowerCase()) {
             case "pdf": {
                 Pdf2Html pdf2Html = new Pdf2Html();
                 pdf2Html.setFileName(fileName);
@@ -30,4 +30,8 @@ public class ConverterFactory {
             }
         }
     }
+	public static String getFileExtension(String fileName){
+		return fileName.substring(
+				fileName.lastIndexOf('.') + 1);
+	}
 }

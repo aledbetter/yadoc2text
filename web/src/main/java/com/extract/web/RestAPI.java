@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 @Path("/data/")
 @Produces(MediaType.APPLICATION_JSON)
-public class RestAPI extends RestBase {
+public class RestAPI {
 
     @POST
     @Path("/convert")
@@ -38,7 +38,7 @@ public class RestAPI extends RestBase {
         if (uploadedInputStream == null) {
             return Response.status(404).build();
         }
-        System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
+        //System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         Converter converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
