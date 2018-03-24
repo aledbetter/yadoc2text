@@ -34,6 +34,8 @@ public class HtmlUtils {
         styleTags.add("b");
         styleTags.add("i");
         styleTags.add("u");
+        styleTags.add("strong");
+        styleTags.add("em");
         listTags = new HashSet<>();
         listTags.add("ul");
         listTags.add("ol");
@@ -55,6 +57,7 @@ public class HtmlUtils {
         ignoredTags.add("button");
         ignoredTags.add("input");
         ignoredTags.add("nav");
+        ignoredTags.add("annotation");
         containerTags = new HashSet<>();
         containerTags.add("div");
         containerTags.add("nav");
@@ -66,6 +69,9 @@ public class HtmlUtils {
     public static void simplify(Element element, SimpleHtml simpleHtml) {
         for (Element child : element.children()) {
             String tagName = child.tagName();
+            //String roleName = child.attr("role");
+            //String idName = child.attr("id");
+
             if (!ignoredTags.contains(tagName)) {
                 if (headerTags.contains(tagName)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
@@ -217,11 +223,11 @@ public class HtmlUtils {
     }
 
     public static boolean isBold(Node node) {
-        return isStyled(node, "b");
+        return (isStyled(node, "b") || isStyled(node, "strong"));
     }
 
     public static boolean isItalic(Node node) {
-        return isStyled(node, "i");
+        return (isStyled(node, "i") || isStyled(node, "em"));
     }
 
     public static boolean isUnderlined(Node node) {

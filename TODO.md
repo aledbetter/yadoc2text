@@ -24,19 +24,20 @@ PDF (.pdf)
 
 HTML (.htm, .html)
 
-	1) <nav> content in under nav should just be removed (configurable)
-	2) meta lang tag from page indicated language 
-	3) <p></p> still found in docs (https://en.wikipedia.org/wiki/Precession)
-	4) html annotations should be ignored if not in encoding != html/text
-	       <annotation encoding="application/x-tex">{\displaystyle {\boldsymbol {\omega }}_{\mathrm {p} }={\frac {{\boldsymbol {I}}_{\mathrm {s} }{\boldsymbol 	{\omega }}_{\mathrm {s} }}{{\boldsymbol {I}}_{\mathrm {p} }\cos({\boldsymbol {\alpha }})}}}</annotation>
-	5) don't include any items or their children if taged with: role=[navigation, menu, menubar, menuitem]
-	6) if attribute: id=footer OR role=footer then consider the item and children to be in footer
-	8) much missing content (test2.html)
-	9) issue with processing the output html files: java.lang.IllegalStateException: Stream already closed
+	1) much missing content (test2.html). when content is in <div> it is not shown
+		<div>McCabe <a href="index.html">defended himself</a> and argued his firing</div>
+	2) apostrophe"’" converts to 2 unreadable special chars in output (test6.html)
+    3) bad special char conversions: &trade; &amp; &copy;
+    4) <ul> with no <li> should be treated as <p>
+    5) in <ul> or <li> retain <hX> within or outside of <li>
+    6) retain <section> and <article> tags in location. don't retain any attributes
+    7) treat string of <span> or <a> as single <p>
+       <a href="/terms">Terms of service</a> | <a href="/privacy">Privacy guidelines</a> | <a target="_blank">AdChoices</a>
+	8) meta lang tag in results when the language is avaliable (body attribute or meta tag)
+	9) don't include any items or their children if attribute with: role=[navigation, menu, menubar, menuitem]
+	10) if attribute: id=footer OR role=footer then consider the item and children to be in footer
+	11) issue with processing the output html files: java.lang.IllegalStateException: Stream already closed
 		<html><head><title>3rd nor'easter in 2 weeks to hit East Coast - ABC News</title><meta name="doc-type" content="html"/><meta name="doc-name" content="story?id=53678598.html"/></head><body>this is just plain text so nothing raw should come around or around</body></html>
-	10) apostrophe"’" converts to 2 unreadable special chars in output (test6.html)
-	11) <em> tag content as italic <i> (test6.html)
-	12) <strong> tag content as bold <b>
  
  
 TEXT (.txt)
