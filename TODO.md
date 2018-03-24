@@ -3,7 +3,7 @@ Bugs, changes and enhancements
 
 DOCs (.doc, .docx)
 
-	1) mpty tags (tabs or other whitespace inside)
+	1) mpty tags (tabs or other whitespace inside) convert all tabs to 4 spaces
 		<p>
 			<b>aaron.</b><b>ledbetter</b><b>.1</b><b>@</b><b>gmail</b><b>.com</b><b>
 			</b><b> </b><b> </b><b> </b><b> </b><b> </b><b> </b><b> </b><b>Los
