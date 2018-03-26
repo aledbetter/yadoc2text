@@ -3,7 +3,7 @@ package com.extract.processor.render;
 import com.extract.processor.model.Text;
 
 public class TextRenderer {
-    public String render(Text text) {
+    public static String render(Text text) {
 
         StringBuilder prefix = new StringBuilder();
         StringBuilder suffix = new StringBuilder();
@@ -20,6 +20,11 @@ public class TextRenderer {
             prefix.append("<u>");
             suffix.insert(0, "</u>");
         }
-        return prefix.toString() + text.getText() + suffix.toString();
+        String txt = text.getText().replace("\t", "    "); // replace tabs always
+        txt = txt.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
+        if (txt.trim().length() > 0) { // fmt only if something to fmt
+        	return prefix.toString() + txt + suffix.toString();
+        }
+        return txt;
     }
 }

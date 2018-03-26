@@ -4,25 +4,19 @@ import com.extract.processor.model.HtmlListElement;
 import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
+import main.java.com.convert.processor.render.ListRenderer;
+import main.java.com.convert.processor.render.TextRenderer;
 
 public class ListElementRenderer {
-
-    @Getter
-    @Setter
-    private TextRenderer textRenderer;
-    @Getter
-    @Setter
-    private ListRenderer listRenderer;
-
-    public String render(HtmlListElement element) {
+    public static String render(HtmlListElement element) {
         StringBuilder result = new StringBuilder();
         if (element.getTextList() != null) {
             for (Text text : element.getTextList()) {
-                result.append(textRenderer.render(text));
+                result.append(TextRenderer.render(text));
             }
         }
         if (element.getNestedList() != null) {
-            result.append(listRenderer.render(element.getNestedList()));
+            result.append(ListRenderer.render(element.getNestedList()));
         }
         return "<li>" + result.toString() + "</li>";
     }

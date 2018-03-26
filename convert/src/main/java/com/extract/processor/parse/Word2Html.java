@@ -45,7 +45,6 @@ public class Word2Html implements Converter {
 
         Date created = ppropsPart.getCreatedProperty().getValue();
         Date modified = ppropsPart.getModifiedProperty().getValue();
-
         log.debug("document name: " + fileName);
         log.debug("document created: " + created);
         log.debug("document modified: " + modified);
@@ -61,8 +60,6 @@ public class Word2Html implements Converter {
             simpleHtml.setCreated(sdf.format(modified));
         }
         simpleHtml.setElementList(new ArrayList<Element>());
-
-        SimpleHtmlRender simpleHtmlRender = SimpleHtmlRender.factoryMethod();
 
         Iterator<IBodyElement> iterator = doc.getBodyElementsIterator();
         while (iterator.hasNext()) {
@@ -88,6 +85,6 @@ public class Word2Html implements Converter {
                 simpleHtml.getElementList().add(WordUtils.processTable(table));
             }
         }
-        os.write(simpleHtmlRender.render(simpleHtml).getBytes());
+        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
     }
 }

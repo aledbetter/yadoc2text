@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,16 +36,30 @@ public class Html2Html implements Converter {
         simpleHtml.setFooterList(new ArrayList<Element>());
         simpleHtml.setName(fileName);
 
-        Document document = Jsoup.parse(is, "UTF-8", "");
-
+        String in = readStream(is);
+        Document document = Jsoup.parse(in);
+        //Document document = Jsoup.parse(is, "UTF-8", "");
+        HtmlUtils.processMeta(document, simpleHtml);
         HtmlUtils.simplify(document, simpleHtml);
 
         SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
         SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
 
-        SimpleHtmlRender simpleHtmlRender = SimpleHtmlRender.factoryMethod();
-
-        os.write(simpleHtmlRender.render(simpleHtml).getBytes());
+        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
     }
+	public static String readStream(InputStream input) {
+		// load the data to a buffer to prevent closed stream issue
+		ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
+		int read = 0;
+		byte[] bytes = new byte[4096];
+		try {
+			while ((read = input.read(bytes)) != -1) {
+				bOutput.write(bytes, 0, read);
+			}
+		} catch (IOException e) {
+			return null;
+		}
+		return bOutput.toString();
+	}
 
 }

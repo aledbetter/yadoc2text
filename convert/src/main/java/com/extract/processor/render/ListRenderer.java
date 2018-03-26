@@ -5,29 +5,39 @@ import com.extract.processor.model.HtmlListElement;
 import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
+import main.java.com.convert.processor.render.HeaderRender;
+import main.java.com.convert.processor.render.ListElementRenderer;
+import main.java.com.convert.processor.render.TextRenderer;
 
 public class ListRenderer {
-
-    @Getter
-    @Setter
-    private TextRenderer textRenderer;
-    @Getter
-    @Setter
-    private ListElementRenderer listElementRenderer;
-
-    public String render(HtmlList list) {
-        String tagName = list.isSorted() ? "ol" : "ul";
+	// 1) no empty list
+	// 2) must have a list item
+	// 3) if header, leave as header not list item
+	// 4) if first is header, place before list as list header/title
+    public static String render(HtmlList list) {
         StringBuilder result = new StringBuilder();
+        int liCnt = 0;
+        // if no li then no list
         if (list.getTextList() != null) {
             for (Text text : list.getTextList()) {
-                result.append(textRenderer.render(text));
+                result.append(TextRenderer.render(text));
             }
         }
         if (list.getElementList() != null) {
             for (HtmlListElement listElement : list.getElementList()) {
-                result.append(listElementRenderer.render(listElement));
+            	if (listElement.isListItem()) {
+            		liCnt++;
+                    result.append(ListElementRenderer.render(listElement));
+            	} else {
+                    result.append(HeaderRender.render(listElement));
+            	}
             }
         }
-        return "<" + tagName + ">" + result.toString() + "</" + tagName + ">";
+        if (liCnt > 0) {
+            String tagName = list.isSorted() ? "ol" : "ul";
+        	return "<" + tagName + ">" + result.toString() + "</" + tagName + ">";
+        } else {
+        	return result.toString();
+        }
     }
 }

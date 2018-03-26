@@ -34,12 +34,10 @@ public class Pdf2Html implements Converter {
 
         Calendar creation = document.getDocumentInformation().getCreationDate();
         Calendar modification = document.getDocumentInformation().getModificationDate();
-
+       // document.getDocumentInformation().getCreator()
         log.debug("document name: " + fileName);
         log.debug("document creation: " + creation);
         log.debug("document modification: " + modification);
-
-        SimpleHtmlRender simpleHtmlRender = SimpleHtmlRender.factoryMethod();
 
         SimpleHtml simpleHtml = stripper.getSimpleHtml();
         simpleHtml.setType(TYPE);
@@ -53,6 +51,6 @@ public class Pdf2Html implements Converter {
         SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
         SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
 
-        os.write(simpleHtmlRender.render(simpleHtml).getBytes());
+        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
     }
 }

@@ -3,45 +3,20 @@ package com.extract.processor.render;
 import com.extract.processor.model.*;
 import lombok.Getter;
 import lombok.Setter;
+import main.java.com.convert.processor.model.Element;
+import main.java.com.convert.processor.model.Header;
+import main.java.com.convert.processor.model.HtmlList;
+import main.java.com.convert.processor.model.Paragraph;
+import main.java.com.convert.processor.model.SimpleHtml;
+import main.java.com.convert.processor.render.HeaderRender;
+import main.java.com.convert.processor.render.ListRenderer;
+import main.java.com.convert.processor.render.ParagraphRender;
 
 import java.util.List;
 
 public class SimpleHtmlRender {
 
-    public static SimpleHtmlRender factoryMethod() {
-        SimpleHtmlRender simpleHtmlRender = new SimpleHtmlRender();
-        simpleHtmlRender.setHeaderRender(new HeaderRender());
-
-        ParagraphRender paragraphRender = new ParagraphRender();
-        paragraphRender.setTextRenderer(new TextRenderer());
-
-        simpleHtmlRender.setParagraphRender(paragraphRender);
-
-        ListRenderer listRenderer = new ListRenderer();
-
-        ListElementRenderer listElementRenderer = new ListElementRenderer();
-        listElementRenderer.setListRenderer(listRenderer);
-        listElementRenderer.setTextRenderer(new TextRenderer());
-
-        listRenderer.setListElementRenderer(listElementRenderer);
-        listRenderer.setTextRenderer(new TextRenderer());
-
-        simpleHtmlRender.setListRenderer(listRenderer);
-
-        return simpleHtmlRender;
-    }
-
-    @Getter
-    @Setter
-    private ParagraphRender paragraphRender;
-    @Getter
-    @Setter
-    private HeaderRender headerRender;
-    @Getter
-    @Setter
-    private ListRenderer listRenderer;
-
-    public String render(SimpleHtml simpleHtml) {
+    public static String render(SimpleHtml simpleHtml) {
         StringBuilder result = new StringBuilder();
         result.append("<html><head>");
         if (simpleHtml.getTitle() != null) {
@@ -70,6 +45,16 @@ public class SimpleHtmlRender {
                     .append("<meta name=\"doc-modified\" content=\"")
                     .append(simpleHtml.getModified()).append("\"/>");
         }
+        if (simpleHtml.getLanguage() != null) {
+            result
+                    .append("<meta name=\"doc-language\" content=\"")
+                    .append(simpleHtml.getLanguage()).append("\"/>");
+        }
+        if (simpleHtml.getUrl() != null) {
+            result
+                    .append("<meta name=\"doc-url\" content=\"")
+                    .append(simpleHtml.getUrl()).append("\"/>");
+        }
         result.append("</head><body>");
         if (simpleHtml.getHeaderList() != null && simpleHtml.getHeaderList().size() > 0) {
             result.append("<header>");
@@ -86,14 +71,14 @@ public class SimpleHtmlRender {
         return result.toString();
     }
 
-    private void renderElementList(List<Element> elementList, StringBuilder result) {
+    private static void renderElementList(List<Element> elementList, StringBuilder result) {
         for (Element element : elementList) {
             if (element instanceof Header) {
-                result.append(headerRender.render((Header) element));
+                result.append(HeaderRender.render((Header) element));
             } else if (element instanceof Paragraph) {
-                result.append(paragraphRender.render((Paragraph) element));
+                result.append(ParagraphRender.render((Paragraph) element));
             } else if (element instanceof HtmlList) {
-                result.append(listRenderer.render((HtmlList) element));
+                result.append(ListRenderer.render((HtmlList) element));
             }
         }
     }
