@@ -1,7 +1,14 @@
 package org.apache.pdfbox.text;
 
-import com.extract.processor.model.*;
 import com.extract.processor.utils.PdfUtils;
+
+import com.extract.processor.model.Element;
+import com.extract.processor.model.Header;
+import com.extract.processor.model.HtmlList;
+import com.extract.processor.model.HtmlListElement;
+import com.extract.processor.model.Paragraph;
+import com.extract.processor.model.SimpleHtml;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -10,6 +17,9 @@ import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
+import org.apache.pdfbox.text.Stripper.LineItem;
+import org.apache.pdfbox.text.Stripper.PositionWrapper;
+import org.apache.pdfbox.text.Stripper.WordWithTextPositions;
 import org.apache.pdfbox.util.QuickSort;
 
 import java.io.*;
@@ -667,8 +677,11 @@ public class Stripper extends LegacyPDFStreamEngine {
                 }
                 Header header = new Header();
                 header.setLevel(PdfUtils.getLevelByFontSize(firstTextPosition));
+ //               header.setFontSize(firstTextPosition);
+ //FIXME get font size and save it               
                 header.setText(text);
                 simpleHtml.getElementList().add(header);
+                
             } else if (PdfUtils.isListItem(text)) {
                 int currentListItemIntent = (int) textPositions.get(0).getTextMatrix().getTranslateX();
                 // first time
@@ -677,11 +690,14 @@ public class Stripper extends LegacyPDFStreamEngine {
                 }
 //                LOG.warn("list item found: " + text);
 //                LOG.warn("intent: " + currentListItemIntent);
+                boolean f = false;
                 if (listStack.empty()) {
                     HtmlList htmlList = new HtmlList();
                     htmlList.setElementList(new ArrayList<HtmlListElement>());
                     listStack.push(htmlList);
+                    f = true;
                 }
+
                 if (currentListItemIntent > lastListItemIntent) {
 //                    LOG.warn("nested list start: " + text);
                     HtmlList nestedList = new HtmlList();
@@ -690,11 +706,14 @@ public class Stripper extends LegacyPDFStreamEngine {
                             .setNestedList(nestedList);
                     listStack.push(nestedList);
                 } else if (currentListItemIntent < lastListItemIntent) {
-                    listStack.pop();
+                    if (!f) listStack.pop();
                 }
+
                 lastListItemIntent = currentListItemIntent;
                 HtmlListElement element = new HtmlListElement();
                 element.setTextList(PdfUtils.convertText(textPositions));
+            	//System.out.println("LI["+text+"] => " + element.getTextList().size());
+
                 listStack.peek().getElementList().add(element);
             } else {
                 if (!listStack.empty()) {
@@ -1910,4 +1929,3 @@ public class Stripper extends LegacyPDFStreamEngine {
         }
     }
 }
-

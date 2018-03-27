@@ -2,6 +2,7 @@ package com.extract.processor.utils;
 
 import com.extract.processor.model.Text;
 import lombok.extern.log4j.Log4j2;
+
 import org.apache.pdfbox.text.TextPosition;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class PdfUtils {
         listItemPattern.add("^\\w\\. .*");
         listItemPattern.add("^\\+ .*");
         listItemPattern.add("^\\- .*");
+        listItemPattern.add("^§ .*");
+        //§
     }
 
     public static boolean isHeader(int fontSize) {
@@ -143,13 +146,41 @@ public class PdfUtils {
 
     public static List<Text> convertText(List<TextPosition> textPositions) {
         List<Text> result = new ArrayList<>();
+        String txt = "";
+        int len = 0;
+        boolean cb = false;
+        boolean ci = false;
+        // link together in chains... if format update then break 
         for (TextPosition textPosition : textPositions) {
-            Text simpleText = new Text();
-            simpleText.setText(textPosition.getUnicode());
-            simpleText.setItalic(PdfUtils.isItalic(textPosition));
-            simpleText.setBold(PdfUtils.isBold(textPosition));
-            result.add(simpleText);
+        	boolean it = PdfUtils.isItalic(textPosition);
+        	boolean b = PdfUtils.isBold(textPosition);
+        	if (it != ci || b != cb) {
+        		if (len > 0) { // add due to change
+	                Text simpleText = new Text();
+	                simpleText.setText(txt);
+	                txt = txt.replace("\t", " ").replace("§ ", "");
+	                simpleText.setItalic(ci);
+	                simpleText.setBold(cb);
+	                result.add(simpleText);  
+        		}
+        		cb = b;
+        		ci = it;
+        		len = 1;
+        		txt = textPosition.getUnicode();
+        	} else {
+        		len++;
+        		txt += textPosition.getUnicode();
+        	}
         }
+        
+    	if (len > 0) {
+            Text simpleText = new Text();
+            txt = txt.replace("\t", " ").replace("§ ", "");
+            simpleText.setText(txt);
+            simpleText.setItalic(ci);
+            simpleText.setBold(cb);          
+            result.add(simpleText);
+    	}
         return result;
     }
 
