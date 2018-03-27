@@ -17,9 +17,9 @@ import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
-import org.apache.pdfbox.text.Stripper.LineItem;
-import org.apache.pdfbox.text.Stripper.PositionWrapper;
-import org.apache.pdfbox.text.Stripper.WordWithTextPositions;
+//mport org.apache.pdfbox.text.Stripper.LineItem;
+//import org.apache.pdfbox.text.Stripper.PositionWrapper;
+//import org.apache.pdfbox.text.Stripper.WordWithTextPositions;
 import org.apache.pdfbox.util.QuickSort;
 
 import java.io.*;
