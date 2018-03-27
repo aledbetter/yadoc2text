@@ -4,7 +4,7 @@ import com.extract.processor.model.Paragraph;
 import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.com.convert.processor.render.TextRenderer;
+import com.extract.processor.render.TextRenderer;
 
 public class ParagraphRender {
     public static String render(Paragraph paragraph) {

@@ -2,13 +2,13 @@ package com.extract.processor.utils;
 
 import com.extract.processor.model.*;
 import lombok.extern.log4j.Log4j2;
-import main.java.com.convert.processor.model.Header;
-import main.java.com.convert.processor.model.HtmlList;
-import main.java.com.convert.processor.model.HtmlListElement;
-import main.java.com.convert.processor.model.Paragraph;
-import main.java.com.convert.processor.model.SimpleHtml;
-import main.java.com.convert.processor.model.Text;
-import main.java.com.convert.processor.utils.HtmlUtils;
+import com.extract.processor.model.Header;
+import com.extract.processor.model.HtmlList;
+import com.extract.processor.model.HtmlListElement;
+import com.extract.processor.model.Paragraph;
+import com.extract.processor.model.SimpleHtml;
+import com.extract.processor.model.Text;
+import com.extract.processor.utils.HtmlUtils;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -134,7 +134,7 @@ public class HtmlUtils {
         }
     }
 
-    public static void simplify(Element element, List<main.java.com.convert.processor.model.Element> elements) {   	
+    public static void simplify(Element element, List<com.extract.processor.model.Element> elements) {   	
         for (Element child : element.children()) {
             String tagName = child.tagName();
 
@@ -175,7 +175,7 @@ public class HtmlUtils {
         return Integer.valueOf(matcher.group(1));
     }
 
-    public static HtmlList processList(Element element, List<main.java.com.convert.processor.model.Element> elements) {
+    public static HtmlList processList(Element element, List<com.extract.processor.model.Element> elements) {
 
         HtmlList htmlList = new HtmlList();
         htmlList.setTextList(new ArrayList<Text>());
@@ -208,7 +208,7 @@ public class HtmlUtils {
         return htmlList;
     }
 
-    public static HtmlListElement processListElement(Element element, List<main.java.com.convert.processor.model.Element> elements) {
+    public static HtmlListElement processListElement(Element element, List<com.extract.processor.model.Element> elements) {
         HtmlListElement result = new HtmlListElement();
         result.setTextList(new ArrayList<Text>());    
         result.setTagName(element.tagName().toLowerCase());

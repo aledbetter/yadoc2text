@@ -5,9 +5,9 @@ import com.extract.processor.model.HtmlListElement;
 import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.com.convert.processor.render.HeaderRender;
-import main.java.com.convert.processor.render.ListElementRenderer;
-import main.java.com.convert.processor.render.TextRenderer;
+import com.extract.processor.render.HeaderRender;
+import com.extract.processor.render.ListElementRenderer;
+import com.extract.processor.render.TextRenderer;
 
 public class ListRenderer {
 	// 1) no empty list

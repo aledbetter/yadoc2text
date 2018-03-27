@@ -3,14 +3,14 @@ package com.extract.processor.render;
 import com.extract.processor.model.*;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.com.convert.processor.model.Element;
-import main.java.com.convert.processor.model.Header;
-import main.java.com.convert.processor.model.HtmlList;
-import main.java.com.convert.processor.model.Paragraph;
-import main.java.com.convert.processor.model.SimpleHtml;
-import main.java.com.convert.processor.render.HeaderRender;
-import main.java.com.convert.processor.render.ListRenderer;
-import main.java.com.convert.processor.render.ParagraphRender;
+import com.extract.processor.model.Element;
+import com.extract.processor.model.Header;
+import com.extract.processor.model.HtmlList;
+import com.extract.processor.model.Paragraph;
+import com.extract.processor.model.SimpleHtml;
+import com.extract.processor.render.HeaderRender;
+import com.extract.processor.render.ListRenderer;
+import com.extract.processor.render.ParagraphRender;
 
 import java.util.List;
 

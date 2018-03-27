@@ -4,8 +4,8 @@ import com.extract.processor.model.HtmlListElement;
 import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.com.convert.processor.render.ListRenderer;
-import main.java.com.convert.processor.render.TextRenderer;
+import com.extract.processor.render.ListRenderer;
+import com.extract.processor.render.TextRenderer;
 
 public class ListElementRenderer {
     public static String render(HtmlListElement element) {
