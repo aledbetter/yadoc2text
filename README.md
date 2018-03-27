@@ -9,11 +9,12 @@ build and run locally
 	2. prompt# brew install maven
     3. mvn clean
     4. mvn install
-    5. mvn jetty:run
+    5. cd web
+    6. mvn jetty:run
        mvn jetty:run -Djetty.port=8099
        old: mvn jetty:run -Dhttp.port=8099
        old: mvn jetty:run -Djetty.http.port=8099   
-    6. index is test page
+    7. index is test page
     
 Supported Document Types
 
@@ -29,8 +30,8 @@ Converted file html tags
 	Headings: <h1>, <h2>, <h3>...<hn>
 	Text: <b>, <u>, <i>
 	Structure: <p>, <header>, <footer>
-	Lists: <ol>, <ul>
-	Sections: <section>  TODO
+	Lists: <ol>, <ul>, <li>
+	Sections: <section>, <article>  TODO
 	Tables: TBD
 	
 Converted meta info
@@ -47,7 +48,8 @@ Converted meta info
 		<meta name="doc-author" content="Bober Simthsonsons">
 	Language
 		<meta name="doc-language" content="en">	
-		
+	Url
+		<meta name="doc-url" content="http://www.sample.com/moby-dick.html">	
 		
 		
 		
