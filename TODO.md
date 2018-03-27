@@ -3,16 +3,8 @@ Bugs, changes and enhancements
 
 DOCs (.doc, .docx)
 
-	1) Missing titles / content missing
-	2) Bold content from tables not bold
 
 PDF (.pdf)
-
-	1) all text has spaces striped
-	2) ul not identified each set to start with: <p>§
-	3) Mar 13, 2018 4:06:58 PM org.apache.pdfbox.cos.COSDocument finalize
-	   WARNING: Warning: You did not close a PDF Document
-
 
 HTML (.htm, .html)
 
