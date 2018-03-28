@@ -2,7 +2,6 @@ package com.extract.processor.utils;
 
 import com.extract.processor.model.*;
 import lombok.extern.log4j.Log4j2;
-import main.java.com.convert.processor.model.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
