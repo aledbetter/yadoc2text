@@ -2,6 +2,7 @@ package com.extract.processor.utils;
 
 import com.extract.processor.model.*;
 import lombok.extern.log4j.Log4j2;
+import main.java.com.convert.processor.model.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +61,9 @@ public class SimpleHtmlUtils {
         Iterator<Text> iterator = texts.iterator();
         while (iterator.hasNext()) {
             Text text = iterator.next();
-            if (text.getText().trim().isEmpty()) {
+            if (text.getText().equals("\n")) {
+            	text.setText("  ");
+            } else if (text.getText().trim().isEmpty()) {          	
                 iterator.remove();
             }
         }
@@ -159,11 +162,16 @@ public class SimpleHtmlUtils {
     public static Text joinTexts(List<Text> texts) {
         Text result = new Text();
         StringBuilder textContent = new StringBuilder();
+        String last = null;
         for (Text text : texts) {
+        	// make a space between tokens
+        	if (last != null && last.length() > 1 && text.getText().length() > 1 && !last.endsWith(" ") && !text.getText().startsWith(" ")) textContent.append(" ");
+            last = text.getText();
+
             textContent.append(text.getText());
             result.setItalic(text.isItalic());
             result.setBold(text.isBold());
-            result.setUnderlined(text.isUnderlined());
+            result.setUnderlined(text.isUnderlined());           
         }
         result.setText(textContent.toString());
         return result;

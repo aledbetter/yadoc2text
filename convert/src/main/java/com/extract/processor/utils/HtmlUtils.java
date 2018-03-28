@@ -277,9 +277,9 @@ public class HtmlUtils {
             } else if (node instanceof Element) {
             	if (isIgnored((Element) node)) continue;
             	if (((Element) node).tagName().equals("br")) {
-            		// TODO: possibly add end of paragraph here?
                     Text text = new Text();
-                    text.setText(" ");
+                    text.setText("\n");
+                	//System.out.println(" ADD_BR["+element.tagName()+"][" + text.getText()+"]");
                     result.add(text);
             	} else {
             		result.addAll(processText((Element) node));
