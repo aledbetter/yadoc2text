@@ -109,9 +109,10 @@ public class HtmlUtils {
     	
     	ignoreClassPartial.add("-replay");
     	ignoreClassPartial.add("replay-");    	
-    	
+    	ignoreClassPartial.add("video");
+
     	ignoreClassPartial.add("tools");
-    	//ignoreClassPartial.add("caption");
+    	ignoreClassPartial.add("caption");
     }
 
 
@@ -144,15 +145,15 @@ public class HtmlUtils {
                     }
                 } else if (textTags.contains(tagName)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
-                        simpleHtml.getElementList().add(processParagraph(child));
+                        simpleHtml.getElementList().add(processParagraph(child, simpleHtml.getElementList()));
                     } else {
-                        simpleHtml.getFooterList().add(processParagraph(child));
+                        simpleHtml.getFooterList().add(processParagraph(child, simpleHtml.getFooterList()));
                     }
                 } else if (tagName.equals("div") && isDivText(child)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
-                        simpleHtml.getElementList().add(processParagraph(child));
+                        simpleHtml.getElementList().add(processParagraph(child, simpleHtml.getElementList()));
                     } else {
-                        simpleHtml.getFooterList().add(processParagraph(child));
+                        simpleHtml.getFooterList().add(processParagraph(child, simpleHtml.getFooterList()));
                     }
                 } else {
                     simplify(child, simpleHtml);
@@ -170,9 +171,9 @@ public class HtmlUtils {
                 } else if (listTags.contains(tagName)) {
                     elements.add(processList(child, elements));
                 } else if (textTags.contains(tagName)) {        
-                     elements.add(processParagraph(child));
+                     elements.add(processParagraph(child, elements));
                 } else if (tagName.equals("div") && isDivText(child)) {
-                     elements.add(processParagraph(child));
+                     elements.add(processParagraph(child, elements));
                 } else {
                      simplify(child, elements);             
                 }
@@ -180,9 +181,9 @@ public class HtmlUtils {
         } 
     }
 
-    public static Paragraph processParagraph(Element element) {
+    public static Paragraph processParagraph(Element element, List<com.extract.processor.model.Element> elements) {
         Paragraph paragraph = new Paragraph();
-        paragraph.setTexts(processText(element));
+        paragraph.setTexts(processText(element, elements));
         return paragraph;
     }
 
@@ -227,10 +228,10 @@ public class HtmlUtils {
                 		htmlList.getElementList().add(hle);
                 	}
                 } else {
-                    htmlList.getTextList().addAll(processText(child));
+                    htmlList.getTextList().addAll(processText(child, elements));
                 }
             } else {           	
-                htmlList.getTextList().addAll(processText(child));
+                htmlList.getTextList().addAll(processText(child, elements));
             }
         }
         return htmlList;
@@ -242,7 +243,7 @@ public class HtmlUtils {
         result.setTagName(element.tagName().toLowerCase());
 
         if (containsOnlyFormattedText(element)) {
-            result.setTextList(processText(element));
+            result.setTextList(processText(element, elements));
             return result;
         }
         // ISSUE: some li contain multiple div/p, these each need to render in <p> 
@@ -253,15 +254,16 @@ public class HtmlUtils {
         	} else if (listTags.contains(tagName)) {
                 result.setNestedList(processList(child, elements));
             } else {
-                result.getTextList().addAll(processText(child));
+                result.getTextList().addAll(processText(child, elements));
             }
         }
 
         return result;
     }
 
-    public static List<Text> processText(Element element) {
+    public static List<Text> processText(Element element, List<com.extract.processor.model.Element> elements) {
         List<Text> result = new ArrayList<>();
+        boolean first = true;
         for (Node node : element.childNodes()) {
             if (node instanceof TextNode) {
             	String txt = ((TextNode) node).text();
@@ -281,10 +283,14 @@ public class HtmlUtils {
                     text.setText("\n");
                 	//System.out.println(" ADD_BR["+element.tagName()+"][" + text.getText()+"]");
                     result.add(text);
+            	} else if (first && ((Element) node).tagName().equals("cite")) { 
+            		// perhapse others fit this as well?
+            		elements.add(processParagraph((Element) node, elements));
             	} else {
-            		result.addAll(processText((Element) node));
+            		result.addAll(processText((Element) node, elements));
             	}
             }
+            first = false;
         }
         return result;
     }

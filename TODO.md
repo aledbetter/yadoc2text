@@ -12,7 +12,8 @@ HTML (.htm, .html)
 
     1) retain <section> and <article> tags in location. don't retain any attributes
     2) multiple div/ in li, must render each div/p with a p
- 
+
+
 TEXT (.txt)
 
 	1) support .txt files and produce simplified html
