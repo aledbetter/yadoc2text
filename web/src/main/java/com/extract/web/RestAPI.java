@@ -38,7 +38,7 @@ public class RestAPI {
         if (uploadedInputStream == null) {
             return Response.status(404).build();
         }
-        //System.out.println("CONVERT FILE: " + fileDetail.getFileName() + " SIZE: " + fileDetail.getSize());
+        System.out.println("CONVERT FILE: " + fileDetail.getFileName());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         Converter converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());

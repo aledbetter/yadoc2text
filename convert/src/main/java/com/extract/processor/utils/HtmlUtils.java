@@ -401,28 +401,28 @@ public class HtmlUtils {
   	   if (lang == null) lang = getMeta(document, "http-equiv=content-language");
   	   //<meta name="language" content="es">
  	   if (lang == null) lang = getMeta(document, "name=language");
- 	   if (lang != null) {
+ 	   if (lang != null && !lang.isEmpty()) {
  		   simpleHtml.setLanguage(lang.toLowerCase());
  	   }
  	   
  	   // <meta itemprop="url" content="https://www/...">
  	   String url = getMeta(document, "name=url");
  	   if (url == null) url = getMeta(document, "itemprop=url");
- 	   if (url != null) {
+ 	   if (url != null && !url.isEmpty()) {
  		   simpleHtml.setUrl(url);
  	   }
  	   // <meta content="2018-03-22T12:28:18Z" name="pubdate">
  	   String created = getMeta(document, "name=created");
  	   if (created == null) created = getMeta(document, "name=pubdate");
  	   if (created == null) created = getMeta(document, "name=Date");
- 	   if (created != null) {
+ 	   if (created != null && !created.isEmpty()) {
  		   simpleHtml.setCreated(created);
  	   }	 
   
  	   // <meta content="2018-03-22T13:44:08Z" name="lastmod">
  	   String modified = getMeta(document, "name=lastmod");
  	   if (modified == null) modified = getMeta(document, "name=Last-Modified");
- 	   if (modified != null) {
+ 	   if (modified != null && !modified.isEmpty()) {
  		   simpleHtml.setModified(modified);
  	   }	 
      }
