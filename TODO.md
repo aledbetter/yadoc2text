@@ -11,7 +11,9 @@ PDF (.pdf)
 HTML (.htm, .html)
 
     1) retain <section> and <article> tags in location. don't retain any attributes
-
+    2) br => add space, p OR '.' 
+    3) multiple div/ in li, must render each div/p with a p
+    4) (CNN)About => should be different paragrpah for <cite>
  
 TEXT (.txt)
 

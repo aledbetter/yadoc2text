@@ -68,33 +68,60 @@ public class HtmlUtils {
         ignoredTags.add("svg");
         ignoredTags.add("button");
         ignoredTags.add("input");
+        ignoredTags.add("label");
         ignoredTags.add("nav");
         ignoredTags.add("annotation");
+        ignoredTags.add("figure");	// ?? not certain this is always ideal
+        
         ignoredRoles = new HashSet<>();
-        ignoredTags.add("menu");
-        ignoredTags.add("menuitem");
-        ignoredTags.add("menubar");
-        ignoredTags.add("navigation");
+        ignoredRoles.add("menu");
+        ignoredRoles.add("menuitem");
+        ignoredRoles.add("menubar");
+        ignoredRoles.add("navigation");
         containerTags = new HashSet<>();
         containerTags.add("div");
         containerTags.add("nav");
         containerTags.add("section");
         containerTags.add("article");
         containerTags.add("iframe");
+        
+        // heuristic based ignore for controls
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
+    	ignoreClassPartial.add("-btn");
+    	ignoreClassPartial.add("btn-");
+    	ignoreClassPartial.add("-action");
+    	ignoreClassPartial.add("carousel");
+
     	ignoreClassPartial.add("nav-");
     	ignoreClassPartial.add("-nav");
+    	
+    	ignoreClassPartial.add("popover");
+    	ignoreClassPartial.add("popup");
+    	ignoreClassPartial.add("overlay");	
+
+    	ignoreClassPartial.add("notification");
+
+    	ignoreClassPartial.add("signup"); // ??	
+    	ignoreClassPartial.add("login"); // ??	
+    	ignoreClassPartial.add("signin"); // ??	
+    	ignoreClassPartial.add("share-count"); // ??	general -count for counters?
+    	
+    	ignoreClassPartial.add("-replay");
+    	ignoreClassPartial.add("replay-");    	
+    	
+    	ignoreClassPartial.add("tools");
+    	//ignoreClassPartial.add("caption");
     }
 
 
     public static void simplify(Element element, SimpleHtml simpleHtml) {
         for (Element child : element.children()) {
-            String tagName = child.tagName();
-            String roleName = child.attr("role");
-            String idName = child.attr("id");
-
             if (!isIgnored(child)) {
+                String tagName = child.tagName();
+                String roleName = child.attr("role");
+                String idName = child.attr("id");
+                
         		if (headerTags.contains(tagName)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
                         simpleHtml.getElementList().add(processHeader(child));
@@ -137,7 +164,6 @@ public class HtmlUtils {
     public static void simplify(Element element, List<com.extract.processor.model.Element> elements) {   	
         for (Element child : element.children()) {
             String tagName = child.tagName();
-
             if (!isIgnored(child)) {
         		if (headerTags.contains(tagName)) {              
                     elements.add(processHeader(child));
@@ -183,7 +209,9 @@ public class HtmlUtils {
 
         for (Element child : element.children()) {
             String tagName = child.tagName();
-            if (tagName.equals("li")) {
+            if (isIgnored(child)) {
+            	continue;
+            } else if (tagName.equals("li")) {
                 htmlList.getElementList().add(processListElement(child, elements));
             } else if (tagName.startsWith("h") && tagName.length() == 2) {
                 Matcher matcher = headerPattern.matcher(tagName);
@@ -201,7 +229,7 @@ public class HtmlUtils {
                 } else {
                     htmlList.getTextList().addAll(processText(child));
                 }
-            } else {
+            } else {           	
                 htmlList.getTextList().addAll(processText(child));
             }
         }
@@ -217,10 +245,12 @@ public class HtmlUtils {
             result.setTextList(processText(element));
             return result;
         }
-
+        // ISSUE: some li contain multiple div/p, these each need to render in <p> 
         for (Element child : element.children()) {
             String tagName = child.tagName();
-            if (listTags.contains(tagName)) {
+        	if (isIgnored(child)) {
+        		continue;
+        	} else if (listTags.contains(tagName)) {
                 result.setNestedList(processList(child, elements));
             } else {
                 result.getTextList().addAll(processText(child));
@@ -245,7 +275,15 @@ public class HtmlUtils {
             	//System.out.println(" TEXT["+element.tagName()+"][" + text.getText()+"]");
 
             } else if (node instanceof Element) {
-                result.addAll(processText((Element) node));
+            	if (isIgnored((Element) node)) continue;
+            	if (((Element) node).tagName().equals("br")) {
+            		// TODO: possibly add end of paragraph here?
+                    Text text = new Text();
+                    text.setText(" ");
+                    result.add(text);
+            	} else {
+            		result.addAll(processText((Element) node));
+            	}
             }
         }
         return result;
@@ -333,14 +371,24 @@ public class HtmlUtils {
     
     public static boolean isIgnored(Element element) {
         String tagName = element.tagName();
-        if (ignoredTags.contains(tagName)) return true;
+        if (ignoredTags.contains(tagName)) {
+            //System.out.println("IGNC["+tagName+"]");
+        	return true;
+        }
+        
         String roleName = element.attr("role");
-        if (roleName != null && ignoredRoles.contains(roleName)) return true;        
+        if (roleName != null && ignoredRoles.contains(roleName)) return true;     
+        
         String idName = element.attr("id");
         if (idName != null && idName.equals("nav")) return true;
+        
         String className = element.attr("class");
+        if (className == null && idName == null) return false;
+        //System.out.println("IGNC["+tagName+"] id: "+idName+" class: " + className);
+
         for (String s:ignoreClassPartial) {
-        	if (className.contains(s)) return true;
+        	if (className != null && className.contains(s)) return true;
+        	if (idName != null && idName.contains(s)) return true;
         }
         return false;
     }
