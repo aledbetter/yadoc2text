@@ -264,7 +264,8 @@ public class HtmlUtils {
                 }
                 cnt1++;
             } else if (node instanceof Element) {
-            	if (textTags.contains(((Element)node).tagName())) {
+            	String tn = ((Element)node).tagName();
+            	if (!tn.equalsIgnoreCase("p") && textTags.contains(tn)) {
                 	cnt2++;
             	} 
             } else {
@@ -345,35 +346,39 @@ public class HtmlUtils {
     }
     
     public static void processMeta(Document document, SimpleHtml simpleHtml) {
- 	   // <html lang="es">
- 	   String lang = document.attr("lang");
-       //<meta http-equiv="content-language" content="es">
- 	   if (lang == null) lang = getMeta(document, "http-equiv=content-language");
- 	   //<meta name="language" content="es">
-	   if (lang == null) lang = getMeta(document, "name=language");
-	   if (lang != null) {
-		   simpleHtml.setLanguage(lang.toLowerCase());
-	   }
-	   
-	   // <meta itemprop="url" content="https://www/...">
-	   String url = getMeta(document, "name=url");
-	   if (url == null) url = getMeta(document, "itemprop=url");
-	   if (url != null) {
-		   simpleHtml.setUrl(url);
-	   }
-	   // <meta content="2018-03-22T12:28:18Z" name="pubdate">
-	   String created = getMeta(document, "name=created");
-	   if (created == null) created = getMeta(document, "name=pubdate");
-	   if (created != null) {
-		   simpleHtml.setCreated(created);
-	   }	 
- 
-	   // <meta content="2018-03-22T13:44:08Z" name="lastmod">
-	   String modified = getMeta(document, "name=lastmod");
-	   if (modified != null) {
-		   simpleHtml.setModified(modified);
-	   }	 
-    }
+  	   // <html lang="es">
+   	   Element tlan = document.select("html").first();
+  	   String lang = tlan.attr("lang");
+        //<meta http-equiv="content-language" content="es">
+  	   if (lang == null) lang = getMeta(document, "http-equiv=content-language");
+  	   //<meta name="language" content="es">
+ 	   if (lang == null) lang = getMeta(document, "name=language");
+ 	   if (lang != null) {
+ 		   simpleHtml.setLanguage(lang.toLowerCase());
+ 	   }
+ 	   
+ 	   // <meta itemprop="url" content="https://www/...">
+ 	   String url = getMeta(document, "name=url");
+ 	   if (url == null) url = getMeta(document, "itemprop=url");
+ 	   if (url != null) {
+ 		   simpleHtml.setUrl(url);
+ 	   }
+ 	   // <meta content="2018-03-22T12:28:18Z" name="pubdate">
+ 	   String created = getMeta(document, "name=created");
+ 	   if (created == null) created = getMeta(document, "name=pubdate");
+ 	   if (created == null) created = getMeta(document, "name=Date");
+ 	   if (created != null) {
+ 		   simpleHtml.setCreated(created);
+ 	   }	 
+  
+ 	   // <meta content="2018-03-22T13:44:08Z" name="lastmod">
+ 	   String modified = getMeta(document, "name=lastmod");
+ 	   if (modified == null) modified = getMeta(document, "name=Last-Modified");
+ 	   if (modified != null) {
+ 		   simpleHtml.setModified(modified);
+ 	   }	 
+     }
+
 
     private static String getMeta(Document document, String match) {
   	   Elements el = document.select("meta["+match+"]");
