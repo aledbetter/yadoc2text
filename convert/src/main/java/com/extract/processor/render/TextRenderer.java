@@ -21,7 +21,9 @@ public class TextRenderer {
             suffix.insert(0, "</u>");
         }
         String txt = text.getText().replace("\t", "    "); // replace tabs always
-        txt = txt.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
+        txt = txt.replace('—', '-').replace('–', '-').replace('‘', '\'').replace('“', '\"').replace('’', '\'')
+        		.replace('”', '\"').replace('•', '.').replace("�", "--").replace("»", ">>")
+        		.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
         if (txt.trim().length() > 0) { // fmt only if something to fmt
         	return prefix.toString() + txt + suffix.toString();
         }
