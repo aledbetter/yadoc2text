@@ -22,7 +22,7 @@ public class TextRenderer {
         }
         String txt = text.getText().replace("\t", "    "); // replace tabs always
         txt = txt.replace('—', '-').replace('–', '-').replace('‘', '\'').replace('“', '\"').replace('’', '\'')
-        		.replace('”', '\"').replace('•', '.').replace("�", "--").replace("»", ">>")
+        		.replace('”', '\"').replace('•', '.').replace("�", "--").replace("»", ">>").replace("Â", "")
         		.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
         if (txt.trim().length() > 0) { // fmt only if something to fmt
         	return prefix.toString() + txt + suffix.toString();

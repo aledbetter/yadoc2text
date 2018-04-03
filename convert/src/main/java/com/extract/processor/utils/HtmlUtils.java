@@ -10,6 +10,8 @@ import com.extract.processor.model.SimpleHtml;
 import com.extract.processor.model.Text;
 import com.extract.processor.utils.HtmlUtils;
 
+import com.extract.processor.render.TextRenderer;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -73,6 +75,9 @@ public class HtmlUtils {
         ignoredTags.add("label");
         ignoredTags.add("nav");
         ignoredTags.add("sup");
+        ignoredTags.add("semantics");
+        ignoredTags.add("math");
+        
         ignoredTags.add("annotation");
         ignoredTags.add("figure");	// ?? not certain this is always ideal
         
@@ -93,9 +98,7 @@ public class HtmlUtils {
     	ignoreClass = new HashSet<>();
     	ignoreClass.add("toc"); // wikipedia
     	ignoreClass.add("footer-places"); // wikipedia
-    	ignoreClass.add("See_also"); // wikipedia
     	ignoreClass.add("thumbcaption"); // wikipedia
-    	ignoreClass.add("External_links"); // wikipedia
     	
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
@@ -141,9 +144,9 @@ public class HtmlUtils {
                 
         		if (headerTags.contains(tagName)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
-                        simpleHtml.getElementList().add(processHeader(child));
+                        simpleHtml.getElementList().add(processHeader(child, simpleHtml.getElementList()));
                     } else {
-                        simpleHtml.getFooterList().add(processHeader(child));
+                        simpleHtml.getFooterList().add(processHeader(child, simpleHtml.getFooterList()));
                     }
                 } else if (tagName.equals("title")) {
                     simpleHtml.setTitle(child.text());
@@ -183,7 +186,7 @@ public class HtmlUtils {
             String tagName = child.tagName();
             if (!isIgnored(child)) {
         		if (headerTags.contains(tagName)) {              
-                    elements.add(processHeader(child));
+                    elements.add(processHeader(child, elements));
                 } else if (listTags.contains(tagName)) {
                     elements.add(processList(child, elements));
                 } else if (textTags.contains(tagName)) {        
@@ -203,10 +206,17 @@ public class HtmlUtils {
         return paragraph;
     }
 
-    public static Header processHeader(Element element) {
+    public static Header processHeader(Element element, List<com.extract.processor.model.Element> elements) {
         Header header = new Header();
         header.setLevel(getHeaderLevel(element.tagName()));
-        header.setText(element.text());
+        List<Text> tl = processText(element, elements);
+        StringBuilder result = new StringBuilder();
+        if (tl != null) {
+            for (Text text : tl) {
+                result.append(TextRenderer.render(text));
+            }
+        }
+        header.setText(result.toString());
         return header;
     }
 
@@ -235,7 +245,7 @@ public class HtmlUtils {
                 if (matcher.matches()) { // keep hX in the list as well
                 	if (htmlList.getElementList() == null || htmlList.getElementList().size() < 1) {
                 		// if first is header, place it before the list... common bad conceptual layout
-                		Header hdr = processHeader(child);
+                		Header hdr = processHeader(child, elements);
                 		elements.add(hdr);
                 	} else {
                     	int hdr_level = getHeaderLevel(tagName);
