@@ -34,6 +34,7 @@ public class HtmlUtils {
     public static final Set<String> ignoredRoles;
     public static final Set<String> containerTags;
     public static final Set<String> ignoreClassPartial;
+    public static final Set<String> ignoreClass;
 
     private static final Pattern headerPattern = Pattern.compile("^h([123456])$");
 
@@ -42,6 +43,7 @@ public class HtmlUtils {
         textTags.add("p");
         textTags.add("a");
         textTags.add("span");
+        textTags.add("td");
         styleTags = new HashSet<>();
         styleTags.add("b");
         styleTags.add("i");
@@ -70,7 +72,7 @@ public class HtmlUtils {
         ignoredTags.add("input");
         ignoredTags.add("label");
         ignoredTags.add("nav");
-        ignoredTags.add("sub");
+        ignoredTags.add("sup");
         ignoredTags.add("annotation");
         ignoredTags.add("figure");	// ?? not certain this is always ideal
         
@@ -84,9 +86,17 @@ public class HtmlUtils {
         containerTags.add("nav");
         containerTags.add("section");
         containerTags.add("article");
+        containerTags.add("table");
         containerTags.add("iframe");
         
         // heuristic based ignore for controls
+    	ignoreClass = new HashSet<>();
+    	ignoreClass.add("toc"); // wikipedia
+    	ignoreClass.add("footer-places"); // wikipedia
+    	ignoreClass.add("See_also"); // wikipedia
+    	ignoreClass.add("thumbcaption"); // wikipedia
+    	ignoreClass.add("External_links"); // wikipedia
+    	
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
     	ignoreClassPartial.add("-btn");
@@ -98,12 +108,10 @@ public class HtmlUtils {
     	ignoreClassPartial.add("-nav");
     	ignoreClassPartial.add("Nav");
     	
-    	ignoreClassPartial.add("footer-places"); // wikipedia
     	ignoreClassPartial.add("catlinks"); // wikipedia
     	ignoreClassPartial.add("reflist"); // wikipedia
     	ignoreClassPartial.add("-edit"); // wikipedia
-   	    	
-    	
+   	
     	ignoreClassPartial.add("popover");
     	ignoreClassPartial.add("popup");
     	ignoreClassPartial.add("overlay");	
@@ -403,6 +411,10 @@ public class HtmlUtils {
         for (String s:ignoreClassPartial) {
         	if (className != null && className.contains(s)) return true;
         	if (idName != null && idName.contains(s)) return true;
+        }
+        for (String s:ignoreClass) {
+        	if (className != null && className.equals(s)) return true;
+        	if (idName != null && idName.equals(s)) return true;
         }
         return false;
     }
