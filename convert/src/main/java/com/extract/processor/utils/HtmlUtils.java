@@ -70,6 +70,7 @@ public class HtmlUtils {
         ignoredTags.add("input");
         ignoredTags.add("label");
         ignoredTags.add("nav");
+        ignoredTags.add("sub");
         ignoredTags.add("annotation");
         ignoredTags.add("figure");	// ?? not certain this is always ideal
         
@@ -97,6 +98,12 @@ public class HtmlUtils {
     	ignoreClassPartial.add("-nav");
     	ignoreClassPartial.add("Nav");
     	
+    	ignoreClassPartial.add("footer-places"); // wikipedia
+    	ignoreClassPartial.add("catlinks"); // wikipedia
+    	ignoreClassPartial.add("reflist"); // wikipedia
+    	ignoreClassPartial.add("-edit"); // wikipedia
+   	    	
+    	
     	ignoreClassPartial.add("popover");
     	ignoreClassPartial.add("popup");
     	ignoreClassPartial.add("overlay");	
@@ -116,7 +123,6 @@ public class HtmlUtils {
     	ignoreClassPartial.add("tools");
     	ignoreClassPartial.add("caption");
     }
-
 
     public static void simplify(Element element, SimpleHtml simpleHtml) {
         for (Element child : element.children()) {
