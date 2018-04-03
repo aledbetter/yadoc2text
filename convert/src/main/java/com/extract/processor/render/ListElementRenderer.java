@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import com.extract.processor.render.ListRenderer;
 import com.extract.processor.render.TextRenderer;
+import com.extract.processor.utils.SimpleHtmlUtils;
 
 public class ListElementRenderer {
     public static String render(HtmlListElement element) {
@@ -18,6 +19,8 @@ public class ListElementRenderer {
         if (element.getNestedList() != null) {
             result.append(ListRenderer.render(element.getNestedList()));
         }
-        return "<li>" + result.toString() + "</li>";
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+
+        return "<li>" + txt+ "</li>";
     }
 }

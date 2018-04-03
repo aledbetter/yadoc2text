@@ -189,4 +189,12 @@ public class SimpleHtmlUtils {
     	if (first != null && first.length() > 1 && second.length() > 1 && !first.endsWith(" ") && !second.startsWith(" ")) return true;
     	return false;
     }
+    
+    public static String cleanTexts(String text) {
+    	if (text == null) return null;
+    	return text.replace("\t", "    ").replace('—', '-').replace('–', '-').replace('‘', '\'')
+    			.replace('“', '\"').replace('’', '\'').replace('”', '\"').replace('•', '.')
+    			.replace("�", "--").replace("»", ">>").replace("Â", "").replace("â", "")
+    			.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
+    }	
 }

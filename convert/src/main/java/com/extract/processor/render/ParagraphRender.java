@@ -5,6 +5,7 @@ import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
 import com.extract.processor.render.TextRenderer;
+import com.extract.processor.utils.SimpleHtmlUtils;
 
 public class ParagraphRender {
     public static String render(Paragraph paragraph) {
@@ -12,9 +13,7 @@ public class ParagraphRender {
         for (Text text : paragraph.getTexts()) {
             result.append(TextRenderer.render(text));
         }
-        String txt = result.toString();
-        txt = txt.replace("\t", "    "); // replace tabs always
-        txt = txt.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
         return "<p>" + txt + "</p>";
     }
 }

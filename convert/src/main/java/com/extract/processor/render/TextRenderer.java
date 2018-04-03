@@ -1,6 +1,7 @@
 package com.extract.processor.render;
 
 import com.extract.processor.model.Text;
+import com.extract.processor.utils.SimpleHtmlUtils;
 
 public class TextRenderer {
     public static String render(Text text) {
@@ -20,12 +21,9 @@ public class TextRenderer {
             prefix.append("<u>");
             suffix.insert(0, "</u>");
         }
-        String txt = text.getText().replace("\t", "    "); // replace tabs always
-        txt = txt.replace('—', '-').replace('–', '-').replace('‘', '\'').replace('“', '\"').replace('’', '\'')
-        		.replace('”', '\"').replace('•', '.').replace("�", "--").replace("»", ">>").replace("Â", "")
-        		.replace("\\u0000", ""); // replace null chars (geting in doc/pdf from time to time)
+        String txt = SimpleHtmlUtils.cleanTexts(text.getText());
         if (txt.trim().length() > 0) { // fmt only if something to fmt
-        	return prefix.toString() + txt + suffix.toString();
+        	txt = prefix.toString() + txt + suffix.toString();
         }
         return txt;
     }

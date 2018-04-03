@@ -4,6 +4,7 @@ import com.extract.processor.model.Header;
 import com.extract.processor.model.HtmlListElement;
 import com.extract.processor.model.Text;
 import com.extract.processor.render.TextRenderer;
+import com.extract.processor.utils.SimpleHtmlUtils;
 
 public class HeaderRender {
     public static String render(Header header) {
@@ -18,6 +19,7 @@ public class HeaderRender {
         }
         int hdr_level = header.getLevel();
         if (hdr_level < 1) hdr_level = 1;
-        return "<h" + hdr_level + ">" + result.toString() + "</h" + hdr_level + ">";
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+        return "<h" + hdr_level + ">" + txt + "</h" + hdr_level + ">";
     }
 }
