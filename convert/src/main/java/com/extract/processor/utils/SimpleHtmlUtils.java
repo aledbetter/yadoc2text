@@ -106,7 +106,14 @@ public class SimpleHtmlUtils {
     }
 
     public static void optimizeSimpleHtml(SimpleHtml simpleHtml) {
-        for (Element element : simpleHtml.getElementList()) {
+    	optimizeSimpleHtmlList(simpleHtml.getHeaderList());
+    	optimizeSimpleHtmlList(simpleHtml.getElementList());
+    	optimizeSimpleHtmlList(simpleHtml.getFooterList());
+    }
+    
+    private static void optimizeSimpleHtmlList(List<Element> list) {
+    	if (list == null || list.size() < 1) return;
+        for (Element element : list) {
             if (element instanceof Paragraph) {
                 Paragraph paragraph = (Paragraph) element;
                 paragraph.setTexts(optimizeTexts(paragraph.getTexts()));
@@ -134,17 +141,21 @@ public class SimpleHtmlUtils {
                 return texts;
             }
             Text anchorText = texts.get(0);
+            String last = anchorText.getText();
             int anchorIndex = 0;
-            for (int i = 0; i < texts.size(); i++) {
-                if (i > 0) {
-                    Text currentText = texts.get(i);
-                    if (checkSimilarFontParams(anchorText, currentText)) {
-                        continue;
-                    }
-                    result.add(joinTexts(texts.subList(anchorIndex, i)));
-                    anchorText = currentText;
-                    anchorIndex = i;
+            for (int i = 1; i < texts.size(); i++) {
+                Text currentText = texts.get(i);
+                if (checkSimilarFontParams(anchorText, currentText)) {
+                	if (addSpace(last, currentText.getText())) {
+                        //System.out.println(" NEEDT["+currentText.getText()+"] " + last);
+                        currentText.setText(currentText.getText() + " ");
+                	}
+                	last = currentText.getText();
+                    continue;
                 }
+                result.add(joinTexts(texts.subList(anchorIndex, i)));
+                anchorText = currentText;
+                anchorIndex = i;
             }
             result.add(joinTexts(texts.subList(anchorIndex, texts.size())));
             return result;
@@ -164,9 +175,8 @@ public class SimpleHtmlUtils {
         String last = null;
         for (Text text : texts) {
         	// make a space between tokens
-        	if (last != null && last.length() > 1 && text.getText().length() > 1 && !last.endsWith(" ") && !text.getText().startsWith(" ")) textContent.append(" ");
+        	if (addSpace(last, text.getText())) textContent.append(" ");
             last = text.getText();
-
             textContent.append(text.getText());
             result.setItalic(text.isItalic());
             result.setBold(text.isBold());
@@ -174,5 +184,9 @@ public class SimpleHtmlUtils {
         }
         result.setText(textContent.toString());
         return result;
+    }
+    private static boolean addSpace(String first, String second) {
+    	if (first != null && first.length() > 1 && second.length() > 1 && !first.endsWith(" ") && !second.startsWith(" ")) return true;
+    	return false;
     }
 }
