@@ -95,6 +95,7 @@ public class HtmlUtils {
 
     	ignoreClassPartial.add("nav-");
     	ignoreClassPartial.add("-nav");
+    	ignoreClassPartial.add("Nav");
     	
     	ignoreClassPartial.add("popover");
     	ignoreClassPartial.add("popup");
@@ -110,7 +111,8 @@ public class HtmlUtils {
     	ignoreClassPartial.add("-replay");
     	ignoreClassPartial.add("replay-");    	
     	ignoreClassPartial.add("video");
-
+    	//ignoreClassPartial.add("_header");
+    	//ignoreClassPartial.add("header_");
     	ignoreClassPartial.add("tools");
     	ignoreClassPartial.add("caption");
     }
