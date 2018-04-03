@@ -99,6 +99,8 @@ public class HtmlUtils {
     	ignoreClass.add("toc"); // wikipedia
     	ignoreClass.add("footer-places"); // wikipedia
     	ignoreClass.add("thumbcaption"); // wikipedia
+    	ignoreClass.add("printfooter"); // wikipedia
+    	ignoreClass.add("noprint"); // wikipedia
     	
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
