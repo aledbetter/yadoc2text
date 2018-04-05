@@ -79,7 +79,7 @@ public class HtmlUtils {
         ignoredTags.add("math");
         
         ignoredTags.add("annotation");
-        ignoredTags.add("figure");	// ?? not certain this is always ideal
+    //    ignoredTags.add("figure");	// ?? not certain this is always ideal
         
         ignoredRoles = new HashSet<>();
         ignoredRoles.add("menu");

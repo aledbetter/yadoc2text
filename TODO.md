@@ -11,7 +11,7 @@ PDF (.pdf)
 HTML (.htm, .html)
 
     1) retain <section> and <article> tags in location. don't retain any attributes
-    2) multiple div/ in li, must render each div/p with a p
+    2) <figure> decide where to put these or how to tag them
 
 
 TEXT (.txt)
