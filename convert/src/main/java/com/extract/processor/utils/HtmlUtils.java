@@ -77,6 +77,7 @@ public class HtmlUtils {
         ignoredTags.add("sup");
         ignoredTags.add("semantics");
         ignoredTags.add("math");
+        ignoredTags.add("time");
         
         ignoredTags.add("annotation");
         
