@@ -79,7 +79,6 @@ public class HtmlUtils {
         ignoredTags.add("math");
         
         ignoredTags.add("annotation");
-    //    ignoredTags.add("figure");	// ?? not certain this is always ideal
         
         ignoredRoles = new HashSet<>();
         ignoredRoles.add("menu");
@@ -134,7 +133,11 @@ public class HtmlUtils {
     	//ignoreClassPartial.add("_header");
     	//ignoreClassPartial.add("header_");
     	ignoreClassPartial.add("tools");
-    	ignoreClassPartial.add("caption");
+    	
+   // 	ignoreClassPartial.add("caption");
+        //    ignoredTags.add("figure");	// ?? not certain this is always ideal
+        //    ignoredTags.add("figcaption");	// ?? not certain this is always ideal
+
     }
 
     public static void simplify(Element element, SimpleHtml simpleHtml) {
