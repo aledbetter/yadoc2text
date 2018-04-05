@@ -20,7 +20,7 @@ public class ListElementRenderer {
             result.append(ListRenderer.render(element.getNestedList()));
         }
         String txt = SimpleHtmlUtils.cleanTexts(result.toString());
-
+        if (txt.isEmpty()) return "";
         return "<li>" + txt+ "</li>";
     }
 }

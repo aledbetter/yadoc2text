@@ -33,11 +33,13 @@ public class ListRenderer {
             	}
             }
         }
+        String txt = result.toString();
+        if (txt.isEmpty()) return "";
         if (liCnt > 0) {
             String tagName = list.isSorted() ? "ol" : "ul";
-        	return "<" + tagName + ">" + result.toString() + "</" + tagName + ">";
+        	return "<" + tagName + ">" + txt + "</" + tagName + ">";
         } else {
-        	return result.toString();
+        	return txt;
         }
     }
 }

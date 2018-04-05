@@ -99,7 +99,9 @@ public class HtmlUtils {
     	ignoreClass.add("footer-places"); // wikipedia
     	ignoreClass.add("thumbcaption"); // wikipedia
     	ignoreClass.add("printfooter"); // wikipedia
-    	ignoreClass.add("noprint"); // wikipedia
+    	ignoreClass.add("noprint");
+    	ignoreClass.add("links");
+    	ignoreClass.add("logo");
     	
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
@@ -107,10 +109,13 @@ public class HtmlUtils {
     	ignoreClassPartial.add("btn-");
     	ignoreClassPartial.add("-action");
     	ignoreClassPartial.add("carousel");
+    	ignoreClassPartial.add("toggle");
 
     	ignoreClassPartial.add("nav-");
     	ignoreClassPartial.add("-nav");
+    	ignoreClassPartial.add("_nav");
     	ignoreClassPartial.add("Nav");
+    	
     	
     	ignoreClassPartial.add("catlinks"); // wikipedia
     	ignoreClassPartial.add("reflist"); // wikipedia
@@ -129,10 +134,13 @@ public class HtmlUtils {
     	
     	ignoreClassPartial.add("-replay");
     	ignoreClassPartial.add("replay-");    	
-    	ignoreClassPartial.add("video");
+    	ignoreClassPartial.add("-video");
+    	ignoreClassPartial.add("_video");
     	//ignoreClassPartial.add("_header");
     	//ignoreClassPartial.add("header_");
     	ignoreClassPartial.add("tools");
+    	ignoreClassPartial.add("feedback-");
+    	
     	
    // 	ignoreClassPartial.add("caption");
         //    ignoredTags.add("figure");	// ?? not certain this is always ideal
@@ -412,6 +420,7 @@ public class HtmlUtils {
             //System.out.println("IGNC["+tagName+"]");
         	return true;
         }
+        if (tagName.equals("body")) return false;
         
         String roleName = element.attr("role");
         if (roleName != null && ignoredRoles.contains(roleName)) return true;     
