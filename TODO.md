@@ -12,7 +12,8 @@ HTML (.htm, .html)
 
     1) retain <section> and <article> tags in location. don't retain any attributes
     2) <figure> decide where to put these or how to tag them
-
+	3) add & promotions: keep, section off or kill?
+	4) aside content: keep, section off or kill?
 
 TEXT (.txt)
 

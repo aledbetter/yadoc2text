@@ -72,27 +72,39 @@ public class HtmlUtils {
         ignoredTags.add("svg");
         ignoredTags.add("button");
         ignoredTags.add("input");
+        ignoredTags.add("select");
         ignoredTags.add("label");
+        ignoredTags.add("video");
+        ignoredTags.add("textarea");
         ignoredTags.add("nav");
         ignoredTags.add("sup");
         ignoredTags.add("semantics");
         ignoredTags.add("math");
         ignoredTags.add("time");
-        
+        ignoredTags.add("aside");    
         ignoredTags.add("annotation");
+        ignoredTags.add("code");
+        ignoredTags.add("embed");
+        ignoredTags.add("object");
+        ignoredTags.add("canvas");
+        ignoredTags.add("del");
+        ignoredTags.add("dialog");
         
         ignoredRoles = new HashSet<>();
         ignoredRoles.add("menu");
         ignoredRoles.add("menuitem");
         ignoredRoles.add("menubar");
         ignoredRoles.add("navigation");
+        ignoredRoles.add("aside");
+        
         containerTags = new HashSet<>();
         containerTags.add("div");
-        containerTags.add("nav");
+       // containerTags.add("nav");
         containerTags.add("section");
         containerTags.add("article");
         containerTags.add("table");
         containerTags.add("iframe");
+        containerTags.add("main");
         
         // heuristic based ignore for controls
     	ignoreClass = new HashSet<>();
@@ -103,6 +115,8 @@ public class HtmlUtils {
     	ignoreClass.add("noprint");
     	ignoreClass.add("links");
     	ignoreClass.add("logo");
+    	ignoreClass.add("prefooter");   	
+
     	
     	ignoreClassPartial = new HashSet<>();
     	ignoreClassPartial.add("button");
@@ -117,6 +131,9 @@ public class HtmlUtils {
     	ignoreClassPartial.add("_nav");
     	ignoreClassPartial.add("Nav");
     	
+    	ignoreClassPartial.add("icon");
+    	ignoreClassPartial.add("logo");
+
     	
     	ignoreClassPartial.add("catlinks"); // wikipedia
     	ignoreClassPartial.add("reflist"); // wikipedia
@@ -125,6 +142,7 @@ public class HtmlUtils {
     	ignoreClassPartial.add("popover");
     	ignoreClassPartial.add("popup");
     	ignoreClassPartial.add("overlay");	
+    	ignoreClassPartial.add("flyout");	
 
     	ignoreClassPartial.add("notification");
 
@@ -141,6 +159,24 @@ public class HtmlUtils {
     	//ignoreClassPartial.add("header_");
     	ignoreClassPartial.add("tools");
     	ignoreClassPartial.add("feedback-");
+    	
+    	// adds
+    	ignoreClassPartial.add("morefrom");
+    	ignoreClassPartial.add("promotional");
+    	ignoreClassPartial.add("sidebar");
+    	ignoreClassPartial.add("adsquare");
+    	ignoreClassPartial.add("paid-");
+    	ignoreClassPartial.add("sponsored");
+    	ignoreClassPartial.add("Sponsors");	
+    	ignoreClassPartial.add("adBanner");
+    	ignoreClassPartial.add("ads-");
+    	ignoreClassPartial.add("-ads");
+    	ignoreClassPartial.add("module-surge");
+    	
+    	
+    	// mailChimp
+    	ignoreClassPartial.add("mc-embedded");
+    	
     	
     	
    // 	ignoreClassPartial.add("caption");
