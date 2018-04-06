@@ -192,6 +192,9 @@ public class SimpleHtmlUtils {
     
     public static String cleanTexts(String text) {
     	if (text == null) return null;
+    	//U+20000, represented by 2 chars in java (UTF-16 surrogate pair)
+    //	text = text.replaceAll( "([\\ud800-\\udbff\\udc00-\\udfff])", "");
+    	
     	return text.replace("\t", "    ").replace('—', '-').replace('–', '-').replace('‘', '\'')
     			.replace('“', '\"').replace('’', '\'').replace('”', '\"').replace('•', '.')
     			.replace("�", "--").replace("»", ">>").replace("Â", "").replace("â", "")

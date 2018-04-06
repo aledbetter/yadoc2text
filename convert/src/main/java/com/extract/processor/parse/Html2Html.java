@@ -47,7 +47,7 @@ public class Html2Html implements Converter {
 
         os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
     }
-	public static String readStream(InputStream input) {
+	public static String readStream(InputStream input) {	
 		// load the data to a buffer to prevent closed stream issue
 		ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
 		int read = 0;
@@ -59,6 +59,7 @@ public class Html2Html implements Converter {
 		} catch (IOException e) {
 			return null;
 		}
+		//return bOutput.toString("UTF-8");
 		return bOutput.toString();
 	}
 
