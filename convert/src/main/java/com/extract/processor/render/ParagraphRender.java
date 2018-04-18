@@ -25,6 +25,9 @@ public class ParagraphRender {
             }
         }
         String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+        //System.out.println("P1["+result.toString()+"]");
+        //System.out.println("P2["+txt+"]");
+
         return "<p>" + txt + "</p>";
     }
 }
