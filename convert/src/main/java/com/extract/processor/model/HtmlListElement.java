@@ -17,4 +17,8 @@ public class HtmlListElement {
     	if (tagName == null || tagName.equals("li")) return true;
     	return false;
     }
+    public boolean isHeaderItem() {
+    	if (tagName == null || tagName.startsWith("h")) return true;
+    	return false;
+    }
 }

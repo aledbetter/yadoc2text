@@ -48,10 +48,11 @@ public class HtmlUtils {
         textTags.add("td");
         styleTags = new HashSet<>();
         styleTags.add("b");
-        styleTags.add("i");
-        styleTags.add("u");
         styleTags.add("strong");
+        styleTags.add("i");
         styleTags.add("em");
+        styleTags.add("small");
+        styleTags.add("u");
         listTags = new HashSet<>();
         listTags.add("ul");
         listTags.add("ol");
@@ -198,19 +199,27 @@ public class HtmlUtils {
                     } else {
                         simpleHtml.getFooterList().add(processHeader(child, simpleHtml.getFooterList()));
                     }
-                } else if (tagName.equals("title")) {
+                } else if (tagName.equalsIgnoreCase("title")) {
                     simpleHtml.setTitle(child.text());
-                } else if (tagName.equals("header") || (roleName != null && roleName.equals("header"))) {
-                    simplify(child, simpleHtml.getHeaderList());
-                } else if (tagName.equals("footer") 
-                		|| (roleName != null && roleName.equals("footer"))
-                		|| (idName != null && idName.equals("footer"))) {
-                	simplify(child, simpleHtml.getFooterList());
-                } else if (listTags.contains(tagName)) {
-                    if (simpleHtml.getFooterList().isEmpty()) {
-                        simpleHtml.getElementList().add(processList(child, simpleHtml.getElementList()));
+                } else if (tagName.equalsIgnoreCase("header") || (roleName != null && roleName.equalsIgnoreCase("header"))) {
+                    simplify(child, simpleHtml.getHeaderList(), simpleHtml);
+                } else if (tagName.equalsIgnoreCase("footer") 
+                		|| (roleName != null && roleName.equalsIgnoreCase("footer"))
+                		|| (idName != null && idName.equalsIgnoreCase("footer"))) {
+                    if (isDivText(child)) {
+                        simpleHtml.getFooterList().add(processParagraph(child, simpleHtml.getFooterList()));
                     } else {
-                        simpleHtml.getFooterList().add(processList(child, simpleHtml.getFooterList()));
+                        simplify(child, simpleHtml.getFooterList(), simpleHtml);
+                    }
+                } else if (listTags.contains(tagName)) {
+                    if (isRealList(child)) {
+                        if (simpleHtml.getFooterList().isEmpty()) {
+                            simpleHtml.getElementList().add(processList(child, simpleHtml.getElementList()));
+                        } else {
+                            simpleHtml.getFooterList().add(processList(child, simpleHtml.getFooterList()));
+                        }
+                    } else {
+                        simplify(child, simpleHtml);
                     }
                 } else if (textTags.contains(tagName)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
@@ -218,7 +227,7 @@ public class HtmlUtils {
                     } else {
                         simpleHtml.getFooterList().add(processParagraph(child, simpleHtml.getFooterList()));
                     }
-                } else if (tagName.equals("div") && isDivText(child)) {
+                } else if (tagName.equalsIgnoreCase("div") && isDivText(child)) {
                     if (simpleHtml.getFooterList().isEmpty()) {
                         simpleHtml.getElementList().add(processParagraph(child, simpleHtml.getElementList()));
                     } else {
@@ -231,20 +240,25 @@ public class HtmlUtils {
         }
     }
 
-    public static void simplify(Element element, List<com.extract.processor.model.Element> elements) {   	
+    public static void simplify(Element element, List<com.extract.processor.model.Element> elements, SimpleHtml simpleHtml) {   	
         for (Element child : element.children()) {
             String tagName = child.tagName();
+
             if (!isIgnored(child)) {
         		if (headerTags.contains(tagName)) {              
                     elements.add(processHeader(child, elements));
                 } else if (listTags.contains(tagName)) {
-                    elements.add(processList(child, elements));
+                    if (isRealList(child)) {
+                        elements.add(processList(child, elements));
+                    } else {
+                        simplify(child, elements, simpleHtml); 
+                    }
                 } else if (textTags.contains(tagName)) {        
                      elements.add(processParagraph(child, elements));
-                } else if (tagName.equals("div") && isDivText(child)) {
+                } else if (tagName.equalsIgnoreCase("div") && isDivText(child)) {
                      elements.add(processParagraph(child, elements));
                 } else {
-                     simplify(child, elements);             
+                     simplify(child, elements, simpleHtml);             
                 }
             }
         } 
@@ -278,6 +292,13 @@ public class HtmlUtils {
         return Integer.valueOf(matcher.group(1));
     }
 
+    // true if this list has any children; else should be treated like a div
+    public static boolean isRealList(Element element) {
+        for (Element child : element.children()) {
+            if (child.tagName().equalsIgnoreCase("li")) return true;
+        }
+        return false;
+    }
     public static HtmlList processList(Element element, List<com.extract.processor.model.Element> elements) {
 
         HtmlList htmlList = new HtmlList();
@@ -288,8 +309,25 @@ public class HtmlUtils {
             String tagName = child.tagName();
             if (isIgnored(child)) {
             	continue;
-            } else if (tagName.equals("li")) {
+            } else if (tagName.equalsIgnoreCase("li")) {
                 htmlList.getElementList().add(processListElement(child, elements));
+            } else if (tagName.equalsIgnoreCase("p")) {
+                HtmlListElement result = new HtmlListElement();
+                result.setTextList(new ArrayList<Text>());    
+                result.setTagName(tagName.toLowerCase());
+                result.getTextList().addAll(processText(child, elements));
+                htmlList.getElementList().add(result);
+
+            } else if ((tagName.equalsIgnoreCase("div") && isDivText(child))) {   
+        System.out.println(" LIST_DIV["+tagName+"]");
+
+                HtmlListElement result = new HtmlListElement();
+                result.setTextList(new ArrayList<Text>());    
+                result.setTagName(tagName.toLowerCase());
+                result.getTextList().addAll(processText(child, elements));
+                htmlList.getElementList().add(result);
+
+
             } else if (tagName.startsWith("h") && tagName.length() == 2) {
                 Matcher matcher = headerPattern.matcher(tagName);
                 if (matcher.matches()) { // keep hX in the list as well
@@ -343,7 +381,7 @@ public class HtmlUtils {
         for (Node node : element.childNodes()) {
             if (node instanceof TextNode) {
             	String txt = ((TextNode) node).text();
-            	if (element.tagName().equals("div") && txt.trim().isEmpty()) continue; // no empty div text
+            	if (element.tagName().equalsIgnoreCase("div") && txt.trim().isEmpty()) continue; // no empty div text
                 Text text = new Text();
                 text.setText(txt);
                 text.setBold(isBold(node));
@@ -354,12 +392,12 @@ public class HtmlUtils {
 
             } else if (node instanceof Element) {
             	if (isIgnored((Element) node)) continue;
-            	if (((Element) node).tagName().equals("br")) {
+            	if (((Element) node).tagName().equalsIgnoreCase("br")) {
                     Text text = new Text();
                     text.setText("\n");
                 	//System.out.println(" ADD_BR["+element.tagName()+"][" + text.getText()+"]");
                     result.add(text);
-            	} else if (first && ((Element) node).tagName().equals("cite")) { 
+            	} else if (first && ((Element) node).tagName().equalsIgnoreCase("cite")) { 
             		// perhapse others fit this as well?
             		elements.add(processParagraph((Element) node, elements));
             	} else {
@@ -373,27 +411,30 @@ public class HtmlUtils {
     
     // if contains text OR contains textElements
     public static boolean isDivText(Element element) {
-    	int cnt1 = 0, cnt2 = 0, cntt = 0;
-        for (Node node : element.childNodes()) {
-            if (node instanceof TextNode) {
-            	String txt = ((TextNode) node).text();
-                if (!txt.trim().isEmpty()) {
-                	// if it contains text, treat it like a span...
-                	//System.out.println("DIV["+txt.length()+"] [" + txt+"]");
-                    return true;
+        int cnt1 = 0, cnt2 = 0, cntt = 0;
+        if (element.hasText()) {
+            if (containsOnlyFormattedText(element)) return true;
+            for (Node node : element.childNodes()) {
+                if (node instanceof TextNode) {
+                    String txt = ((TextNode) node).text();
+                    if (!txt.trim().isEmpty()) {
+                        // if it contains text, treat it like a span...
+                        System.out.println("DIV_TXT["+txt.length()+"] [" + txt+"]");
+                        return true;
+                    }
+                    cnt1++;
+                } else if (node instanceof Element) {
+                    String tn = ((Element)node).tagName();
+                    if (!tn.equalsIgnoreCase("p") && textTags.contains(tn)) {
+                        cnt2++;
+                    } 
+                } else {
+                    return false;
                 }
-                cnt1++;
-            } else if (node instanceof Element) {
-            	String tn = ((Element)node).tagName();
-            	if (!tn.equalsIgnoreCase("p") && textTags.contains(tn)) {
-                	cnt2++;
-            	} 
-            } else {
-            	return false;
+                cntt++;
             }
-            cntt++;
+            if ((cnt1 + cnt2) == cntt) return true;
         }
-        if ((cnt1 + cnt2) == cntt) return true;
         return false;
     }
 
@@ -403,7 +444,7 @@ public class HtmlUtils {
                 if (element != child) {
                     String tagName = child.tagName();
                     if (!styleTags.contains(tagName)) {
-                        if (!containerTags.contains(tagName) && !tagName.equals("div")) {
+                        if (!containerTags.contains(tagName) && !tagName.equalsIgnoreCase("div")) {
                             if (!textTags.contains(tagName)) {
                                 if (!headerTags.contains(tagName)) {
                                     return false;
@@ -424,7 +465,7 @@ public class HtmlUtils {
     }
 
     public static boolean isItalic(Node node) {
-        return (isStyled(node, "i") || isStyled(node, "em"));
+        return (isStyled(node, "i") || isStyled(node, "em") || isStyled(node, "small"));
     }
 
     public static boolean isUnderlined(Node node) {
@@ -439,11 +480,11 @@ public class HtmlUtils {
             container = (Element) node;
         }
         if (container != null) {
-            if (container.tagName().equals(styleTagName)) {
+            if (container.tagName().equalsIgnoreCase(styleTagName)) {
                 return true;
             }
             for (Element parent : container.parents()) {
-                if (parent.tagName().equals(styleTagName)) {
+                if (parent.tagName().equalsIgnoreCase(styleTagName)) {
                     return true;
                 }
             }
@@ -463,7 +504,7 @@ public class HtmlUtils {
         if (roleName != null && ignoredRoles.contains(roleName)) return true;     
         
         String idName = element.attr("id");
-        if (idName != null && idName.equals("nav")) return true;
+        if (idName != null && idName.equalsIgnoreCase("nav")) return true;
         
         String className = element.attr("class");
         if (className == null && idName == null) return false;

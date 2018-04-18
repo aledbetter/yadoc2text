@@ -6,6 +6,7 @@ import com.extract.processor.model.Text;
 import lombok.Getter;
 import lombok.Setter;
 import com.extract.processor.render.HeaderRender;
+import com.extract.processor.render.ParagraphRender;
 import com.extract.processor.render.ListElementRenderer;
 import com.extract.processor.render.TextRenderer;
 
@@ -28,8 +29,10 @@ public class ListRenderer {
             	if (listElement.isListItem()) {
             		liCnt++;
                     result.append(ListElementRenderer.render(listElement));
-            	} else {
+                } else if (listElement.isHeaderItem()) {
                     result.append(HeaderRender.render(listElement));
+            	} else {
+                    result.append(ParagraphRender.render(listElement));
             	}
             }
         }
