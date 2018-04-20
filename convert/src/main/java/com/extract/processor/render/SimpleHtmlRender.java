@@ -11,6 +11,7 @@ import com.extract.processor.model.SimpleHtml;
 import com.extract.processor.render.HeaderRender;
 import com.extract.processor.render.ListRenderer;
 import com.extract.processor.render.ParagraphRender;
+import com.extract.processor.utils.SimpleHtmlUtils;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class SimpleHtmlRender {
         if (simpleHtml.getTitle() != null) {
             result
                     .append("<title>")
-                    .append(simpleHtml.getTitle())
+                    .append(SimpleHtmlUtils.cleanTexts(simpleHtml.getTitle()))
                     .append("</title>");
         }
         if (simpleHtml.getType() != null) {
