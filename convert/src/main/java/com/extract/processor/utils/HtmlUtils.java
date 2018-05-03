@@ -319,7 +319,7 @@ public class HtmlUtils {
                 htmlList.getElementList().add(result);
 
             } else if ((tagName.equalsIgnoreCase("div") && isDivText(child))) {   
-        System.out.println(" LIST_DIV["+tagName+"]");
+        //System.out.println(" LIST_DIV["+tagName+"]");
 
                 HtmlListElement result = new HtmlListElement();
                 result.setTextList(new ArrayList<Text>());    
@@ -413,13 +413,16 @@ public class HtmlUtils {
     public static boolean isDivText(Element element) {
         int cnt1 = 0, cnt2 = 0, cntt = 0;
         if (element.hasText()) {
-            if (containsOnlyFormattedText(element)) return true;
+            if (containsOnlyFormattedText(element)) {
+               // System.out.println(" LIST_DIVXX[just text] ");
+                return true;
+            }
             for (Node node : element.childNodes()) {
                 if (node instanceof TextNode) {
                     String txt = ((TextNode) node).text();
                     if (!txt.trim().isEmpty()) {
                         // if it contains text, treat it like a span...
-                        System.out.println("DIV_TXT["+txt.length()+"] [" + txt+"]");
+                        //System.out.println("DIV_TXT["+txt.length()+"] [" + txt+"]");
                         return true;
                     }
                     cnt1++;
@@ -433,16 +436,21 @@ public class HtmlUtils {
                 }
                 cntt++;
             }
-            if ((cnt1 + cnt2) == cntt) return true;
+            if ((cnt1 + cnt2) == cntt) {
+                //System.out.println(" LIST_DIVXX["+cnt1+" / "+cnt2+"] ");
+                return true;
+            }
         }
         return false;
     }
 
     public static boolean containsOnlyFormattedText(Element element) {
         if (element.hasText()) {
+            int pcnt = 0;
             for (Element child : element.getAllElements()) {
                 if (element != child) {
                     String tagName = child.tagName();
+                    if (tagName.equalsIgnoreCase("p")) pcnt++;
                     if (!styleTags.contains(tagName)) {
                         if (!containerTags.contains(tagName) && !tagName.equalsIgnoreCase("div")) {
                             if (!textTags.contains(tagName)) {
@@ -453,6 +461,10 @@ public class HtmlUtils {
                         }
                     }
                 }
+            }
+            if (pcnt > 1) {
+                //System.out.println(" containsOnlyFormattedText["+pcnt+" ");
+                return false;
             }
             return true;
         } else {
