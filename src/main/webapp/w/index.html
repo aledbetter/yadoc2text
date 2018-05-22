@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Convert file</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html">
+	<meta http-equiv="cache-control" content="no-cache">
+	<script src="w/css/style.css"></script>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="w/js/jquery.ui.widget.js"></script>
+	<script src="w/js/jquery.iframe-transport.js"></script>
+	<script src="w/js/jquery.fileupload.js"></script>
+	<script src="w/js/FileSaver.min.js"></script>
+	<script>
+	    var lfn = "";
+		$(function () {
+			$("#status").html('');
+			$("#docconvert").html('');
+			$("#save-filename").val('');
+			$("#docconvert_data").val('');
+			$("#saveas").hide();
+			
+		    $('#fileupload').fileupload({
+		        add: function (e, data) {
+		        	$("#docconvert").html('');
+		        	$("#docconvert_data").val('');
+		        	$("#saveas").hide();
+			    	var uploadErrors = [];
+			    	var acceptFileTypes = /(doc)|(docx)|(pdf)|(htm)|(html)|(txt)$/i;
+	                if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+	                    uploadErrors.push('Not an accepted file type');
+	                }
+	                if(uploadErrors.length > 0) {
+	                    alert(uploadErrors.join("\n"));
+	                } else {
+			            data.context = "uploading";
+			            lfn = data.files[0].name;
+			            $("#status").html('Converting Document '+lfn+'...');
+			            data.submit();
+	                }
+		        },
+		        done: function (e, data) {
+		            data.context = "done";
+		            $("#status").html('Document Converted: ' + lfn);
+		            if (lfn.endsWith(".html")) $("#save-filename").val(lfn);
+		            else $("#save-filename").val(lfn+".html");
+		            $("#docconvert").html(data.result);
+		            $("#docconvert_data").val(data.result);
+		            $("#saveas").show();
+		        }
+		    });
+		
+		    // save content
+		    $("#save-as").submit(function(event) {
+				event.preventDefault();	
+				var sfn = $("#save-filename").val();
+				var file = new File([$("#docconvert_data").val()], sfn, {type: "text/html;charset=utf-8"});
+				saveAs(file, sfn);
+			});
+		});
+	</script>
+</head>
+
+<body style='background:#FFF'>
+
+<div style='float:left;width:100%'>
+<h1 style='text-align:center;margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #555'>Upload file to convert</h1>
+
+	<div style='float:left;width:100%;margin-left:50px;margin-top:20px'>
+		<input id="fileupload" type="file" name="file" data-url="/api/data/convert">
+	</div>
+	<div style='float:left;width:100%;text-align:center;margin-top:20px;font-size:26px' id="status"></div>
+	<div style='float:left;width:100%;text-align:center;margin-top:15px;font-size:12px;display:none' id="saveas">
+	    <form id="save-as">
+            <label>Save As: <input type="text" class="filename" id="save-filename" placeholder="filename"/></label>
+            <input type="submit" value="Save"/>
+        </form>
+    </div>
+	<div style='float:left;width:100%;margin-top:20px;font-size:12px' id="docconvert"></div>
+	<input id="docconvert_data" type="hidden" />
+	
+</div>
+
+</body>
+</html>
