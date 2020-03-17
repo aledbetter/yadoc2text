@@ -19,7 +19,7 @@ unzip -p target/web-convert-0.9.1.war  META-INF/MANIFEST.MF
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java-version>1.8</java-version>
     <buildNumber>20000022</buildNumber>
-    <jettyVersion>9.4.10.v20180503</jettyVersion>
+    <jettyVersion>9.4.27.v20200227</jettyVersion>
     <jerseyVersion>1.14</jerseyVersion>
   </properties>
 
