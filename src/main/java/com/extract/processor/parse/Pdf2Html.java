@@ -1,11 +1,8 @@
-package com.extract.processor.parse;
+package main.java.com.extract.processor.parse;
 
-import com.extract.processor.model.SimpleHtml;
-import com.extract.processor.render.SimpleHtmlRender;
-import com.extract.processor.utils.SimpleHtmlUtils;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.render.SimpleHtmlRender;
+import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.Stripper;
 
@@ -15,17 +12,24 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-@Log4j2
-public class Pdf2Html implements Converter {
+//FIXME will this Stripper override the other? 
+
+public class Pdf2Html implements ConverterHtml {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "pdf";
 
-    @Getter
-    @Setter
     private String fileName;
 
-    @Override
+    public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	@Override
     public void convert(InputStream is, OutputStream os) throws Exception {
         PDDocument document = PDDocument.load(is);
         Stripper stripper = new Stripper();
@@ -35,9 +39,9 @@ public class Pdf2Html implements Converter {
         Calendar creation = document.getDocumentInformation().getCreationDate();
         Calendar modification = document.getDocumentInformation().getModificationDate();
        // document.getDocumentInformation().getCreator()
-        log.debug("document name: " + fileName);
-        log.debug("document creation: " + creation);
-        log.debug("document modification: " + modification);
+        //log.debug("document name: " + fileName);
+        //log.debug("document creation: " + creation);
+        //log.debug("document modification: " + modification);
 
         SimpleHtml simpleHtml = stripper.getSimpleHtml();
         simpleHtml.setType(TYPE);

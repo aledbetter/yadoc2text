@@ -1,17 +1,11 @@
-package com.extract.processor.render;
+package main.java.com.extract.processor.render;
 
-import com.extract.processor.model.*;
-import lombok.Getter;
-import lombok.Setter;
-import com.extract.processor.model.Element;
-import com.extract.processor.model.Header;
-import com.extract.processor.model.HtmlList;
-import com.extract.processor.model.Paragraph;
-import com.extract.processor.model.SimpleHtml;
-import com.extract.processor.render.HeaderRender;
-import com.extract.processor.render.ListRenderer;
-import com.extract.processor.render.ParagraphRender;
-import com.extract.processor.utils.SimpleHtmlUtils;
+import main.java.com.extract.processor.model.MElement;
+import main.java.com.extract.processor.model.MHeader;
+import main.java.com.extract.processor.model.HtmlList;
+import main.java.com.extract.processor.model.MParagraph;
+import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 
 import java.util.List;
 
@@ -72,12 +66,12 @@ public class SimpleHtmlRender {
         return result.toString();
     }
 
-    private static void renderElementList(List<Element> elementList, StringBuilder result) {
-        for (Element element : elementList) {
-            if (element instanceof Header) {
-                result.append(HeaderRender.render((Header) element));
-            } else if (element instanceof Paragraph) {
-                result.append(ParagraphRender.render((Paragraph) element));
+    private static void renderElementList(List<MElement> elementList, StringBuilder result) {
+        for (MElement element : elementList) {
+            if (element instanceof MHeader) {
+                result.append(HeaderRender.render((MHeader) element));
+            } else if (element instanceof MParagraph) {
+                result.append(ParagraphRender.render((MParagraph) element));
             } else if (element instanceof HtmlList) {
                 result.append(ListRenderer.render((HtmlList) element));
             }

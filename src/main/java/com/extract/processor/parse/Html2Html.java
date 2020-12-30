@@ -1,13 +1,11 @@
-package com.extract.processor.parse;
+package main.java.com.extract.processor.parse;
 
-import com.extract.processor.model.Element;
-import com.extract.processor.model.SimpleHtml;
-import com.extract.processor.render.SimpleHtmlRender;
-import com.extract.processor.utils.HtmlUtils;
-import com.extract.processor.utils.SimpleHtmlUtils;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import main.java.com.extract.processor.model.MElement;
+import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.render.SimpleHtmlRender;
+import main.java.com.extract.processor.utils.HtmlUtils;
+import main.java.com.extract.processor.utils.SimpleHtmlUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -17,23 +15,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-@Log4j2
-public class Html2Html implements Converter {
+public class Html2Html implements ConverterHtml {
 
     private static final String TYPE = "html";
 
-    @Getter
-    @Setter
     private String fileName;
 
-    @Override
+    public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	@Override
     public void convert(InputStream is, OutputStream os) throws IOException {
 
         SimpleHtml simpleHtml = new SimpleHtml();
         simpleHtml.setType(TYPE);
-        simpleHtml.setHeaderList(new ArrayList<Element>());
-        simpleHtml.setElementList(new ArrayList<Element>());
-        simpleHtml.setFooterList(new ArrayList<Element>());
+        simpleHtml.setHeaderList(new ArrayList<MElement>());
+        simpleHtml.setElementList(new ArrayList<MElement>());
+        simpleHtml.setFooterList(new ArrayList<MElement>());
         simpleHtml.setName(fileName);
 
         String in = readStream(is);

@@ -1,18 +1,33 @@
-package com.extract.processor.model;
+package main.java.com.extract.processor.model;
 
-import lombok.Data;
-import com.extract.processor.model.HtmlList;
-import com.extract.processor.model.Text;
 
 import java.util.List;
 
-@Data
 public class HtmlListElement {
-    private List<Text> textList;
+    private List<MText> textList;
     private HtmlList nestedList;
     private String tagName;
     private int level;
 
+    
+	public List<MText> getTextList() {
+		return textList;
+	}
+	public void setTextList(List<MText> textList) {
+		this.textList = textList;
+	}
+	public HtmlList getNestedList() {
+		return nestedList;
+	}
+	public void setNestedList(HtmlList nestedList) {
+		this.nestedList = nestedList;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
     public boolean isListItem() {
     	if (tagName == null || tagName.equals("li")) return true;
     	return false;
@@ -21,4 +36,10 @@ public class HtmlListElement {
     	if (tagName == null || tagName.startsWith("h")) return true;
     	return false;
     }
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
 }

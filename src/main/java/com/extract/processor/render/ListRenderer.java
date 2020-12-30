@@ -1,14 +1,9 @@
-package com.extract.processor.render;
+package main.java.com.extract.processor.render;
 
-import com.extract.processor.model.HtmlList;
-import com.extract.processor.model.HtmlListElement;
-import com.extract.processor.model.Text;
-import lombok.Getter;
-import lombok.Setter;
-import com.extract.processor.render.HeaderRender;
-import com.extract.processor.render.ParagraphRender;
-import com.extract.processor.render.ListElementRenderer;
-import com.extract.processor.render.TextRenderer;
+import main.java.com.extract.processor.model.HtmlList;
+import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MText;
+
 
 public class ListRenderer {
 	// 1) no empty list
@@ -20,7 +15,7 @@ public class ListRenderer {
         int liCnt = 0;
         // if no li then no list
         if (list.getTextList() != null) {
-            for (Text text : list.getTextList()) {
+            for (MText text : list.getTextList()) {
                 result.append(TextRenderer.render(text));
             }
         }

@@ -1,10 +1,10 @@
-package com.extract.processor.render;
+package main.java.com.extract.processor.render;
 
-import com.extract.processor.model.Text;
-import com.extract.processor.utils.SimpleHtmlUtils;
+import main.java.com.extract.processor.model.MText;
+import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 
 public class TextRenderer {
-    public static String render(Text text) {
+    public static String render(MText text) {
 
         StringBuilder prefix = new StringBuilder();
         StringBuilder suffix = new StringBuilder();

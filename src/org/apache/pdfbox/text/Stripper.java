@@ -1,13 +1,14 @@
+//package main.java.org.apache.pdfbox.text;
 package org.apache.pdfbox.text;
 
-import com.extract.processor.utils.PdfUtils;
+import main.java.com.extract.processor.utils.PdfUtils;
 
-import com.extract.processor.model.Element;
-import com.extract.processor.model.Header;
-import com.extract.processor.model.HtmlList;
-import com.extract.processor.model.HtmlListElement;
-import com.extract.processor.model.Paragraph;
-import com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MElement;
+import main.java.com.extract.processor.model.MHeader;
+import main.java.com.extract.processor.model.HtmlList;
+import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MParagraph;
+import main.java.com.extract.processor.model.SimpleHtml;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +18,9 @@ import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
-//mport org.apache.pdfbox.text.Stripper.LineItem;
+
+
+//import org.apache.pdfbox.text.Stripper.LineItem;
 //import org.apache.pdfbox.text.Stripper.PositionWrapper;
 //import org.apache.pdfbox.text.Stripper.WordWithTextPositions;
 import org.apache.pdfbox.util.QuickSort;
@@ -279,7 +282,7 @@ public class Stripper extends LegacyPDFStreamEngine {
     protected void startDocument(PDDocument document) throws IOException {
         // no default implementation, but available for subclasses
         simpleHtml = new SimpleHtml();
-        simpleHtml.setElementList(new ArrayList<Element>());
+        simpleHtml.setElementList(new ArrayList<MElement>());
         listStack = new Stack<>();
     }
 
@@ -675,7 +678,7 @@ public class Stripper extends LegacyPDFStreamEngine {
                     }
                     simpleHtml.getElementList().add(listStack.pop());
                 }
-                Header header = new Header();
+                MHeader header = new MHeader();
                 header.setLevel(PdfUtils.getLevelByFontSize(firstTextPosition));
  //               header.setFontSize(firstTextPosition);
  //FIXME get font size and save it               
@@ -723,7 +726,7 @@ public class Stripper extends LegacyPDFStreamEngine {
                     }
                     simpleHtml.getElementList().add(listStack.pop());
                 }
-                Paragraph paragraph = new Paragraph();
+                MParagraph paragraph = new MParagraph();
                 paragraph.setTexts(PdfUtils.convertText(textPositions));
                 simpleHtml.getElementList().add(paragraph);
             }

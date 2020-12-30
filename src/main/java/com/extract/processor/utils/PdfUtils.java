@@ -1,14 +1,12 @@
-package com.extract.processor.utils;
+package main.java.com.extract.processor.utils;
 
-import com.extract.processor.model.Text;
-import lombok.extern.log4j.Log4j2;
+import main.java.com.extract.processor.model.MText;
 
 import org.apache.pdfbox.text.TextPosition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 public class PdfUtils {
 
     public static final int HEADER_1_SIZE = 20;
@@ -144,8 +142,8 @@ public class PdfUtils {
         return false;
     }
 
-    public static List<Text> convertText(List<TextPosition> textPositions) {
-        List<Text> result = new ArrayList<>();
+    public static List<MText> convertText(List<TextPosition> textPositions) {
+        List<MText> result = new ArrayList<>();
         String txt = "";
         int len = 0;
         boolean cb = false;
@@ -156,7 +154,7 @@ public class PdfUtils {
         	boolean b = PdfUtils.isBold(textPosition);
         	if (it != ci || b != cb) {
         		if (len > 0) { // add due to change
-	                Text simpleText = new Text();
+	                MText simpleText = new MText();
 	                simpleText.setText(txt);
 	                txt = txt.replace("\t", " ").replace("§ ", "");
 	                simpleText.setItalic(ci);
@@ -174,7 +172,7 @@ public class PdfUtils {
         }
         
     	if (len > 0) {
-            Text simpleText = new Text();
+            MText simpleText = new MText();
             txt = txt.replace("\t", " ").replace("§ ", "");
             simpleText.setText(txt);
             simpleText.setItalic(ci);

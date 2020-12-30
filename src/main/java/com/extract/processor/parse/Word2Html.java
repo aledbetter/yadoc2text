@@ -1,15 +1,12 @@
-package com.extract.processor.parse;
+package main.java.com.extract.processor.parse;
 
-import com.extract.processor.model.Element;
-import com.extract.processor.model.Header;
-import com.extract.processor.model.SimpleHtml;
-import com.extract.processor.render.SimpleHtmlRender;
-import com.extract.processor.utils.WordUtils;
-import com.extract.processor.parse.Converter;
+import main.java.com.extract.processor.model.MElement;
+import main.java.com.extract.processor.model.MHeader;
+import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.render.SimpleHtmlRender;
+import main.java.com.extract.processor.utils.WordUtils;
+import main.java.com.extract.processor.parse.ConverterHtml;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import org.apache.poi.POIXMLProperties;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -32,16 +29,24 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-@Log4j2
-public class Word2Html implements Converter {
+public class Word2Html implements ConverterHtml {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "word";
 
-    @Getter
-    @Setter
+
     private String fileName;
-    private int defFontSize;
+    public String getFileName() {
+		return fileName;
+	}
+
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+
+	private int defFontSize;
 
     @Override
     public void convert(InputStream is, OutputStream os) throws IOException, OpenXML4JException, XmlException {
@@ -53,9 +58,9 @@ public class Word2Html implements Converter {
 
         Date created = ppropsPart.getCreatedProperty().getValue();
         Date modified = ppropsPart.getModifiedProperty().getValue();
-        log.debug("document name: " + fileName);
-        log.debug("document created: " + created);
-        log.debug("document modified: " + modified);
+        //log.debug("document name: " + fileName);
+        //log.debug("document created: " + created);
+        //log.debug("document modified: " + modified);
 
         SimpleHtml simpleHtml = new SimpleHtml();
         simpleHtml.setType(TYPE);
@@ -67,7 +72,7 @@ public class Word2Html implements Converter {
         if (modified != null) {
             simpleHtml.setCreated(sdf.format(modified));
         }
-        simpleHtml.setElementList(new ArrayList<Element>());
+        simpleHtml.setElementList(new ArrayList<MElement>());
 
         defFontSize = doc.getStyles().getDefaultRunStyle().getFontSize();
         if (defFontSize < 0) defFontSize = 10; // guess
@@ -82,9 +87,9 @@ public class Word2Html implements Converter {
         if (simpleHtml.getElementList().size() > 0) {
             Set<Integer> uniques = new HashSet<Integer>();
         	// correct HX sizes based on found font sizes
-        	for (Element e:simpleHtml.getElementList()) {
-        		if (!(e instanceof Header)) continue;
-        		uniques.add(((Header)e).getFontSize());
+        	for (MElement e:simpleHtml.getElementList()) {
+        		if (!(e instanceof MHeader)) continue;
+        		uniques.add(((MHeader)e).getFontSize());
         	}
         	Object ul [] = uniques.toArray();
             Arrays.sort(ul);
@@ -95,10 +100,10 @@ public class Word2Html implements Converter {
     			if (level > 7) level = 7; // max
     			//System.out.println("    SZ["+i+"][h"+level+"]: " + sz);
     			// update all headers of this size
-            	for (Element e:simpleHtml.getElementList()) {
-            		if (!(e instanceof Header)) continue;
-            		if (((Header)e).getFontSize() == sz) {
-            			((Header)e).setLevel(level);
+            	for (MElement e:simpleHtml.getElementList()) {
+            		if (!(e instanceof MHeader)) continue;
+            		if (((MHeader)e).getFontSize() == sz) {
+            			((MHeader)e).setLevel(level);
             		}
             	}
     		}
@@ -123,22 +128,22 @@ public class Word2Html implements Converter {
                  */
                               
                 if (doc.getNumbering() != null && doc.getNumbering().numExist(paragraph.getNumID())) {
-                    log.debug("list was fount");
+                    //log.debug("list was fount");
                     //System.out.println(" LIST["+paragraph.getRuns().size()+"][f:"+styleFontSize+"]["+paragraph.getText()+"]: ");
                     IBodyElement unused = WordUtils.processList(iterator, paragraph, simpleHtml.getElementList());
                     if (unused != null) return unused;
                 } else if (WordUtils.isHeader(defFontSize, styleFontSize)) {
-                    log.debug("header was found");    
+                    //log.debug("header was found");    
                     //System.out.println(" HDR[f:"+styleFontSize+"/"+runFontSize+"/"+defFontSize+"]["+paragraph.getText()+"]: ");
                     simpleHtml.getElementList().add(WordUtils.processHeader(paragraph, styleFontSize));
                 } else {
-                    log.debug("paragraph was found");
+                    //log.debug("paragraph was found");
                     //System.out.println(" PARA[f:"+styleFontSize+"/"+runFontSize+"/"+defFontSize+"]["+paragraph.getText()+"]: ");
                     simpleHtml.getElementList().add(WordUtils.processParagraph(paragraph));
                 }
             }
         } else if (element instanceof XWPFTable) {
-            log.debug("table was found");
+            //log.debug("table was found");
             XWPFTable table = (XWPFTable) element;
             int styleFontSize = WordUtils.getStyleFontSize(doc, table);
             if (WordUtils.isHeader(defFontSize, styleFontSize) && table.getRows().size() == 1) {

@@ -1,14 +1,13 @@
-package com.extract.processor.utils;
+package main.java.com.extract.processor.utils;
 
-import com.extract.processor.model.Element;
-import com.extract.processor.model.Header;
-import com.extract.processor.model.HtmlList;
-import com.extract.processor.model.HtmlListElement;
-import com.extract.processor.model.Paragraph;
-import com.extract.processor.model.Text;
-import com.extract.processor.utils.WordUtils;
+import main.java.com.extract.processor.model.MElement;
+import main.java.com.extract.processor.model.MHeader;
+import main.java.com.extract.processor.model.HtmlList;
+import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MParagraph;
+import main.java.com.extract.processor.model.MText;
+import main.java.com.extract.processor.utils.WordUtils;
 
-import lombok.extern.log4j.Log4j2;
 
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHpsMeasure;
@@ -20,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-@Log4j2
+
 public class WordUtils {
 
 	// FIXME need to establish baseline font size, then establish HX based on what is found in the document
@@ -49,23 +48,23 @@ public class WordUtils {
 
     public static int getStyleFontSize(XWPFDocument doc, XWPFParagraph wordParagraph) {
         XWPFStyle style = doc.getStyles().getStyle(wordParagraph.getStyleID());
-        log.debug("process style: " + wordParagraph.getStyleID());
+        //log.debug("process style: " + wordParagraph.getStyleID());
         if (style != null) {
             CTRPr ctrPr = style.getCTStyle().getRPr();
             if (ctrPr != null) {
                 CTHpsMeasure ctHpsMeasure = ctrPr.getSz();
                 if (ctHpsMeasure != null) {
-                    log.debug("kern value: " + ctHpsMeasure.getVal());
+                    //log.debug("kern value: " + ctHpsMeasure.getVal());
                     BigInteger val = ctHpsMeasure.getVal();
                     return val.intValue()/2; // correct to get value
                 } else {
-                    log.debug("measure was not found");
+                    //log.debug("measure was not found");
                 }
             } else {
-                log.debug("pr was not found");
+                //log.debug("pr was not found");
             }
         } else {
-            log.debug("paragraph doesn't styled");
+            //log.debug("paragraph doesn't styled");
         }
         return -1;
     }
@@ -77,11 +76,11 @@ public class WordUtils {
     	return getStyleFontSize(doc, cellParagraph);
     }
 
-    public static Paragraph processParagraph(XWPFParagraph wordParagraph) {
-        Paragraph paragraph = new Paragraph();
-        List<Text> textList = new ArrayList<>();
+    public static MParagraph processParagraph(XWPFParagraph wordParagraph) {
+        MParagraph paragraph = new MParagraph();
+        List<MText> textList = new ArrayList<>();
         for (XWPFRun run : wordParagraph.getRuns()) {
-            Text text = new Text();
+            MText text = new MText();
             text.setBold(run.isBold());
             text.setItalic(run.isItalic());
             text.setUnderlined(run.getUnderline() != UnderlinePatterns.NONE);
@@ -93,26 +92,26 @@ public class WordUtils {
     }
 
     
-    public static Paragraph processTable(XWPFTable table) {
-        Paragraph paragraph = new Paragraph();
-        List<Text> textList = new ArrayList<>();
-        Text text = new Text();
+    public static MParagraph processTable(XWPFTable table) {
+        MParagraph paragraph = new MParagraph();
+        List<MText> textList = new ArrayList<>();
+        MText text = new MText();
         text.setText(table.getText());
         textList.add(text);
         paragraph.setTexts(textList);
         // would be nice to get text attributes.. but I don't see a way 
         return paragraph;
     }
-    public static Header processTableHeader(XWPFTable table, int styleFontSize) {
-        Header header = new Header();
+    public static MHeader processTableHeader(XWPFTable table, int styleFontSize) {
+        MHeader header = new MHeader();
         header.setLevel(getLevelByFontSize(styleFontSize));
         header.setFontSize(styleFontSize);
         header.setText(table.getText());
         return header;
     }
 
-    public static Header processHeader(XWPFParagraph wordParagraph, int styleFontSize) {
-        Header header = new Header();
+    public static MHeader processHeader(XWPFParagraph wordParagraph, int styleFontSize) {
+        MHeader header = new MHeader();
         header.setLevel(getLevelByFontSize(styleFontSize));
         header.setFontSize(styleFontSize);
         header.setText(wordParagraph.getParagraphText());
@@ -120,7 +119,7 @@ public class WordUtils {
         return header;
     }
 
-    public static IBodyElement processList(Iterator<IBodyElement> iterator, XWPFParagraph firstElement, List<Element> elements) {
+    public static IBodyElement processList(Iterator<IBodyElement> iterator, XWPFParagraph firstElement, List<MElement> elements) {
         HtmlList firstHtmlList = new HtmlList();
         firstHtmlList.setElementList(new ArrayList<HtmlListElement>());
         firstHtmlList.setSorted(!firstElement.getNumFmt().equals("bullet"));
@@ -142,13 +141,13 @@ public class WordUtils {
                 XWPFParagraph paragraph = (XWPFParagraph) element;
                 BigInteger level = paragraph.getNumIlvl();
                 if (level == null) {
-                    log.debug("end of list");
+                    //log.debug("end of list");
                    // System.out.println("     List END 1["+paragraph.getText()+"]: ");
                     unused = element;
                     break;
                 }
                 if (level.compareTo(currentLevel) > 0) {
-                    log.debug("element nested");
+                    //log.debug("element nested");
                     currentLevel = level;
 
                     HtmlList htmlList = new HtmlList();
@@ -164,7 +163,7 @@ public class WordUtils {
                     htmlLists.peek().getElementList().add(listElement);
 
                 } else if (level.compareTo(currentLevel) < 0) {
-                    log.debug("end of nested list");
+                    //log.debug("end of nested list");
                     currentLevel = level;
 
                     htmlLists.pop();
@@ -174,14 +173,14 @@ public class WordUtils {
                     htmlLists.peek().getElementList().add(listElement);
 
                 } else {
-                    log.debug("next list element");
+                    //log.debug("next list element");
 
                     HtmlListElement listElement = new HtmlListElement();
                     listElement.setTextList(processParagraph(paragraph).getTexts());
                     htmlLists.peek().getElementList().add(listElement);
                 }
             } else {
-                log.debug("end of list");
+                //log.debug("end of list");
                 unused = element;
                 break;
             }

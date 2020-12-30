@@ -1,17 +1,15 @@
-package com.extract.processor.render;
+package main.java.com.extract.processor.render;
 
-import com.extract.processor.model.Paragraph;
-import com.extract.processor.model.Text;
-import com.extract.processor.model.HtmlListElement;
-import com.extract.processor.render.TextRenderer;
-import com.extract.processor.utils.SimpleHtmlUtils;
-import lombok.Getter;
-import lombok.Setter;
+import main.java.com.extract.processor.model.MParagraph;
+import main.java.com.extract.processor.model.MText;
+import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.utils.SimpleHtmlUtils;
+
 
 public class ParagraphRender {
-    public static String render(Paragraph paragraph) {
+    public static String render(MParagraph paragraph) {
         StringBuilder result = new StringBuilder();
-        for (Text text : paragraph.getTexts()) {
+        for (MText text : paragraph.getTexts()) {
             result.append(TextRenderer.render(text));
         }
         String txt = SimpleHtmlUtils.cleanTexts(result.toString());
@@ -20,7 +18,7 @@ public class ParagraphRender {
     public static String render(HtmlListElement paragraph) {
         StringBuilder result = new StringBuilder();
         if (paragraph.getTextList() != null) {
-            for (Text text : paragraph.getTextList()) {
+            for (MText text : paragraph.getTextList()) {
                 result.append(TextRenderer.render(text));
             }
         }
