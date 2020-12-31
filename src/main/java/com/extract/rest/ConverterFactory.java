@@ -1,8 +1,10 @@
-package main.java.com.extract.web;
+package main.java.com.extract.rest;
 
 import main.java.com.extract.processor.parse.ConverterHtml;
 import main.java.com.extract.processor.parse.Html2Html;
 import main.java.com.extract.processor.parse.Pdf2Html;
+import main.java.com.extract.processor.parse.Rtf2Html;
+import main.java.com.extract.processor.parse.Text2Html;
 import main.java.com.extract.processor.parse.Word2Html;
 
 public class ConverterFactory {
@@ -30,8 +32,9 @@ public class ConverterFactory {
                 return html2Html;
             }
             case "rtf": {
-                //FIXME
-                return null;
+            	Rtf2Html rtf2Html = new Rtf2Html();
+            	rtf2Html.setFileName(fileName);
+                return rtf2Html;
             }  
             case "odt": {
                 //FIXME
@@ -39,8 +42,9 @@ public class ConverterFactory {
             } 
             case "text":
             case "txt": {
-                //FIXME
-                return null;
+                Text2Html text2Html = new Text2Html();
+                text2Html.setFileName(fileName);
+                return text2Html;
             }            
             default: {
                 return null;

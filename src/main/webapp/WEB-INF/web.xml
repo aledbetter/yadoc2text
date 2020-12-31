@@ -39,7 +39,7 @@
      -->
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>main.java.com.extract</param-value>
+      <param-value>main.java.com.extract.rest</param-value>
     </init-param>
 
     <init-param>

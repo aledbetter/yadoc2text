@@ -314,8 +314,25 @@
 								<tarLongFileMode>posix</tarLongFileMode>
 							</configuration>				   
 					  </execution>
+					  <!--  jar with dependencies (we add them in script) -->
+					  <execution>
+					      <id>create-my-bundle</id>
+					      <phase>package</phase>
+					      <goals>
+					        	<goal>single</goal>
+					      </goals>					     
+					      <configuration>
+								<descriptors>
+									<descriptor>assemblejar.xml</descriptor>
+								</descriptors>					      
+					        	<descriptorRefs>
+					         		 <descriptorRef>jar-with-dependencies</descriptorRef>
+					        	</descriptorRefs>
+					      </configuration>
+				    </execution>					  
 				 </executions>				
 			</plugin>
+
 
 		</plugins>
 	</build>
