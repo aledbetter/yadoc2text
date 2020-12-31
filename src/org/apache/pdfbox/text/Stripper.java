@@ -1,4 +1,3 @@
-//package main.java.org.apache.pdfbox.text;
 package org.apache.pdfbox.text;
 
 import main.java.com.extract.processor.utils.PdfUtils;
@@ -20,9 +19,6 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlin
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
 
 
-//import org.apache.pdfbox.text.Stripper.LineItem;
-//import org.apache.pdfbox.text.Stripper.PositionWrapper;
-//import org.apache.pdfbox.text.Stripper.WordWithTextPositions;
 import org.apache.pdfbox.util.QuickSort;
 
 import java.io.*;

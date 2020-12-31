@@ -1,5 +1,9 @@
 Bugs, changes and enhancements
 
+build:
+	issue with the org.apache.pdfbox.text class in maven build
+	- load, build class in eclipse, then build install generates code
+	- best fix would be to remove this method and call the PDF stripper directly
 
 DOCs (.doc, .docx)
 
@@ -15,13 +19,14 @@ HTML (.htm, .html)
 	3) add & promotions: keep, section off or kill?
 	4) aside content: keep, section off or kill?
 
-TEXT (.txt)
+TEXT (.txt, .text)
 
 	1) support .txt files and produce simplified html
 	2) <ul><ol> supported, lines that start with number/special char and have multiple such lines in succession
 	3) <p> where lines are ended early (and not <li>
 	   or when large gap between words see example
    
-PPT (.ppt)
+RTF (.rtf)
 	
-	1) support powerpoint conversion. each page in <section>
+	1) add support
+	
