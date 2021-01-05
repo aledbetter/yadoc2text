@@ -18,6 +18,8 @@ import javax.ws.rs.core.UriInfo;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 
 
 @Path("/data/")
@@ -61,74 +63,21 @@ public class RestAPI {
         try {
             converter.convert(uploadedInputStream, data);
         } catch (Exception e) {
-            System.err.println("CONVERT FILE ERROR:");
+            System.err.println("CONVERT FILE ERROR: " + e.getMessage());
             e.printStackTrace();
             return Response.status(500).build();
         }
-
-        InputStream result = new ByteArrayInputStream(data.toByteArray());
-
-        ResponseBuilder response = Response.ok(result);
+        
+		ResponseBuilder response = null;
+		try {
+			StringReader sr = new StringReader(data.toString("UTF-8"));
+	        response = Response.ok(sr);
+		} catch (UnsupportedEncodingException e) {
+	        InputStream result = new ByteArrayInputStream(data.toByteArray());
+	        response = Response.ok(result);
+		}   
         return response.type("application/octet-stream").build();
     }
-    /*
 
-    @POST
-    @Path("/tokens")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response tokensUploadPOST(@Context UriInfo urinfo,
-                   @Context HttpServletRequest hsr,
-                   @FormDataParam("language") String language,
-                   @FormDataParam("lang_auto") String slang_auto,
-                   @FormDataParam("template") String template,
-                   @FormDataParam("pov") String spov,
-                   @FormDataParam("lock") String lock,
-                   @FormDataParam("qqfile") InputStream qquploadedInputStream,
-                   @FormDataParam("qqfile") FormDataContentDisposition qqfileDetail,
-                   @FormDataParam("file") InputStream uploadedInputStream,
-                   @FormDataParam("file") FormDataContentDisposition fileDetail,
-                   @FormDataParam("atok") String access_key,
-                   @CookieParam("atok") String cookie_access_key) {
-        if (qquploadedInputStream != null) {
-            uploadedInputStream = qquploadedInputStream;
-            fileDetail = qqfileDetail;
-        }
-        if (uploadedInputStream == null) {
-        	return Response.status(404).build();
-        }
-        
-		//System.out.println("CONVERT_REST: " + fileDetail.getFileName());
-		RestResp rr = new RestResp(urinfo, hsr, null, cookie_access_key, cookie_access_key);
-		if (!checkAuth(rr, "user")) return rr.retNoAuth();
-		
-        String words = RestUtils.readContentConvert(uploadedInputStream, fileDetail.getFileName());
-        if (words == null || words.isEmpty() || words.length() < 3) {
-			return Response.status(500).build();
-		}	
-		if (!paramHave(ctx)) ctx = ProcTenant.DEFAULT_TENANT;
-        if (paramHave(persona)) persona = null;
-        if (paramHave(fsave)) fsave = null;
-        ArrayList<String> knowledge = null;
-        if (paramHave(sknowlede)) {
-        	String kn [] = sknowlede.split(",");
-    		knowledge = new ArrayList<>();
-    		for (String s:kn) knowledge.add(s);	    
-    		if (knowledge.size() < 1) knowledge = null;	       	
-        }		
-		
-		if (RestUtils.haveXSubscription(hsr)) lock = "better";
-		if (!paramHave(lock) || !lock.equals("better")) {
-			// limit space
-			if (words.length() > MAX_LOCK_BYTES) {
-				return rr.ret(413); 
-			}
-		} 
-
-		return resultsProcess(rr, "min", ctx, words, null, depot, docid, template, language, lang_auto, persona, knowledge, fsave, review, 
-				 no_pos, no_classifier, no_possessive, no_type, true, no_dir,
-				 no_rtype, no_gender, no_quant, no_scope, no_reftype, no_usive, no_doc,
-				 true, false, pov, false, false, false);
-    }
-     */
 
 }
