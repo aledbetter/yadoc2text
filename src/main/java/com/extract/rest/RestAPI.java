@@ -4,7 +4,7 @@ package main.java.com.extract.rest;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import main.java.com.extract.processor.parse.ConverterHtml;
+import main.java.com.extract.processor.parse.Converter2Html;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
@@ -52,7 +52,7 @@ public class RestAPI {
         System.out.println("CONVERT FILE: " + fileDetail.getFileName());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
-        ConverterHtml converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
+        Converter2Html converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
         if (converter == null) {
             return Response.status(500).build();
         }

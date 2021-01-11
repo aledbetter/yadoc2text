@@ -1,6 +1,6 @@
 package main.java.com.extract.rest;
 
-import main.java.com.extract.processor.parse.ConverterHtml;
+import main.java.com.extract.processor.parse.Converter2Html;
 import main.java.com.extract.processor.parse.Html2Html;
 import main.java.com.extract.processor.parse.Pdf2Html;
 import main.java.com.extract.processor.parse.Rtf2Html;
@@ -8,7 +8,7 @@ import main.java.com.extract.processor.parse.Text2Html;
 import main.java.com.extract.processor.parse.Word2Html;
 
 public class ConverterFactory {
-    public static ConverterHtml getConverterByFileName(String fileName) {
+    public static Converter2Html getConverterByFileName(String fileName) {
     	
     	//.DOC, .RTF, .DOCX, .ODT, .DOT, .PDF, .HTM, .HTML, .MHT file formats.
         switch (getFileExtension(fileName).toLowerCase()) {

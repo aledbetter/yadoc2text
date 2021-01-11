@@ -5,7 +5,7 @@ import main.java.com.extract.processor.model.MHeader;
 import main.java.com.extract.processor.model.SimpleHtml;
 import main.java.com.extract.processor.render.SimpleHtmlRender;
 import main.java.com.extract.processor.utils.WordUtils;
-import main.java.com.extract.processor.parse.ConverterHtml;
+import main.java.com.extract.processor.parse.Converter2Html;
 
 
 import org.apache.poi.POIXMLProperties;
@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Word2Html implements ConverterHtml {
+public class Word2Html implements Converter2Html {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "word";

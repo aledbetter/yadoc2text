@@ -13,9 +13,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-public class Rtf2Html implements ConverterHtml {
+public class Rtf2Html implements Converter2Html {
 
     private static final String TYPE = "rtf";
 
@@ -41,22 +42,8 @@ public class Rtf2Html implements ConverterHtml {
         System.out.println("FIXME: rtf not supported ");
 
 
-        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
+        os.write(in.getBytes());
     }
-	public static String readStream(InputStream input) {	
-		// load the data to a buffer to prevent closed stream issue
-		ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
-		int read = 0;
-		byte[] bytes = new byte[4096];
-		try {
-			while ((read = input.read(bytes)) != -1) {
-				bOutput.write(bytes, 0, read);
-			}
-		} catch (IOException e) {
-			return null;
-		}
-		//return bOutput.toString("UTF-8");
-		return bOutput.toString();
-	}
+	
 
 }

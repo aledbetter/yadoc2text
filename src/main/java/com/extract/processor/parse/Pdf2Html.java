@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 //FIXME will this Stripper override the other? 
 
-public class Pdf2Html implements ConverterHtml {
+public class Pdf2Html implements Converter2Html {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "pdf";

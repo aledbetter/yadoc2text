@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class Html2Html implements ConverterHtml {
+public class Html2Html implements Converter2Html {
 
     private static final String TYPE = "html";
 
@@ -48,20 +48,5 @@ public class Html2Html implements ConverterHtml {
 
         os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
     }
-	public static String readStream(InputStream input) {	
-		// load the data to a buffer to prevent closed stream issue
-		ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
-		int read = 0;
-		byte[] bytes = new byte[4096];
-		try {
-			while ((read = input.read(bytes)) != -1) {
-				bOutput.write(bytes, 0, read);
-			}
-		} catch (IOException e) {
-			return null;
-		}
-		//return bOutput.toString("UTF-8");
-		return bOutput.toString();
-	}
 
 }

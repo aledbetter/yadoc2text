@@ -1,6 +1,6 @@
 package main.java.com.extract;
 
-import main.java.com.extract.processor.parse.ConverterHtml;
+import main.java.com.extract.processor.parse.Converter2Html;
 import main.java.com.extract.processor.parse.Pdf2Html;
 import main.java.com.extract.processor.parse.Word2Html;
 
@@ -13,7 +13,7 @@ public class StandAlone {
             System.err.println("use 3 arguments: sourcePath, resultPath, type[pdf,word]");
             System.exit(1);
         }
-        ConverterHtml converter = null;
+        Converter2Html converter = null;
         switch (args[2].toLowerCase()) {
             case "pdf": {
                 converter = new Pdf2Html();
