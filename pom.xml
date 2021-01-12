@@ -18,7 +18,7 @@
 		<java-version>1.8</java-version>
 		<jetty.version>9.4.10.v20180503</jetty.version>			
 		<jersey.version>2.29</jersey.version>
-		<buildNumber>G6660000228</buildNumber>
+		<buildNumber>G6660000229</buildNumber>
 	</properties>
 
   	<!--  repositories -->
