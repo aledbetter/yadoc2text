@@ -27,7 +27,7 @@
 		        	$("#docconvert_data").val('');
 		        	$("#saveas").hide();
 			    	var uploadErrors = [];
-			    	var acceptFileTypes = /(doc)|(docx)|(pdf)|(htm)|(html)|(txt)$/i;
+			    	var acceptFileTypes = /|(doc)|(dot)|(docx)|(pdf)|(htm)|(html)|(mht)|(text)|(rtf)(odt)||(txt)$/i;
 	                if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
 	                    uploadErrors.push('Not an accepted file type');
 	                }
