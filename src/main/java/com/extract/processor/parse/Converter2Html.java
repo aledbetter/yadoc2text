@@ -25,6 +25,7 @@ public interface Converter2Html {
 			return bOutput.toString("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		}
+		
 		return bOutput.toString();
 	}
 }

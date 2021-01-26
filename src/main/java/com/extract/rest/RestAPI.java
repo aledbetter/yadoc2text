@@ -6,6 +6,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import main.java.com.extract.processor.parse.Converter2Html;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,8 +71,12 @@ public class RestAPI {
         
 		ResponseBuilder response = null;
 		try {
-			StringReader sr = new StringReader(data.toString("UTF-8"));
+			String str = data.toString("UTF-8");		
+			StringReader sr = new StringReader(str);
 	        response = Response.ok(sr);
+	    
+	       // System.out.println(str);
+
 	        System.out.println("CONVERT FILE complete1: " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 	        InputStream result = new ByteArrayInputStream(data.toByteArray());
