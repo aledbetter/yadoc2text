@@ -49,12 +49,12 @@ public class RestAPI {
         if (uploadedInputStream == null) {
             return Response.status(404).build();
         }
-        System.out.println("CONVERT FILE: " + fileDetail.getFileName());
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         Converter2Html converter = ConverterFactory.getConverterByFileName(fileDetail.getFileName());
         if (converter == null) {
-            return Response.status(500).build();
+            System.out.println("ERROR: not converter CONVERT FILE: " + fileDetail.getFileName());
+           return Response.status(500).build();
         }
 		/* TODO set headers for cross-site scripting	 	
 		 * "Access-Control-Allow-Origin", "https://www.testing.com http://localhost:8080"
@@ -72,10 +72,12 @@ public class RestAPI {
 		try {
 			StringReader sr = new StringReader(data.toString("UTF-8"));
 	        response = Response.ok(sr);
+	        System.out.println("CONVERT FILE complete1: " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 	        InputStream result = new ByteArrayInputStream(data.toByteArray());
 	        response = Response.ok(result);
-		}   
+	        System.out.println("CONVERT FILE complete2: " + fileDetail.getFileName());
+		}
         return response.type("application/octet-stream").build();
     }
 
