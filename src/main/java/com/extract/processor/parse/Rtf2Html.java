@@ -16,6 +16,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+//https://github.com/kschroeer/rtf-html-java
+// saved
 public class Rtf2Html implements Converter2Html {
 
     private static final String TYPE = "rtf";

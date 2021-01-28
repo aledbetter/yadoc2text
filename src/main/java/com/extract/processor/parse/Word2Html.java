@@ -55,7 +55,6 @@ public class Word2Html implements Converter2Html {
         OPCPackage pkg = doc.getPackage();
         POIXMLProperties props = new POIXMLProperties(pkg);
         PackagePropertiesPart ppropsPart = props.getCoreProperties().getUnderlyingProperties();
-        System.out.println("   START:  ");
 
         Date created = ppropsPart.getCreatedProperty().getValue();
         Date modified = ppropsPart.getModifiedProperty().getValue();
