@@ -702,7 +702,9 @@ public class Stripper extends LegacyPDFStreamEngine {
                     HtmlList nestedList = new HtmlList();
                     nestedList.setElementList(new ArrayList<HtmlListElement>());
                     List<HtmlListElement> lel = listStack.peek().getElementList();
-                    lel.get(lel.size() - 1).setNestedList(nestedList);
+                    if (lel.size() > 0) {
+                    	lel.get(lel.size() - 1).setNestedList(nestedList);
+                    }
                     listStack.push(nestedList);
                 } else if (currentListItemIntent < lastListItemIntent) {
                     if (!f) listStack.pop();
