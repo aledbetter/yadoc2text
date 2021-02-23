@@ -690,7 +690,7 @@ public class Stripper extends LegacyPDFStreamEngine {
 //                LOG.warn("list item found: " + text);
 //                LOG.warn("intent: " + currentListItemIntent);
                 boolean f = false;
-                if (listStack.empty()) {
+                if (listStack.size() < 1) {
                     HtmlList htmlList = new HtmlList();
                     htmlList.setElementList(new ArrayList<HtmlListElement>());
                     listStack.push(htmlList);
@@ -701,8 +701,8 @@ public class Stripper extends LegacyPDFStreamEngine {
 //                    LOG.warn("nested list start: " + text);
                     HtmlList nestedList = new HtmlList();
                     nestedList.setElementList(new ArrayList<HtmlListElement>());
-                    listStack.peek().getElementList().get(listStack.peek().getElementList().size() - 1)
-                            .setNestedList(nestedList);
+                    List<HtmlListElement> lel = listStack.peek().getElementList();
+                    lel.get(lel.size() - 1).setNestedList(nestedList);
                     listStack.push(nestedList);
                 } else if (currentListItemIntent < lastListItemIntent) {
                     if (!f) listStack.pop();
