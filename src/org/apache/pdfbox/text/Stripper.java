@@ -681,6 +681,8 @@ public class Stripper extends LegacyPDFStreamEngine {
                 header.setText(text);
                 simpleHtml.getElementList().add(header);
                 
+                lastListItemIntent = 0; // reset list
+                
             } else if (PdfUtils.isListItem(text)) {
                 int currentListItemIntent = (int) textPositions.get(0).getTextMatrix().getTranslateX();
                 // first time
@@ -699,15 +701,20 @@ public class Stripper extends LegacyPDFStreamEngine {
 
                 if (currentListItemIntent > lastListItemIntent) {
 //                    LOG.warn("nested list start: " + text);
-                    HtmlList nestedList = new HtmlList();
-                    nestedList.setElementList(new ArrayList<HtmlListElement>());
                     List<HtmlListElement> lel = listStack.peek().getElementList();
+                   // System.out.println("LIST>["+currentListItemIntent+"]["+lastListItemIntent+"]lel["+lel.size()+"] " + text);
                     if (lel.size() > 0) {
-                    	lel.get(lel.size() - 1).setNestedList(nestedList);
-                    }
-                    listStack.push(nestedList);
+                        HtmlList nestedList = new HtmlList();
+                        nestedList.setElementList(new ArrayList<HtmlListElement>());
+                        lel.get(lel.size() - 1).setNestedList(nestedList);
+                        listStack.push(nestedList);
+                   }
                 } else if (currentListItemIntent < lastListItemIntent) {
-                    if (!f) listStack.pop();
+                	//System.out.println("LIST<["+currentListItemIntent+"]["+lastListItemIntent+"] " + text);
+                   if (!f) listStack.pop();
+                } else {
+                	//System.out.println("LIST["+currentListItemIntent+"]["+lastListItemIntent+"] " + text);
+
                 }
 
                 lastListItemIntent = currentListItemIntent;
