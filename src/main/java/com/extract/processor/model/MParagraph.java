@@ -13,4 +13,7 @@ public class MParagraph implements MElement {
 	public void setTexts(List<MText> texts) {
 		this.texts = texts;
 	}
+	public void addTexts(List<MText> texts) {
+		this.texts.addAll(texts);
+	}
 }

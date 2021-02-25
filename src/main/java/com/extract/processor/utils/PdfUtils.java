@@ -142,6 +142,15 @@ public class PdfUtils {
         return false;
     }
 
+    public static float getWordWidth(List<TextPosition> textPositions) {
+    	float ww = 0;
+        for (TextPosition textPosition : textPositions) {
+        	char c = textPosition.getUnicode().charAt(0);
+        	if (Character.isWhitespace(c)) break;
+        	ww += textPosition.getWidth();
+        }
+        return ww;
+    }
     public static List<MText> convertText(List<TextPosition> textPositions) {
         List<MText> result = new ArrayList<>();
         String txt = "";

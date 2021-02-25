@@ -140,6 +140,8 @@ public class Stripper extends LegacyPDFStreamEngine {
     private SimpleHtml simpleHtml;
     private Stack<HtmlList> listStack;
     private int lastListItemIntent = 0;
+    private float lastListTextEnd = 0;
+    private float lastListTextH = 0;
 
     /**
      * The charactersByArticle is used to extract text by article divisions. For example a PDF that has two columns like
@@ -265,7 +267,7 @@ public class Stripper extends LegacyPDFStreamEngine {
             currentPageNo++;
             if (page.hasContents()) {
                 processPage(page);
-            }
+            }            
         }
     }
 
@@ -666,6 +668,7 @@ public class Stripper extends LegacyPDFStreamEngine {
     protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
         if (textPositions.size() > 0) {
             TextPosition firstTextPosition = textPositions.get(0);
+       
             if (PdfUtils.isHeader(firstTextPosition)) {
                 if (!listStack.empty()) {
                     // collapse nested lists
@@ -681,10 +684,10 @@ public class Stripper extends LegacyPDFStreamEngine {
                 header.setText(text);
                 simpleHtml.getElementList().add(header);
                 
-                lastListItemIntent = 0; // reset list
+                lastListTextEnd = lastListItemIntent = 0; // reset list
                 
             } else if (PdfUtils.isListItem(text)) {
-                int currentListItemIntent = (int) textPositions.get(0).getTextMatrix().getTranslateX();
+                int currentListItemIntent = (int) firstTextPosition.getTextMatrix().getTranslateX();
                 // first time
                 if (lastListItemIntent == 0) {
                     lastListItemIntent = currentListItemIntent;
@@ -721,20 +724,79 @@ public class Stripper extends LegacyPDFStreamEngine {
                 HtmlListElement element = new HtmlListElement();
                 element.setTextList(PdfUtils.convertText(textPositions));
             	//System.out.println("LI["+text+"] => " + element.getTextList().size());
-
+                lastListTextEnd = 0;
                 listStack.peek().getElementList().add(element);
+// FIXME check if this is a table! (so we know no wrap)                
             } else {
-                if (!listStack.empty()) {
-                    // collapse nested lists
-                    while (listStack.size() > 1) {
-                        listStack.pop();
+
+ // FIXME where to check if merge with last one?        
+ /*
+  * retain last, if firstTextPosition+spx would have been over page width then MAYBE wrap         
+  */
+  /*
+TXT__[553.5833][380.7211][588.5801][30.006714] [results in software design, engineering, agile process and team building. ]
+TXT__[559.83624][277.68216][598.25543][33.429104] [mining, question and answer as well as chatbots. ]
+TXT__[534.1302][521.7842][591.79205][52.671806] [small-dollar loans as an alternative to unethical and predatory lenders (payday lenders). Developed and ]
+TXT__[521.7842][521.2795][568.0197][41.245438] [operated a consumer facing peer-to-peer lending platform with both web and mobile access. Our Robo-]
+TXT__[521.2795][550.3608][553.41693][27.147354] [Aaron Ledbetter   2 of 2 ]
+TXT__[550.3608][540.8905][595.702][40.35119] [investing platform for peer-to-peer lending allowed individuals to easily manage investments across lending ]
+TXT__[540.8905][107.83195][592.14923][46.26863] [platforms.  ]
+TXT__[551.2492][492.84247][596.6015][40.36224] [T-Mobile Business Solutions brand, as well as a unified communication REST API and iOS/Android ]
+TXT__[492.84247][155.44135][567.88135][70.04879] [communication apps. ]
+TXT__[547.68353][170.25868][569.92914][17.255527] [Tier 1 telecom operators. ]
+TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of HomePortal routers. ]
+   */
+                boolean oldP = false;
+                if (text.trim().length() > 0) {
+	               float ex = textPositions.get(textPositions.size()-1).getEndX();
+	               float ht = firstTextPosition.getHeight();
+	               // use height to spot non-normal text...
+                   if (lastListTextEnd > 0 && lastListTextH == ht) {
+     	                float ffw = PdfUtils.getWordWidth(textPositions);
+
+                	    float spx = firstTextPosition.getWidthOfSpace(); // 2.49504017829895
+		                float px = firstTextPosition.getPageWidth(); // 612.0
+		                float mx = ffw + (2*spx)+lastListTextEnd;
+		                // or check hieght different
+		            	if (mx >= px) {
+		          //      	System.out.println("TXT_W["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"] [" + text+"]");
+		            		//oldP = true;
+		            	} else {
+//		                	System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"] [" + text+"]");
+	//	            		oldP = true;
+
+		            	}
+                    } else {
+	                	//System.out.println("TXT_B["+ex+"]["+ht+"] [" + text+"]");
+//FIXME if line ended with new line, then NO save to lastListTextEnd
                     }
-                    simpleHtml.getElementList().add(listStack.pop());
+	            	lastListTextEnd = ex;
+	            	lastListTextH = ht;
+                } else {
+                	lastListTextEnd = 0;
                 }
-                MParagraph paragraph = new MParagraph();
-                paragraph.setTexts(PdfUtils.convertText(textPositions));
-                simpleHtml.getElementList().add(paragraph);
+                if (oldP) {
+                	// old paragraph
+                    MParagraph paragraph = (MParagraph)simpleHtml.getElementList().get(simpleHtml.getElementList().size()-1);
+                    paragraph.addTexts(PdfUtils.convertText(textPositions));
+                } else {
+                	// new paragraph
+                    if (!listStack.empty()) {
+                        // collapse nested lists
+                        while (listStack.size() > 1) {
+                            listStack.pop();
+                        }
+                        simpleHtml.getElementList().add(listStack.pop());
+                    }
+                    MParagraph paragraph = new MParagraph();
+                    paragraph.setTexts(PdfUtils.convertText(textPositions));
+                    simpleHtml.getElementList().add(paragraph);               	
+                }
+                
+                
             }
+        } else {
+        	lastListTextEnd = 0;        	
         }
         writeString(text);
     }
