@@ -756,14 +756,15 @@ TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of H
 
                 	    float spx = firstTextPosition.getWidthOfSpace(); // 2.49504017829895
 		                float px = firstTextPosition.getPageWidth(); // 612.0
-		                float mx = ffw + (2*spx)+lastListTextEnd;
+		                float mx = ffw + lastListTextEnd;
+		                float stx = firstTextPosition.getEndX() - firstTextPosition.getWidth();
 		                // or check hieght different
 		            	if (mx >= px) {
-		          //      	System.out.println("TXT_W["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"] [" + text+"]");
-		            		//oldP = true;
+		    //            	System.out.println("TXT_W["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		            		oldP = true;
 		            	} else {
-//		                	System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"] [" + text+"]");
-	//	            		oldP = true;
+		   //             	System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		            		oldP = true;
 
 		            	}
                     } else {
