@@ -57,18 +57,42 @@ public class PdfUtils {
             return isTextHeightHeader(textHeight);
         }
     }
-
-    public static int getLevelByFontSize(TextPosition textPosition) {
-        int fontSize = (int) textPosition.getFontSize();
+// use past FIXME
+    public static int getLevelByFontSize(TextPosition lastHeader, int lastHeadingLevel, TextPosition textPosition) {
+    	// if no last then 1
+    	// if last is 1, then 1 OR 2
+    	// if last is 2, then 1, 2, 3
+    	// if same as last ??
+    	
+    	int fontSize = (int) textPosition.getFontSize();
         int fontWeight = (int) textPosition.getFont().getFontDescriptor().getFontWeight();
         int textHeight = (int) textPosition.getHeight();
+        if (lastHeader != null) {
+        	int lfontSize = (int) lastHeader.getFontSize();
+            int lfontWeight = (int) lastHeader.getFont().getFontDescriptor().getFontWeight();
+            int ltextHeight = (int) lastHeader.getHeight();   
+            if (lfontSize == fontSize && lfontWeight == fontWeight && ltextHeight == textHeight) {
+            	// same as last... same level
+            	return lastHeadingLevel;
+            }
+        } 
+        int level = 1;
         if (fontSize > 1) {
-            return getLevelByFontSize(fontSize);
+        	level = getLevelByFontSize(fontSize);
         } else if (fontWeight > 1) {
-            return getLevelByFontSize(fontWeight);
+        	level = getLevelByFontSize(fontWeight);
         } else {
-            return getLevelByTextHeight(textHeight);
+        	level = getLevelByTextHeight(textHeight);
         }
+        if (lastHeader != null) {
+        	if (level > (lastHeadingLevel+1)) {
+        		level = lastHeadingLevel+1; // go one deeper only
+        	}
+        } else if (level > 2) {
+        	// first heading is 1 or 2...
+        	level = 2;
+        }
+        return level;
     }
 
     public static int getLevelByTextHeight(int textHeight) {

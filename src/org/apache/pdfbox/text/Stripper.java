@@ -38,6 +38,8 @@ import java.util.regex.Pattern;
  * @author Ben Litchfield
  */
 public class Stripper extends LegacyPDFStreamEngine {
+	private static final boolean DONT_ADD_FOOTERS = true;	// don't add page footers to content
+	
     private static float defaultIndentThreshold = 2.0f;
     private static float defaultDropThreshold = 2.5f;
     private static final boolean useCustomQuickSort;
@@ -142,6 +144,13 @@ public class Stripper extends LegacyPDFStreamEngine {
     private int lastListItemIntent = 0;
     private float lastListTextEnd = 0;
     private float lastListTextH = 0;
+    private float lastYPos = 0;
+    private float lastPageEndY = 0;
+    
+    // heading tracking
+    private TextPosition lastHeader = null;
+    private int lastHeadingLevel = -1;
+    
 
     /**
      * The charactersByArticle is used to extract text by article divisions. For example a PDF that has two columns like
@@ -282,6 +291,7 @@ public class Stripper extends LegacyPDFStreamEngine {
         simpleHtml = new SimpleHtml();
         simpleHtml.setElementList(new ArrayList<MElement>());
         listStack = new Stack<>();
+       // System.out.println("TITLE: " + document.getDocumentInformation().getMetadataKeys());
     }
 
     /**
@@ -622,6 +632,7 @@ public class Stripper extends LegacyPDFStreamEngine {
             endArticle();
         }
         writePageEnd();
+        lastPageEndY = lastPosition.getTextPosition().getEndY();
     }
 
     private boolean overlap(float y1, float height1, float y2, float height2) {
@@ -677,10 +688,12 @@ public class Stripper extends LegacyPDFStreamEngine {
                     }
                     simpleHtml.getElementList().add(listStack.pop());
                 }
+                               
                 MHeader header = new MHeader();
-                header.setLevel(PdfUtils.getLevelByFontSize(firstTextPosition));
+                lastHeadingLevel = PdfUtils.getLevelByFontSize(lastHeader, lastHeadingLevel, firstTextPosition);
+                lastHeader = firstTextPosition;
+                header.setLevel(lastHeadingLevel);
  //               header.setFontSize(firstTextPosition);
- //FIXME get font size and save it               
                 header.setText(text);
                 simpleHtml.getElementList().add(header);
                 
@@ -729,23 +742,8 @@ public class Stripper extends LegacyPDFStreamEngine {
 // FIXME check if this is a table! (so we know no wrap)                
             } else {
 
- // FIXME where to check if merge with last one?        
- /*
-  * retain last, if firstTextPosition+spx would have been over page width then MAYBE wrap         
-  */
-  /*
-TXT__[553.5833][380.7211][588.5801][30.006714] [results in software design, engineering, agile process and team building. ]
-TXT__[559.83624][277.68216][598.25543][33.429104] [mining, question and answer as well as chatbots. ]
-TXT__[534.1302][521.7842][591.79205][52.671806] [small-dollar loans as an alternative to unethical and predatory lenders (payday lenders). Developed and ]
-TXT__[521.7842][521.2795][568.0197][41.245438] [operated a consumer facing peer-to-peer lending platform with both web and mobile access. Our Robo-]
-TXT__[521.2795][550.3608][553.41693][27.147354] [Aaron Ledbetter   2 of 2 ]
-TXT__[550.3608][540.8905][595.702][40.35119] [investing platform for peer-to-peer lending allowed individuals to easily manage investments across lending ]
-TXT__[540.8905][107.83195][592.14923][46.26863] [platforms.  ]
-TXT__[551.2492][492.84247][596.6015][40.36224] [T-Mobile Business Solutions brand, as well as a unified communication REST API and iOS/Android ]
-TXT__[492.84247][155.44135][567.88135][70.04879] [communication apps. ]
-TXT__[547.68353][170.25868][569.92914][17.255527] [Tier 1 telecom operators. ]
-TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of HomePortal routers. ]
-   */
+ // FIXME this should be better for determining end
+
                 boolean oldP = false;
                 if (text.trim().length() > 0) {
 	               float ex = textPositions.get(textPositions.size()-1).getEndX();
@@ -754,7 +752,7 @@ TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of H
                    if (lastListTextEnd > 0 && lastListTextH == ht) {
      	                float ffw = PdfUtils.getWordWidth(textPositions);
 
-                	    float spx = firstTextPosition.getWidthOfSpace(); // 2.49504017829895
+                	    //float spx = firstTextPosition.getWidthOfSpace(); // 2.49504017829895
 		                float px = firstTextPosition.getPageWidth(); // 612.0
 		                float mx = ffw + lastListTextEnd;
 		                float stx = firstTextPosition.getEndX() - firstTextPosition.getWidth();
@@ -763,9 +761,10 @@ TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of H
 		    //            	System.out.println("TXT_W["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
 		            		oldP = true;
 		            	} else {
-		   //             	System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		            		
+		                	//System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		                	//System.out.println("TXT__["+firstTextPosition.getEndY()+"/"+firstTextPosition.getY()+"]["+firstTextPosition.getTextMatrix().getShearY()+"]pg["+firstTextPosition.getPageHeight()+"]h["+firstTextPosition.getHeight()+"] [" + text+"]");		                	
 		            		oldP = true;
-
 		            	}
                     } else {
 	                	//System.out.println("TXT_B["+ex+"]["+ht+"] [" + text+"]");
@@ -776,6 +775,19 @@ TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of H
                 } else {
                 	lastListTextEnd = 0;
                 }
+                if (lastPageEndY > 0) {
+	                if (firstTextPosition.getEndY() < lastPageEndY) {
+	                	// don't add footer info..
+	                	if (DONT_ADD_FOOTERS) {
+	                		//System.out.println("FOOTER["+firstTextPosition.getEndY()+"/"+firstTextPosition.getY()+"]["+firstTextPosition.getTextMatrix().getShearY()+"]pg["+firstTextPosition.getPageHeight()+"]h["+firstTextPosition.getHeight()+"] [" + text+"]");
+	                		return;
+	                	}
+	                } else {
+	                	lastPageEndY = 0;
+	                }
+                }
+                lastYPos = firstTextPosition.getEndY(); // save
+                
                 if (oldP) {
                 	// old paragraph
                     MParagraph paragraph = (MParagraph)simpleHtml.getElementList().get(simpleHtml.getElementList().size()-1);
@@ -987,6 +999,7 @@ TXT__[551.92255][278.07407][600.8297][43.917103] [managing 10's of millions of H
      * @param endPageValue New value of 1-based endPage property.
      */
     public void setEndPage(int endPageValue) {
+    	System.out.println("setEndPage["+endPageValue+"]");
         endPage = endPageValue;
     }
 
