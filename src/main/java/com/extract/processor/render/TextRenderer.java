@@ -25,6 +25,7 @@ public class TextRenderer {
         if (txt.trim().length() > 0) { // fmt only if something to fmt
         	txt = prefix.toString() + txt + suffix.toString();
         }
+        
         return txt;
     }
 }

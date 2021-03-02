@@ -315,6 +315,7 @@ public class RtfReader {
 		group = null;
 		root = null;
 
+		
 		while (pos < len) {
 			// Read next character.
 			getChar();

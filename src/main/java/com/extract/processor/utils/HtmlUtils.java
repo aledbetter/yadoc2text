@@ -88,6 +88,7 @@ public class HtmlUtils {
         ignoredTags.add("del");
         ignoredTags.add("dialog");
         
+        
         ignoredRoles = new HashSet<>();
         ignoredRoles.add("menu");
         ignoredRoles.add("menuitem");

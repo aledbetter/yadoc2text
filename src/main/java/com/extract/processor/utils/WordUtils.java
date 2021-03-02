@@ -27,6 +27,7 @@ public class WordUtils {
     public static final int HEADER_2_SIZE = 18;
     public static final int HEADER_3_SIZE = 16;
     public static final int HEADER_4_SIZE = 14;
+    
     // this is just an initial, reset at the end
     public static int getLevelByFontSize(int fontSize) {
         if (fontSize >= HEADER_1_SIZE) {

@@ -50,6 +50,7 @@ public class Stripper extends LegacyPDFStreamEngine {
     // with -D system properties:
     // pdftextstripper.indent
     // pdftextstripper.drop
+   
     static {
         String strDrop = null, strIndent = null;
         try {

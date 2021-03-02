@@ -1,6 +1,5 @@
 package main.java.com.extract.processor.model;
 
-import main.java.com.extract.processor.model.MElement;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ public class SimpleHtml {
     private List<MElement> headerList;
     private List<MElement> elementList;
     private List<MElement> footerList;
+    
     
 	public String getTitle() {
 		return title;

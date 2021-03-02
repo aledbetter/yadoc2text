@@ -8,7 +8,7 @@ package main.java.com.extract.processor.utils.rtf;
  */
 public class RtfParseException extends Exception {
 	private static final long serialVersionUID = 0L;
-
+ 
 	/**
 	 * Creates the new exception.
 	 *

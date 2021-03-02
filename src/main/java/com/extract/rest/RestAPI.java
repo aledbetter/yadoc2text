@@ -6,7 +6,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import main.java.com.extract.processor.parse.Converter2Html;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.servlet.http.HttpServletRequest;

@@ -3,22 +3,17 @@ package main.java.com.extract.processor.parse;
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MHeader;
 import main.java.com.extract.processor.model.SimpleHtml;
-import main.java.com.extract.processor.render.SimpleHtmlRender;
 import main.java.com.extract.processor.utils.WordUtils;
-import main.java.com.extract.processor.parse.Converter2Html;
 
 
 import org.apache.poi.POIXMLProperties;
-import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.internal.PackagePropertiesPart;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.xmlbeans.XmlException;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -33,9 +28,10 @@ public class Word2Html implements Converter2Html {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "word";
-
-
+    
+	private int defFontSize;
     private String fileName;
+    
     public String getFileName() {
 		return fileName;
 	}
@@ -45,8 +41,6 @@ public class Word2Html implements Converter2Html {
 		this.fileName = fileName;
 	}
 
-
-	private int defFontSize;
 
 	@Override
     public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {

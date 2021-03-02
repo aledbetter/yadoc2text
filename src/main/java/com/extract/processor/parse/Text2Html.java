@@ -25,7 +25,6 @@ import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 public class Text2Html implements Converter2Html {
 
     private static final String TYPE = "text";
-
     private String fileName;
 
     public String getFileName() {

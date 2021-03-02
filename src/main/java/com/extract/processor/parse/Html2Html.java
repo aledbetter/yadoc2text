@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class Html2Html implements Converter2Html {
 
     private static final String TYPE = "html";
-
     private String fileName;
 
     public String getFileName() {

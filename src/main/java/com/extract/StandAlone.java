@@ -21,6 +21,7 @@ public class StandAlone {
             break;
             case "word": {
                 converter = new Word2Html();
+                
             }
             break;
             default: {

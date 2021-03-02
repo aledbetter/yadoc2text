@@ -1,7 +1,6 @@
 package main.java.com.extract.processor.parse;
 
 import main.java.com.extract.processor.model.SimpleHtml;
-import main.java.com.extract.processor.render.SimpleHtmlRender;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.Stripper;
@@ -25,7 +24,8 @@ public class Pdf2Html implements Converter2Html {
 		return fileName;
 	}
 
-	public void setFileName(String fileName) {
+	public void setFileName(String fileName) {	
+		
 		this.fileName = fileName;
 	}
 

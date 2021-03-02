@@ -21,6 +21,7 @@ public class PdfUtils {
 
     public static final List<String> listItemPattern;
 
+    
     static {
         listItemPattern = new ArrayList<>();
         listItemPattern.add(".*\\x{2022}.*");
