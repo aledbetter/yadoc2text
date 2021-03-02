@@ -318,13 +318,14 @@ public class RtfHtml {
 		} else if (rtfWord.word.equals("enspace")) {
 			applyStyle("&ensp;");
 		} else if (rtfWord.word.equals("tab")) {
-			applyStyle("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			applyStyle("&nbsp;&nbsp;&nbsp;&nbsp;");
 		} else if (rtfWord.word.equals("line")) {
 			applyStyle("<br>");
 		} else if (rtfWord.word.equals("bullet")) {
 			applyStyle("&bull;");
 		} else if (rtfWord.word.equals("u")) {
-			applyStyle("&#" + rtfWord.parameter + ";");
+			applyStyle("&#8226;");				
+			//applyStyle("&#" + rtfWord.parameter + ";");
 		} else if (rtfWord.word.equals("par") || rtfWord.word.equals("row")) {
 			// Close previously opened tags.
 			closeTags();
@@ -347,7 +348,7 @@ public class RtfHtml {
 			String span = "";
 
 			if (state.font >= 0) {
-				span += "font-family:" + printFontFamily(state.font) + ";";
+			//	span += "font-family:" + printFontFamily(state.font) + ";";
 			}
 			if (state.bold) {
 				span += "font-weight:bold;";
@@ -455,6 +456,7 @@ public class RtfHtml {
 	protected void closeTag(String tag) {
 		if (openedTags.get(tag)) {
 			output += "</" + tag + ">";
+			if (tag.equals("p")) output += "\n";
 			openedTags.put(tag, false);
 		}
 	}
@@ -493,7 +495,7 @@ public class RtfHtml {
 	 */
 	protected void formatControlSymbol(RtfControlSymbol rtfSymbol) {
 		if (rtfSymbol.symbol == '\'') {
-			applyStyle("&#" + rtfSymbol.parameter + ";");
+			applyStyle("&#" + rtfSymbol.parameter + ";");				
 		}
 		if (rtfSymbol.symbol == '~') {
 			output += "&nbsp;";

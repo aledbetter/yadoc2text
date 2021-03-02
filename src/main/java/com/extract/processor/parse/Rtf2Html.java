@@ -5,6 +5,9 @@ import main.java.com.extract.processor.model.SimpleHtml;
 import main.java.com.extract.processor.render.SimpleHtmlRender;
 import main.java.com.extract.processor.utils.HtmlUtils;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
+import main.java.com.extract.processor.utils.rtf.RtfHtml;
+import main.java.com.extract.processor.utils.rtf.RtfParseException;
+import main.java.com.extract.processor.utils.rtf.RtfReader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,29 +41,26 @@ public class Rtf2Html implements Converter2Html {
         simpleHtml.setElementList(new ArrayList<MElement>());
         simpleHtml.setFooterList(new ArrayList<MElement>());
         simpleHtml.setName(fileName);
+               
+        String in = readStream(is);
+        RtfReader reader = new RtfReader();
+        RtfHtml formatter = new RtfHtml();
+        String fmt = null;
+        try {
+            reader.parse(in);
+            fmt = formatter.format(reader.root, true);
+   //         System.out.println(fmt);
+        } catch (RtfParseException e) {
+            e.printStackTrace();
+        }       
+        Document document = Jsoup.parse(fmt);
+        //Document document = Jsoup.parse(is, "UTF-8", "");
+        HtmlUtils.processMeta(document, simpleHtml);
+        HtmlUtils.simplify(document, simpleHtml);
+
+        SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
+        SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
         return simpleHtml;       
 	}
-
-	@Override
-    public void convert(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
-        String in = readStream(is);
-        System.out.println("FIXME: rtf not supported ");
-		
-        //System.out.println(in);
-        StringBuilder result = SimpleHtmlRender.renderHdr(data);
-        result.append(in);
-        result = SimpleHtmlRender.renderFtr(data, result);
- // FIXME CHARSET?    
-        os.write(result.toString().getBytes());
-    }
-	@Override
-   public void convertText(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
-        String in = readStream(is);
-        System.out.println("FIXME: rtf not supported ");
-
-
-        os.write(in.getBytes());
-    }
-	
 
 }
