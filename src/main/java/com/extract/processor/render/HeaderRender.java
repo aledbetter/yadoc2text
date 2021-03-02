@@ -22,4 +22,20 @@ public class HeaderRender {
         String txt = SimpleHtmlUtils.cleanTexts(result.toString());
         return "<h" + hdr_level + ">" + txt + "</h" + hdr_level + ">";
     }
+    
+    public static String renderText(MHeader header) {
+        return header.getText() + "\n";
+    }
+    public static String renderText(HtmlListElement header) {
+        StringBuilder result = new StringBuilder();
+        if (header.getTextList() != null) {
+            for (MText text : header.getTextList()) {
+                result.append(TextRenderer.render(text));
+            }
+        }
+        int hdr_level = header.getLevel();
+        if (hdr_level < 1) hdr_level = 1;
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+        return txt + "\n";
+    }
 }

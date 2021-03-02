@@ -30,7 +30,7 @@ public class Pdf2Html implements Converter2Html {
 	}
 
 	@Override
-    public void convert(InputStream is, OutputStream os) throws Exception {
+    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
         PDDocument document = PDDocument.load(is);
         Stripper stripper = new Stripper();
         StringWriter stringWriter = new StringWriter();
@@ -55,6 +55,6 @@ public class Pdf2Html implements Converter2Html {
         SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
         SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
 
-        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
+        return simpleHtml;
     }
 }

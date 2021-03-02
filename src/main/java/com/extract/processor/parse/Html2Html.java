@@ -27,8 +27,9 @@ public class Html2Html implements Converter2Html {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	
 	@Override
-    public void convert(InputStream is, OutputStream os) throws IOException {
+	public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
 
         SimpleHtml simpleHtml = new SimpleHtml();
         simpleHtml.setType(TYPE);
@@ -46,7 +47,7 @@ public class Html2Html implements Converter2Html {
         SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
         SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
 
-        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
+        return simpleHtml;
     }
 
 }

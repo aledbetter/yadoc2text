@@ -48,8 +48,8 @@ public class Word2Html implements Converter2Html {
 
 	private int defFontSize;
 
-    @Override
-    public void convert(InputStream is, OutputStream os) throws IOException, OpenXML4JException, XmlException {
+	@Override
+    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
         XWPFDocument doc = new XWPFDocument(is);
 
         OPCPackage pkg = doc.getPackage();
@@ -111,7 +111,7 @@ public class Word2Html implements Converter2Html {
 
         }
         
-        os.write(SimpleHtmlRender.render(simpleHtml).getBytes());
+        return simpleHtml;
     }
     
  

@@ -31,15 +31,30 @@ public class Rtf2Html implements Converter2Html {
 		this.fileName = fileName;
 	}
 	@Override
-    public void convert(InputStream is, OutputStream os) throws IOException {
-
+    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
         SimpleHtml simpleHtml = new SimpleHtml();
         simpleHtml.setType(TYPE);
         simpleHtml.setHeaderList(new ArrayList<MElement>());
         simpleHtml.setElementList(new ArrayList<MElement>());
         simpleHtml.setFooterList(new ArrayList<MElement>());
         simpleHtml.setName(fileName);
+        return simpleHtml;       
+	}
 
+	@Override
+    public void convert(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
+        String in = readStream(is);
+        System.out.println("FIXME: rtf not supported ");
+		
+        //System.out.println(in);
+        StringBuilder result = SimpleHtmlRender.renderHdr(data);
+        result.append(in);
+        result = SimpleHtmlRender.renderFtr(data, result);
+ // FIXME CHARSET?    
+        os.write(result.toString().getBytes());
+    }
+	@Override
+   public void convertText(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
         String in = readStream(is);
         System.out.println("FIXME: rtf not supported ");
 

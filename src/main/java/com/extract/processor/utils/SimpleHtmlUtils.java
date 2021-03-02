@@ -105,6 +105,8 @@ public class SimpleHtmlUtils {
     }
 
     public static void optimizeSimpleHtml(SimpleHtml simpleHtml) {
+    	
+ // FIXME prevent headers from getting too long.. such as entire body   	
     	optimizeSimpleHtmlList(simpleHtml.getHeaderList());
     	optimizeSimpleHtmlList(simpleHtml.getElementList());
     	optimizeSimpleHtmlList(simpleHtml.getFooterList());

@@ -28,6 +28,6 @@ public class StandAlone {
                 System.exit(2);
             }
         }
-        converter.convert(new FileInputStream(args[0]), new FileOutputStream(args[1]));
+        converter.convertDataHtml(new FileInputStream(args[0]), new FileOutputStream(args[1]));
     }
 }

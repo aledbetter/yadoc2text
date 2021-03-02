@@ -40,4 +40,35 @@ public class ListRenderer {
         	return txt;
         }
     }
+    
+    public static String renderText(HtmlList list) {
+        StringBuilder result = new StringBuilder();
+        int liCnt = 0;
+        // if no li then no list
+        if (list.getTextList() != null) {
+            for (MText text : list.getTextList()) {
+                result.append(TextRenderer.render(text));
+            }
+        }
+        if (list.getElementList() != null) {
+            for (HtmlListElement listElement : list.getElementList()) {
+            	if (listElement.isListItem()) {
+            		liCnt++;
+                    result.append(ListElementRenderer.render(listElement));
+                } else if (listElement.isHeaderItem()) {
+                    result.append(HeaderRender.render(listElement));
+            	} else {
+                    result.append(ParagraphRender.render(listElement));
+            	}
+            }
+        }
+        String txt = result.toString();
+        if (txt.isEmpty()) return "";
+        if (liCnt > 0) {
+           // String tagName = list.isSorted() ? "ol" : "ul";
+        	return "∙" + txt + "\n";
+        } else {
+        	return "∙" + txt + "\n";
+        }
+    }
 }

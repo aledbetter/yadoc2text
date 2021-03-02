@@ -6,8 +6,28 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.render.SimpleHtmlRender;
+
 public interface Converter2Html {
-    void convert(InputStream is, OutputStream os) throws Exception;
+    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception;
+
+
+    public default void convert(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
+        os.write(SimpleHtmlRender.render(data).getBytes());
+    }
+    public default void convertText(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
+        os.write(SimpleHtmlRender.render(data).getBytes());
+    }
+    
+    public default void convertDataHtml(InputStream is, OutputStream os) throws Exception {
+    	SimpleHtml data = convertData(is, os);
+        convert(data, is, os);
+    }
+    public default void convertDataText(InputStream is, OutputStream os) throws Exception {
+    	SimpleHtml data = convertData(is, os);
+    	convertText(data, is, os);
+    }
     
 	public default String readStream(InputStream input) {	
 		// load the data to a buffer to prevent closed stream issue

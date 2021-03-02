@@ -28,4 +28,26 @@ public class ParagraphRender {
 
         return "<p>" + txt + "</p>";
     }
+    
+    public static String renderText(MParagraph paragraph) {
+        StringBuilder result = new StringBuilder();
+        for (MText text : paragraph.getTexts()) {
+            result.append(TextRenderer.render(text));
+        }
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+        return txt + "\n";
+    }
+    public static String renderText(HtmlListElement paragraph) {
+        StringBuilder result = new StringBuilder();
+        if (paragraph.getTextList() != null) {
+            for (MText text : paragraph.getTextList()) {
+                result.append(TextRenderer.render(text));
+            }
+        }
+        String txt = SimpleHtmlUtils.cleanTexts(result.toString());
+        //System.out.println("P1["+result.toString()+"]");
+        //System.out.println("P2["+txt+"]");
+
+        return txt + "\n";
+    }
 }
