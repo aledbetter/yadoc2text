@@ -391,8 +391,8 @@ public class HtmlUtils {
                 String st = node.parent().attr("style");        
                 String fs = getStyle(st, "font-size"); 
                 if (fs != null) {
-                	 //FIXME check fontsize.               
-               	
+                	 //FIXME check fontsize: 16px, 16pt/em, large/small/x-small, 120%           
+//System.out.println("Font["+element.nodeName()+"]: " + fs) ;             	
                 }
                 result.add(text);
             	//System.out.println(" TEXT["+element.tagName()+"][" + text.getText()+"]");

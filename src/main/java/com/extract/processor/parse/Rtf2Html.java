@@ -49,7 +49,7 @@ public class Rtf2Html implements Converter2Html {
         try {
             reader.parse(in);
             fmt = formatter.format(reader.root, true);
-   //         System.out.println(fmt);
+        //    System.out.println(fmt);
         } catch (RtfParseException e) {
             e.printStackTrace();
         }       

@@ -325,7 +325,9 @@ public class RtfHtml {
 		} else if (rtfWord.word.equals("bullet")) {
 			applyStyle("&bull;");
 		} else if (rtfWord.word.equals("u")) {
-			applyStyle("&#8226;");				
+			applyStyle("&#8226;");	
+// FIXME make a <ul>			
+//			applyStyle("li", "&#8226;");	
 			//applyStyle("&#" + rtfWord.parameter + ";");
 		} else if (rtfWord.word.equals("par") || rtfWord.word.equals("row")) {
 			// Close previously opened tags.
