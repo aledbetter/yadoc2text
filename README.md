@@ -1,6 +1,11 @@
 
-Convert documents to simplified HTML
+Extract Text or simplified HTML
 
+	This utility is extracts text or text and some structural information from documents 
+	so that the information can be processed. The general use case is for NLP / NLU where the
+	document structural information are needed to add semantic context to the content. 
+	The text output is the same, just without the html tags.
+	OCR is not supported, this project does not (currently) work with images
 
 
 build and run locally
@@ -18,11 +23,11 @@ build and run locally
     
 Supported Document Types
 
-	Word: .doc, .docx
+	Word: .doc, .docx, .dot
 	PDF: .pdf
-	html: .html, .htm
-	text: TODO
-	Powerpoint: TODO
+	html: .html, .htm, .mht
+	text: .text, .txt
+	richtext: .rtf
     
 Converted file html tags
 
