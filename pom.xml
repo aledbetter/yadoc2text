@@ -7,7 +7,7 @@
 	<version>1.0.9999</version>
 	<artifactId>doc-extract</artifactId>
 	<packaging>war</packaging>
-	<description>Document Extractor web service</description>
+	<description>Document Extractor Web Service</description>
 
 
 	<!-- properties for use in this project / pom -->
@@ -99,17 +99,17 @@
 	    <dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.10.5</version>
+		    <version>2.11.1</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-core</artifactId>
-		    <version>2.9.10</version>
+		    <version>2.11.1</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-annotations</artifactId>
-		    <version>2.9.10</version>
+		    <version>2.11.1</version>
 		</dependency>	  
 
 	    <dependency>
@@ -160,12 +160,6 @@
 	      <artifactId>log4j-core</artifactId>
 	      <version>2.13.2</version>
 	    </dependency>
-	    <!--  
-	    <dependency>
-	      <groupId>com.lmax</groupId>
-	      <artifactId>disruptor</artifactId>
-	      <version>3.3.7</version>
-	    </dependency>	-->	
 
 	</dependencies>
 		
