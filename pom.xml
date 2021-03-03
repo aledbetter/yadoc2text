@@ -218,7 +218,7 @@
 					<configurationDirectory>doc-extract-1.0.9999/WEB-INF/classes</configurationDirectory>
 					<programs>
 						<program>
-							<mainClass>main.java.com.extractor.StandAlone</mainClass>
+							<mainClass>main.java.com.extractor.DocExtract</mainClass>
 							<name>backrun</name>
 						</program>
 					</programs>
@@ -256,7 +256,7 @@
 						</goals>
 						<configuration>
 							<executable>java</executable>
-							<mainClass>main.java.com.extractor.StandAlone</mainClass>
+							<mainClass>main.java.com.extractor.DocExtract</mainClass>
 							<arguments>
 								<argument>-classpath</argument>
 							</arguments>
