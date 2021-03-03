@@ -10,6 +10,8 @@ import main.java.com.extract.processor.utils.HtmlUtils;
 
 import main.java.com.extract.processor.render.TextRenderer;
 
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -18,6 +20,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -385,6 +388,12 @@ public class HtmlUtils {
                 text.setBold(isBold(node));
                 text.setItalic(isItalic(node));
                 text.setUnderlined(isUnderlined(node));
+                String st = node.parent().attr("style");        
+                String fs = getStyle(st, "font-size"); 
+                if (fs != null) {
+                	 //FIXME check fontsize.               
+               	
+                }
                 result.add(text);
             	//System.out.println(" TEXT["+element.tagName()+"][" + text.getText()+"]");
 
@@ -471,15 +480,31 @@ public class HtmlUtils {
     }
 
     public static boolean isBold(Node node) {
-        return (isStyled(node, "b") || isStyled(node, "strong"));
-    }
 
+        boolean b = (isStyled(node, "b") || isStyled(node, "strong"));
+        if (b) return b;
+        if (!node.nodeName().startsWith("#")) return false;
+        String st = node.parent().attr("style");        
+        String fw = getStyle(st, "font-weight");       
+       // System.out.println("B["+node.parent().nodeName()+"] " + fw+ " => " + st);
+  
+    	if (fw == null) return false;
+    	if (fw.equals("bold") || fw.equals("700") || fw.equals("800") || fw.equals("900")) return true;
+    	return false;
+    }
+    
     public static boolean isItalic(Node node) {
         return (isStyled(node, "i") || isStyled(node, "em") || isStyled(node, "small"));
     }
 
     public static boolean isUnderlined(Node node) {
-        return isStyled(node, "u");
+        boolean it = isStyled(node, "u");
+        if (it) return it;
+        String st = node.parent().attr("style");        
+        String fw = getStyle(st, "text-decoration");       
+    	if (fw == null) return false;
+    	if (fw.equals("underline")) return true;
+    	return false;
     }
 
     public static boolean isStyled(Node node, String styleTagName) {
@@ -500,6 +525,15 @@ public class HtmlUtils {
             }
         }
         return false;
+    }
+    public static String getStyle(String style, String name) {
+    	if (style == null) return null;
+    	int idx = style.indexOf(name);
+    	if (idx < 0) return null;
+    	int b = idx+name.length()+1;
+    	idx = style.indexOf(";", b);
+    	if (idx < 0) return style.substring(b, name.length()).trim();
+    	return style.substring(b, idx).trim();
     }
     
     public static boolean isIgnored(Element element) {

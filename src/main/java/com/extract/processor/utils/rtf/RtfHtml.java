@@ -20,7 +20,8 @@ public class RtfHtml {
 	private List<String> fonttbl;
 	private List<String> colortbl;
 	private boolean newRootPar;
-
+	
+	
 	/**
 	 * Transforms an RTF group with all children into HTML tags.
 	 *
