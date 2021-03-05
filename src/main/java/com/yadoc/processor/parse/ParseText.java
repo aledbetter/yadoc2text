@@ -22,7 +22,7 @@ import main.java.com.yadoc.processor.model.MText;
 import main.java.com.yadoc.processor.render.DocumentRender;
 import main.java.com.yadoc.processor.utils.SimpleHtmlUtils;
 
-public class ParseText implements YaParseer {
+public class ParseText implements YaParser {
 
     private static final String TYPE = "text";
     private String fileName;

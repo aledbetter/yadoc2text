@@ -4,7 +4,7 @@ package main.java.com.yadoc.rest;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import main.java.com.yadoc.processor.parse.YaParseer;
+import main.java.com.yadoc.processor.parse.YaParser;
 import main.java.com.yadoc.processor.parse.YaParserFactory;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -53,7 +53,7 @@ public class RestAPI {
         }
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
-        YaParseer converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
+        YaParser converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
         if (converter == null) {
             System.out.println("ERROR: not converter CONVERT FILE: " + fileDetail.getFileName());
            return Response.status(500).build();
@@ -114,7 +114,7 @@ public class RestAPI {
         }
 
         ByteArrayOutputStream data = new ByteArrayOutputStream();
-        YaParseer converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
+        YaParser converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
         if (converter == null) {
             System.out.println("ERROR: not converter CONVERT FILE: " + fileDetail.getFileName());
            return Response.status(500).build();

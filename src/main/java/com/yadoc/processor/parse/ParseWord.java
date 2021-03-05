@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ParseWord implements YaParseer {
+public class ParseWord implements YaParser {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "word";

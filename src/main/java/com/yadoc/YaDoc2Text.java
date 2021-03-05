@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import javax.ws.rs.core.Response;
 
 
-import main.java.com.yadoc.processor.parse.YaParseer;
+import main.java.com.yadoc.processor.parse.YaParser;
 import main.java.com.yadoc.processor.parse.YaParserFactory;
 
 
@@ -26,7 +26,7 @@ public class YaDoc2Text {
         String infile = args[1].toLowerCase();
         
         // get converter
-        YaParseer converter = YaParserFactory.getConverterByFileName(infile);
+        YaParser converter = YaParserFactory.getConverterByFileName(infile);
         if (converter == null){
         	System.err.println("File type not supported: " + infile);
         	System.exit(2);          

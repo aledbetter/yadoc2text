@@ -1,7 +1,7 @@
 package main.java.com.yadoc.processor.parse;
 
 public class YaParserFactory {
-    public static YaParseer getConverterByFileName(String fileName) {
+    public static YaParser getConverterByFileName(String fileName) {
     	
     	//.DOC, .RTF, .DOCX, .ODT, .DOT, .PDF, .HTM, .HTML, .MHT file formats.
         switch (getFileExtension(fileName).toLowerCase()) {

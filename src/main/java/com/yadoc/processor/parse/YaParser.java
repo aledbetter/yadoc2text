@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import main.java.com.yadoc.processor.model.MDocument;
 import main.java.com.yadoc.processor.render.DocumentRender;
 
-public interface YaParseer {
+public interface YaParser {
     public MDocument parseData(InputStream is, OutputStream os) throws Exception;
 
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 //https://github.com/kschroeer/rtf-html-java
 // saved
-public class ParseRtf implements YaParseer {
+public class ParseRtf implements YaParser {
 
     private static final String TYPE = "rtf";
 

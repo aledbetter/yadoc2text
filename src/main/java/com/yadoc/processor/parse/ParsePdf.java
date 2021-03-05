@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 //FIXME will this Stripper override the other? 
 
-public class ParsePdf implements YaParseer {
+public class ParsePdf implements YaParser {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "pdf";
