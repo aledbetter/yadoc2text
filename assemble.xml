@@ -23,7 +23,7 @@
 	      <outputDirectory></outputDirectory>
 	    </file> 	    
 	    <file>
-	      <source>target/doc-extract-1.0.9999.war</source>
+	      <source>target/yadoc2text-1.0.001.war</source>
 	      <outputDirectory></outputDirectory>
 	    </file>
   </files>

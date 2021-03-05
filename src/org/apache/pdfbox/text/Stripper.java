@@ -1,13 +1,12 @@
 package org.apache.pdfbox.text;
 
-import main.java.com.extract.processor.utils.PdfUtils;
-
-import main.java.com.extract.processor.model.MElement;
-import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.MList;
-import main.java.com.extract.processor.model.MListElement;
-import main.java.com.extract.processor.model.MParagraph;
-import main.java.com.extract.processor.model.MDocument;
+import main.java.com.yadoc.processor.model.MDocument;
+import main.java.com.yadoc.processor.model.MElement;
+import main.java.com.yadoc.processor.model.MHeader;
+import main.java.com.yadoc.processor.model.MList;
+import main.java.com.yadoc.processor.model.MListElement;
+import main.java.com.yadoc.processor.model.MParagraph;
+import main.java.com.yadoc.processor.utils.PdfUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +25,7 @@ import java.text.Bidi;
 import java.text.Normalizer;
 import java.util.*;
 import java.util.regex.Pattern;
+
 
 /**
  * This class will take a pdf document and strip out all of the text and ignore the formatting and such. Please note; it

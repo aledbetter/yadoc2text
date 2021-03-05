@@ -18,7 +18,7 @@
  
   <servlet>
     <servlet-name>LoadUtil</servlet-name>
-    <servlet-class>main.java.com.extract.rest.Servlet</servlet-class>
+    <servlet-class>main.java.com.yadoc.rest.Servlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -39,7 +39,7 @@
      -->
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>main.java.com.extract.rest</param-value>
+      <param-value>main.java.com.yadoc.rest</param-value>
     </init-param>
 
     <init-param>

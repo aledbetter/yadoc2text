@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<name>Doc Extractor</name>
+	<name>YaDoc2Text</name>
 	<groupId>xyz.sedro.full</groupId>
-	<version>1.0.9999</version>
-	<artifactId>doc-extract</artifactId>
+	<version>1.0.001</version>
+	<artifactId>yadoc2text</artifactId>
 	<packaging>war</packaging>
-	<description>Document Extractor Web Service</description>
+	<description>Yet Another Document 2 Text</description>
 
 
 	<!-- properties for use in this project / pom -->
@@ -215,11 +215,11 @@
 					<repositoryLayout>flat</repositoryLayout>
 					<projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
 					<useWildcardClassPath>true</useWildcardClassPath>
-					<configurationDirectory>doc-extract-1.0.9999/WEB-INF/classes</configurationDirectory>
+					<configurationDirectory>yadoc2text-${buildNumber}/WEB-INF/classes</configurationDirectory>
 					<programs>
 						<program>
-							<mainClass>main.java.com.extractor.DocExtract</mainClass>
-							<name>backrun</name>
+							<mainClass>main.java.com.yadoc.YaDoc2Text</mainClass>
+							<name>yadoc2text</name>
 						</program>
 					</programs>
 				</configuration>
@@ -238,7 +238,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
 				<configuration>
-					<war>target/doc-convert-1.0.9999.war</war>
+					<war>target/yadoc2text-${buildNumber}.war</war>
 					<httpConnector>
 						<port>8080</port>
 					</httpConnector>
@@ -256,7 +256,7 @@
 						</goals>
 						<configuration>
 							<executable>java</executable>
-							<mainClass>main.java.com.extractor.DocExtract</mainClass>
+							<mainClass>main.java.com.yadoc.YaDoc2Text</mainClass>
 							<arguments>
 								<argument>-classpath</argument>
 							</arguments>
