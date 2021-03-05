@@ -1,9 +1,9 @@
 package main.java.com.extract;
 
-import main.java.com.extract.processor.parse.Converter2Html;
-import main.java.com.extract.processor.parse.Pdf2Html;
-import main.java.com.extract.processor.parse.Word2Html;
-import main.java.com.extract.rest.ConverterFactory;
+import main.java.com.extract.processor.parse.YaParseer;
+import main.java.com.extract.processor.parse.YaParserFactory;
+import main.java.com.extract.processor.parse.ParsePdf;
+import main.java.com.extract.processor.parse.ParseWord;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
  * Run stand alone
  * DocExtract <text/html> <filename>
  */
-public class DocExtract {
+public class YaDoc2Text {
     public static void main(String[] args) throws Exception {
     	
         if (args.length != 2 || (args.length > 1 && args[1].startsWith("-"))) {
@@ -28,7 +28,7 @@ public class DocExtract {
         String infile = args[1].toLowerCase();
         
         // get converter
-        Converter2Html converter = ConverterFactory.getConverterByFileName(infile);
+        YaParseer converter = YaParserFactory.getConverterByFileName(infile);
         if (converter == null){
         	System.err.println("File type not supported: " + infile);
         	System.exit(2);          

@@ -15,7 +15,7 @@
  * from Aaron Ledbetter.
  */
 
-package main.java.com.extract.processor.utils;
+package main.java.com.extract.rest;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ public class Servlet extends HttpServlet {
 	public Servlet() {
         super();
 		String jre = System.getProperty("sun.arch.data.model");
-		System.out.println("DOC-EXTRACT: RUNNING jre: " + jre);
+		System.out.println("Yet Another Doc 2 Text ->jre: " + jre);
         Runtime rt = Runtime.getRuntime();
         long totalMem = rt.totalMemory();
         long maxMem = rt.maxMemory();

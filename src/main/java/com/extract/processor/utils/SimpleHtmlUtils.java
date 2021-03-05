@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SimpleHtmlUtils {
 
-    public static void clearSimpleHtml(SimpleHtml simpleHtml) {
+    public static void clearSimpleHtml(MDocument simpleHtml) {
         if (simpleHtml.getHeaderList() != null) {
             clearElements(simpleHtml.getHeaderList());
         }
@@ -41,8 +41,8 @@ public class SimpleHtmlUtils {
                 if (paragraph.getTexts().isEmpty()) {
                     iterator.remove();
                 }
-            } else if (element instanceof HtmlList) {
-                HtmlList htmlList = (HtmlList) element;
+            } else if (element instanceof MList) {
+                MList htmlList = (MList) element;
                 if (clearList(htmlList)) {
                     iterator.remove();
                 }
@@ -67,12 +67,12 @@ public class SimpleHtmlUtils {
         }
     }
 
-    public static boolean clearList(HtmlList htmlList) {
+    public static boolean clearList(MList htmlList) {
         boolean listIsEmpty = false;
         if (htmlList.getElementList() != null) {
-            Iterator<HtmlListElement> iterator = htmlList.getElementList().iterator();
+            Iterator<MListElement> iterator = htmlList.getElementList().iterator();
             while (iterator.hasNext()) {
-                HtmlListElement htmlListElement = iterator.next();
+                MListElement htmlListElement = iterator.next();
                 if (clearListItem(htmlListElement)) {
                     iterator.remove();
                 }
@@ -86,7 +86,7 @@ public class SimpleHtmlUtils {
         return listIsEmpty;
     }
 
-    public static boolean clearListItem(HtmlListElement htmlListElement) {
+    public static boolean clearListItem(MListElement htmlListElement) {
         boolean listElementIsEmpty = false;
         clearText(htmlListElement.getTextList());
         if (htmlListElement.getTextList() == null || htmlListElement.getTextList().isEmpty()) {
@@ -104,7 +104,7 @@ public class SimpleHtmlUtils {
         return listElementIsEmpty;
     }
 
-    public static void optimizeSimpleHtml(SimpleHtml simpleHtml) {
+    public static void optimizeSimpleHtml(MDocument simpleHtml) {
     	
  // FIXME prevent headers from getting too long.. such as entire body   	
     	optimizeSimpleHtmlList(simpleHtml.getHeaderList());
@@ -119,16 +119,16 @@ public class SimpleHtmlUtils {
                 MParagraph paragraph = (MParagraph) element;
                 paragraph.setTexts(optimizeTexts(paragraph.getTexts()));
             }
-            if (element instanceof HtmlList) {
-                HtmlList htmlList = (HtmlList) element;
+            if (element instanceof MList) {
+                MList htmlList = (MList) element;
                 optimizeList(htmlList);
             }
         }
     }
 
-    public static void optimizeList(HtmlList htmlList) {
+    public static void optimizeList(MList htmlList) {
         if (htmlList != null) {
-            for (HtmlListElement htmlListElement : htmlList.getElementList()) {
+            for (MListElement htmlListElement : htmlList.getElementList()) {
                 htmlListElement.setTextList(optimizeTexts(htmlListElement.getTextList()));
                 optimizeList(htmlListElement.getNestedList());
             }

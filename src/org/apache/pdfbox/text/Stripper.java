@@ -4,10 +4,10 @@ import main.java.com.extract.processor.utils.PdfUtils;
 
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.HtmlList;
-import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MList;
+import main.java.com.extract.processor.model.MListElement;
 import main.java.com.extract.processor.model.MParagraph;
-import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MDocument;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -140,8 +140,8 @@ public class Stripper extends LegacyPDFStreamEngine {
 
     private List<PDRectangle> beadRectangles = null;
 
-    private SimpleHtml simpleHtml;
-    private Stack<HtmlList> listStack;
+    private MDocument simpleHtml;
+    private Stack<MList> listStack;
     private int lastListItemIntent = 0;
     private float lastListTextEnd = 0;
     private float lastListTextH = 0;
@@ -201,7 +201,7 @@ public class Stripper extends LegacyPDFStreamEngine {
         return outputStream.toString();
     }
 
-    public SimpleHtml getSimpleHtml() {
+    public MDocument getSimpleHtml() {
         return simpleHtml;
     }
 
@@ -289,7 +289,7 @@ public class Stripper extends LegacyPDFStreamEngine {
      */
     protected void startDocument(PDDocument document) throws IOException {
         // no default implementation, but available for subclasses
-        simpleHtml = new SimpleHtml();
+        simpleHtml = new MDocument();
         simpleHtml.setElementList(new ArrayList<MElement>());
         listStack = new Stack<>();
        // System.out.println("TITLE: " + document.getDocumentInformation().getMetadataKeys());
@@ -710,19 +710,19 @@ public class Stripper extends LegacyPDFStreamEngine {
 //                LOG.warn("intent: " + currentListItemIntent);
                 boolean f = false;
                 if (listStack.size() < 1) {
-                    HtmlList htmlList = new HtmlList();
-                    htmlList.setElementList(new ArrayList<HtmlListElement>());
+                    MList htmlList = new MList();
+                    htmlList.setElementList(new ArrayList<MListElement>());
                     listStack.push(htmlList);
                     f = true;
                 }
 
                 if (currentListItemIntent > lastListItemIntent) {
 //                    LOG.warn("nested list start: " + text);
-                    List<HtmlListElement> lel = listStack.peek().getElementList();
+                    List<MListElement> lel = listStack.peek().getElementList();
                    // System.out.println("LIST>["+currentListItemIntent+"]["+lastListItemIntent+"]lel["+lel.size()+"] " + text);
                     if (lel.size() > 0) {
-                        HtmlList nestedList = new HtmlList();
-                        nestedList.setElementList(new ArrayList<HtmlListElement>());
+                        MList nestedList = new MList();
+                        nestedList.setElementList(new ArrayList<MListElement>());
                         lel.get(lel.size() - 1).setNestedList(nestedList);
                         listStack.push(nestedList);
                    }
@@ -735,7 +735,7 @@ public class Stripper extends LegacyPDFStreamEngine {
                 }
 
                 lastListItemIntent = currentListItemIntent;
-                HtmlListElement element = new HtmlListElement();
+                MListElement element = new MListElement();
                 element.setTextList(PdfUtils.convertText(textPositions));
             	//System.out.println("LI["+text+"] => " + element.getTextList().size());
                 lastListTextEnd = 0;

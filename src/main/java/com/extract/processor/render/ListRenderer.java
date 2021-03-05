@@ -1,7 +1,7 @@
 package main.java.com.extract.processor.render;
 
-import main.java.com.extract.processor.model.HtmlList;
-import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MList;
+import main.java.com.extract.processor.model.MListElement;
 import main.java.com.extract.processor.model.MText;
 
 
@@ -10,7 +10,7 @@ public class ListRenderer {
 	// 2) must have a list item
 	// 3) if header, leave as header not list item
 	// 4) if first is header, place before list as list header/title
-    public static String render(HtmlList list) {
+    public static String render(MList list) {
         StringBuilder result = new StringBuilder();
         int liCnt = 0;
         // if no li then no list
@@ -20,7 +20,7 @@ public class ListRenderer {
             }
         }
         if (list.getElementList() != null) {
-            for (HtmlListElement listElement : list.getElementList()) {
+            for (MListElement listElement : list.getElementList()) {
             	if (listElement.isListItem()) {
             		liCnt++;
                     result.append(ListElementRenderer.render(listElement));
@@ -41,24 +41,24 @@ public class ListRenderer {
         }
     }
     
-    public static String renderText(HtmlList list) {
+    public static String renderText(MList list) {
         StringBuilder result = new StringBuilder();
         int liCnt = 0;
         // if no li then no list
         if (list.getTextList() != null) {
             for (MText text : list.getTextList()) {
-                result.append(TextRenderer.render(text));
+                result.append(TextRenderer.renderText(text));
             }
         }
         if (list.getElementList() != null) {
-            for (HtmlListElement listElement : list.getElementList()) {
+            for (MListElement listElement : list.getElementList()) {
             	if (listElement.isListItem()) {
             		liCnt++;
-                    result.append(ListElementRenderer.render(listElement));
+                    result.append(ListElementRenderer.renderText(listElement));
                 } else if (listElement.isHeaderItem()) {
-                    result.append(HeaderRender.render(listElement));
+                    result.append(HeaderRender.renderText(listElement));
             	} else {
-                    result.append(ParagraphRender.render(listElement));
+                    result.append(ParagraphRender.renderText(listElement));
             	}
             }
         }

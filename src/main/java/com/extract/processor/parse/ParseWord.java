@@ -2,7 +2,7 @@ package main.java.com.extract.processor.parse;
 
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MDocument;
 import main.java.com.extract.processor.utils.WordUtils;
 
 
@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Word2Html implements Converter2Html {
+public class ParseWord implements YaParseer {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "word";
@@ -43,7 +43,7 @@ public class Word2Html implements Converter2Html {
 
 
 	@Override
-    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
+    public MDocument parseData(InputStream is, OutputStream os) throws Exception {
         XWPFDocument doc = new XWPFDocument(is);
 
         OPCPackage pkg = doc.getPackage();
@@ -56,7 +56,7 @@ public class Word2Html implements Converter2Html {
         //log.debug("document created: " + created);
         //log.debug("document modified: " + modified);
 
-        SimpleHtml simpleHtml = new SimpleHtml();
+        MDocument simpleHtml = new MDocument();
         simpleHtml.setType(TYPE);
         simpleHtml.setName(fileName);
 
@@ -109,7 +109,7 @@ public class Word2Html implements Converter2Html {
     }
     
  
-    private IBodyElement processElement(XWPFDocument doc, Iterator<IBodyElement> iterator, IBodyElement element, SimpleHtml simpleHtml) {
+    private IBodyElement processElement(XWPFDocument doc, Iterator<IBodyElement> iterator, IBodyElement element, MDocument simpleHtml) {
         if (element instanceof XWPFParagraph) {
             XWPFParagraph paragraph = (XWPFParagraph) element;
             if (paragraph.getRuns().size() > 0) {  

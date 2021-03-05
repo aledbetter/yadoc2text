@@ -6,26 +6,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import main.java.com.extract.processor.model.SimpleHtml;
-import main.java.com.extract.processor.render.SimpleHtmlRender;
+import main.java.com.extract.processor.model.MDocument;
+import main.java.com.extract.processor.render.DocumentRender;
 
-public interface Converter2Html {
-    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception;
+public interface YaParseer {
+    public MDocument parseData(InputStream is, OutputStream os) throws Exception;
 
 
-    public default void convert(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
-        os.write(SimpleHtmlRender.render(data).getBytes());
+    public default void convert(MDocument data, InputStream is, OutputStream os) throws Exception {
+        os.write(DocumentRender.render(data).getBytes());
     }
-    public default void convertText(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
-        os.write(SimpleHtmlRender.render(data).getBytes());
+    public default void convertText(MDocument data, InputStream is, OutputStream os) throws Exception {
+        os.write(DocumentRender.render(data).getBytes());
     }
     
     public default void convertDataHtml(InputStream is, OutputStream os) throws Exception {
-    	SimpleHtml data = convertData(is, os);
+    	MDocument data = parseData(is, os);
         convert(data, is, os);
     }
     public default void convertDataText(InputStream is, OutputStream os) throws Exception {
-    	SimpleHtml data = convertData(is, os);
+    	MDocument data = parseData(is, os);
     	convertText(data, is, os);
     }
     

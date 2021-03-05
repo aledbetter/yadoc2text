@@ -1,6 +1,6 @@
 package main.java.com.extract.processor.parse;
 
-import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MDocument;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.Stripper;
@@ -13,7 +13,7 @@ import java.util.Calendar;
 
 //FIXME will this Stripper override the other? 
 
-public class Pdf2Html implements Converter2Html {
+public class ParsePdf implements YaParseer {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
     private static final String TYPE = "pdf";
@@ -30,7 +30,7 @@ public class Pdf2Html implements Converter2Html {
 	}
 
 	@Override
-    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
+    public MDocument parseData(InputStream is, OutputStream os) throws Exception {
         PDDocument document = PDDocument.load(is);
         Stripper stripper = new Stripper();
         StringWriter stringWriter = new StringWriter();
@@ -43,7 +43,7 @@ public class Pdf2Html implements Converter2Html {
         //log.debug("document creation: " + creation);
         //log.debug("document modification: " + modification);
 
-        SimpleHtml simpleHtml = stripper.getSimpleHtml();
+        MDocument simpleHtml = stripper.getSimpleHtml();
         simpleHtml.setType(TYPE);
         simpleHtml.setName(fileName);
         if (creation != null) {

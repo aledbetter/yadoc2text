@@ -5,3 +5,8 @@ header {
 footer {
 	background:#EEE;
 }
+
+.header {
+	background:#555;
+	color:#FFF;
+}

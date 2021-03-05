@@ -4,9 +4,9 @@ package main.java.com.extract.processor.model;
 import java.util.List;
 
 
-public class HtmlList implements MElement {
+public class MList implements MElement {
     private List<MText> textList;
-    private List<HtmlListElement> elementList;
+    private List<MListElement> elementList;
     private boolean sorted;
     
 	public List<MText> getTextList() {
@@ -15,10 +15,10 @@ public class HtmlList implements MElement {
 	public void setTextList(List<MText> textList) {
 		this.textList = textList;
 	}
-	public List<HtmlListElement> getElementList() {
+	public List<MListElement> getElementList() {
 		return elementList;
 	}
-	public void setElementList(List<HtmlListElement> elementList) {
+	public void setElementList(List<MListElement> elementList) {
 		this.elementList = elementList;
 	}
 	public boolean isSorted() {

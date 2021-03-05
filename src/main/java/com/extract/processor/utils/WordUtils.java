@@ -2,8 +2,8 @@ package main.java.com.extract.processor.utils;
 
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.HtmlList;
-import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MList;
+import main.java.com.extract.processor.model.MListElement;
 import main.java.com.extract.processor.model.MParagraph;
 import main.java.com.extract.processor.model.MText;
 import main.java.com.extract.processor.utils.WordUtils;
@@ -121,16 +121,16 @@ public class WordUtils {
     }
 
     public static IBodyElement processList(Iterator<IBodyElement> iterator, XWPFParagraph firstElement, List<MElement> elements) {
-        HtmlList firstHtmlList = new HtmlList();
-        firstHtmlList.setElementList(new ArrayList<HtmlListElement>());
+        MList firstHtmlList = new MList();
+        firstHtmlList.setElementList(new ArrayList<MListElement>());
         firstHtmlList.setSorted(!firstElement.getNumFmt().equals("bullet"));
 
-        HtmlListElement firstListElement = new HtmlListElement();
+        MListElement firstListElement = new MListElement();
         firstListElement.setTextList(processParagraph(firstElement).getTexts());
 
         firstHtmlList.getElementList().add(firstListElement);
 
-        Stack<HtmlList> htmlLists = new Stack<>();
+        Stack<MList> htmlLists = new Stack<>();
         htmlLists.push(firstHtmlList);
 
         BigInteger currentLevel = firstElement.getNumIlvl();
@@ -151,15 +151,15 @@ public class WordUtils {
                     //log.debug("element nested");
                     currentLevel = level;
 
-                    HtmlList htmlList = new HtmlList();
+                    MList htmlList = new MList();
                     htmlList.setSorted(!paragraph.getNumFmt().equals("bullet"));
-                    htmlList.setElementList(new ArrayList<HtmlListElement>());
+                    htmlList.setElementList(new ArrayList<MListElement>());
                     htmlLists.peek().getElementList().get(htmlLists.peek().getElementList().size() - 1)
                             .setNestedList(htmlList);
 
                     htmlLists.push(htmlList);
 
-                    HtmlListElement listElement = new HtmlListElement();
+                    MListElement listElement = new MListElement();
                     listElement.setTextList(processParagraph(paragraph).getTexts());
                     htmlLists.peek().getElementList().add(listElement);
 
@@ -169,14 +169,14 @@ public class WordUtils {
 
                     htmlLists.pop();
 
-                    HtmlListElement listElement = new HtmlListElement();
+                    MListElement listElement = new MListElement();
                     listElement.setTextList(processParagraph(paragraph).getTexts());
                     htmlLists.peek().getElementList().add(listElement);
 
                 } else {
                     //log.debug("next list element");
 
-                    HtmlListElement listElement = new HtmlListElement();
+                    MListElement listElement = new MListElement();
                     listElement.setTextList(processParagraph(paragraph).getTexts());
                     htmlLists.peek().getElementList().add(listElement);
                 }

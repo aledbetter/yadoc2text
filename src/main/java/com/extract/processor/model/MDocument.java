@@ -3,7 +3,7 @@ package main.java.com.extract.processor.model;
 
 import java.util.List;
 
-public class SimpleHtml {
+public class MDocument {
     private String title;
     private String type;
     private String name;

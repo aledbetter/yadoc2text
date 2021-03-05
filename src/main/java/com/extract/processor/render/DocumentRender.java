@@ -2,15 +2,15 @@ package main.java.com.extract.processor.render;
 
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.HtmlList;
+import main.java.com.extract.processor.model.MList;
 import main.java.com.extract.processor.model.MParagraph;
-import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MDocument;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 
 import java.util.List;
 
-public class SimpleHtmlRender {
-    public static StringBuilder renderHdr(SimpleHtml simpleHtml) {
+public class DocumentRender {
+    public static StringBuilder renderHdr(MDocument simpleHtml) {
         StringBuilder result = new StringBuilder();
         result.append("<html><head>");
         if (simpleHtml.getTitle() != null) {
@@ -57,7 +57,7 @@ public class SimpleHtmlRender {
         }  
         return result;
     }
-    public static StringBuilder renderFtr(SimpleHtml simpleHtml, StringBuilder result) {
+    public static StringBuilder renderFtr(MDocument simpleHtml, StringBuilder result) {
         if (simpleHtml.getFooterList() != null && simpleHtml.getFooterList().size() > 0) {
             result.append("<footer>");
             renderElementList(simpleHtml.getFooterList(), result);
@@ -67,7 +67,7 @@ public class SimpleHtmlRender {
         return result;
     }
     
-    public static String render(SimpleHtml simpleHtml) {
+    public static String render(MDocument simpleHtml) {
         StringBuilder result = renderHdr(simpleHtml);
         renderElementList(simpleHtml.getElementList(), result);
         result = renderFtr(simpleHtml, result);
@@ -80,8 +80,8 @@ public class SimpleHtmlRender {
                 result.append(HeaderRender.render((MHeader) element));
             } else if (element instanceof MParagraph) {
                 result.append(ParagraphRender.render((MParagraph) element));
-            } else if (element instanceof HtmlList) {
-                result.append(ListRenderer.render((HtmlList) element));
+            } else if (element instanceof MList) {
+                result.append(ListRenderer.render((MList) element));
             }
         }
     }
@@ -91,13 +91,13 @@ public class SimpleHtmlRender {
                 result.append(HeaderRender.renderText((MHeader) element));
             } else if (element instanceof MParagraph) {
                 result.append(ParagraphRender.renderText((MParagraph) element));
-            } else if (element instanceof HtmlList) {
-                result.append(ListRenderer.renderText((HtmlList) element));
+            } else if (element instanceof MList) {
+                result.append(ListRenderer.renderText((MList) element));
             }
         }
     }
     
-    public static String renderText(SimpleHtml simpleHtml) {
+    public static String renderText(MDocument simpleHtml) {
         StringBuilder result = new StringBuilder();
         if (simpleHtml.getTitle() != null) {
             result.append(SimpleHtmlUtils.cleanTexts(simpleHtml.getTitle()));

@@ -3,9 +3,9 @@ package main.java.com.extract.processor.model;
 
 import java.util.List;
 
-public class HtmlListElement {
+public class MListElement {
     private List<MText> textList;
-    private HtmlList nestedList;
+    private MList nestedList;
     private String tagName;
     private int level;
 
@@ -16,10 +16,10 @@ public class HtmlListElement {
 	public void setTextList(List<MText> textList) {
 		this.textList = textList;
 	}
-	public HtmlList getNestedList() {
+	public MList getNestedList() {
 		return nestedList;
 	}
-	public void setNestedList(HtmlList nestedList) {
+	public void setNestedList(MList nestedList) {
 		this.nestedList = nestedList;
 	}
 	public int getLevel() {

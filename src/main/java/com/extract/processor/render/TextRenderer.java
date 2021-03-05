@@ -28,4 +28,16 @@ public class TextRenderer {
         
         return txt;
     }
+    public static String renderText(MText text) {
+
+        StringBuilder prefix = new StringBuilder();
+        StringBuilder suffix = new StringBuilder();
+
+        String txt = SimpleHtmlUtils.cleanTexts(text.getText());
+        if (txt.trim().length() > 0) { // fmt only if something to fmt
+        	txt = prefix.toString() + txt + suffix.toString();
+        }
+        
+        return txt;
+    }
 }

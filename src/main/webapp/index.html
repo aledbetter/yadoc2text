@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Convert file</title>
+	<title>YaDoc2Text</title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html">
 	<meta http-equiv="cache-control" content="no-cache">
-	<script src="w/css/style.css"></script>
+	<script src="css/style.css?d=2"></script>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="w/js/jquery.ui.widget.js"></script>
-	<script src="w/js/jquery.iframe-transport.js"></script>
-	<script src="w/js/jquery.fileupload.js"></script>
-	<script src="w/js/FileSaver.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/jquery.ui.widget.js"></script>
+	<script src="js/jquery.iframe-transport.js"></script>
+	<script src="js/jquery.fileupload.js"></script>
+	<script src="js/FileSaver.min.js"></script>
 	<script>
 	    var lfn = "";
 		$(function () {
@@ -64,23 +64,28 @@
 
 <body style='background:#FFF'>
 
-<div style='float:left;width:100%'>
-<h1 style='text-align:center;margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #555'>Upload file to convert</h1>
-
-	<div style='float:left;width:100%;margin-left:50px;margin-top:20px'>
-		<input id="fileupload" type="file" name="file" data-url="/api/data/convert">
-	</div>
-	<div style='float:left;width:100%;text-align:center;margin-top:20px;font-size:26px' id="status"></div>
-	<div style='float:left;width:100%;text-align:center;margin-top:15px;font-size:12px;display:none' id="saveas">
-	    <form id="save-as">
-            <label>Save As: <input type="text" class="filename" id="save-filename" placeholder="filename"/></label>
-            <input type="submit" value="Save"/>
-        </form>
-    </div>
-	<div style='float:left;width:100%;margin-top:20px;font-size:12px' id="docconvert"></div>
-	<input id="docconvert_data" type="hidden" />
+	<div style='float:left;width:100%'>
+		<div class='header' style='color:#111'>
+			<h1>YaDoc2Text - Yet Another Doc2Text</h1>
+			<h5>Version <span class="ya_version">00001</span></h5>
+		</div>
+		
+		<h1 style='text-align:center;margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #555'>Upload file to convert</h1>
 	
-</div>
+		<div style='float:left;width:100%;margin-left:50px;margin-top:20px'>
+			<input id="fileupload" type="file" name="file" data-url="/api/data/convert">
+		</div>
+		<div style='float:left;width:100%;text-align:center;margin-top:20px;font-size:26px' id="status"></div>
+		<div style='float:left;width:100%;text-align:center;margin-top:15px;font-size:12px;display:none' id="saveas">
+		    <form id="save-as">
+	            <label>Save As: <input type="text" class="filename" id="save-filename" placeholder="filename"/></label>
+	            <input type="submit" value="Save"/>
+	        </form>
+	    </div>
+		<div style='float:left;width:100%;margin-top:20px;font-size:12px' id="docconvert"></div>
+		<input id="docconvert_data" type="hidden" />
+		
+	</div>
 
 </body>
 </html>

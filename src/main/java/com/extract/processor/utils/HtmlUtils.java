@@ -1,10 +1,10 @@
 package main.java.com.extract.processor.utils;
 
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.HtmlList;
-import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MList;
+import main.java.com.extract.processor.model.MListElement;
 import main.java.com.extract.processor.model.MParagraph;
-import main.java.com.extract.processor.model.SimpleHtml;
+import main.java.com.extract.processor.model.MDocument;
 import main.java.com.extract.processor.model.MText;
 import main.java.com.extract.processor.utils.HtmlUtils;
 
@@ -187,7 +187,7 @@ public class HtmlUtils {
 
     }
 
-    public static void simplify(Element element, SimpleHtml simpleHtml) {
+    public static void simplify(Element element, MDocument simpleHtml) {
         for (Element child : element.children()) {
             if (!isIgnored(child)) {
                 String tagName = child.tagName();
@@ -241,7 +241,7 @@ public class HtmlUtils {
         }
     }
 
-    public static void simplify(Element element, List<main.java.com.extract.processor.model.MElement> elements, SimpleHtml simpleHtml) {   	
+    public static void simplify(Element element, List<main.java.com.extract.processor.model.MElement> elements, MDocument simpleHtml) {   	
         for (Element child : element.children()) {
             String tagName = child.tagName();
 
@@ -300,11 +300,11 @@ public class HtmlUtils {
         }
         return false;
     }
-    public static HtmlList processList(Element element, List<main.java.com.extract.processor.model.MElement> elements) {
+    public static MList processList(Element element, List<main.java.com.extract.processor.model.MElement> elements) {
 
-        HtmlList htmlList = new HtmlList();
+        MList htmlList = new MList();
         htmlList.setTextList(new ArrayList<MText>());
-        htmlList.setElementList(new ArrayList<HtmlListElement>());
+        htmlList.setElementList(new ArrayList<MListElement>());
 
         for (Element child : element.children()) {
             String tagName = child.tagName();
@@ -313,7 +313,7 @@ public class HtmlUtils {
             } else if (tagName.equalsIgnoreCase("li")) {
                 htmlList.getElementList().add(processListElement(child, elements));
             } else if (tagName.equalsIgnoreCase("p")) {
-                HtmlListElement result = new HtmlListElement();
+                MListElement result = new MListElement();
                 result.setTextList(new ArrayList<MText>());    
                 result.setTagName(tagName.toLowerCase());
                 result.getTextList().addAll(processText(child, elements));
@@ -322,7 +322,7 @@ public class HtmlUtils {
             } else if ((tagName.equalsIgnoreCase("div") && isDivText(child))) {   
         //System.out.println(" LIST_DIV["+tagName+"]");
 
-                HtmlListElement result = new HtmlListElement();
+                MListElement result = new MListElement();
                 result.setTextList(new ArrayList<MText>());    
                 result.setTagName(tagName.toLowerCase());
                 result.getTextList().addAll(processText(child, elements));
@@ -338,7 +338,7 @@ public class HtmlUtils {
                 		elements.add(hdr);
                 	} else {
                     	int hdr_level = getHeaderLevel(tagName);
-                    	HtmlListElement hle = processListElement(child, elements);
+                    	MListElement hle = processListElement(child, elements);
                     	hle.setLevel(hdr_level);
                 		htmlList.getElementList().add(hle);
                 	}
@@ -352,8 +352,8 @@ public class HtmlUtils {
         return htmlList;
     }
 
-    public static HtmlListElement processListElement(Element element, List<main.java.com.extract.processor.model.MElement> elements) {
-        HtmlListElement result = new HtmlListElement();
+    public static MListElement processListElement(Element element, List<main.java.com.extract.processor.model.MElement> elements) {
+        MListElement result = new MListElement();
         result.setTextList(new ArrayList<MText>());    
         result.setTagName(element.tagName().toLowerCase());
 
@@ -565,7 +565,7 @@ public class HtmlUtils {
         return false;
     }
     
-    public static void processMeta(Document document, SimpleHtml simpleHtml) {
+    public static void processMeta(Document document, MDocument simpleHtml) {
   	   // <html lang="es">
    	   Element tlan = document.select("html").first();
   	   String lang = tlan.attr("lang");

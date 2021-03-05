@@ -18,11 +18,11 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import main.java.com.extract.processor.model.MElement;
 import main.java.com.extract.processor.model.MParagraph;
 import main.java.com.extract.processor.model.MText;
-import main.java.com.extract.processor.model.SimpleHtml;
-import main.java.com.extract.processor.render.SimpleHtmlRender;
+import main.java.com.extract.processor.model.MDocument;
+import main.java.com.extract.processor.render.DocumentRender;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
 
-public class Text2Html implements Converter2Html {
+public class ParseText implements YaParseer {
 
     private static final String TYPE = "text";
     private String fileName;
@@ -34,8 +34,8 @@ public class Text2Html implements Converter2Html {
 		this.fileName = fileName;
 	}
 	@Override
-    public SimpleHtml convertData(InputStream is, OutputStream os) throws Exception {
-        SimpleHtml simpleHtml = new SimpleHtml();
+    public MDocument parseData(InputStream is, OutputStream os) throws Exception {
+        MDocument simpleHtml = new MDocument();
         simpleHtml.setType(TYPE);
         simpleHtml.setHeaderList(new ArrayList<MElement>());
         simpleHtml.setElementList(new ArrayList<MElement>());
@@ -60,22 +60,22 @@ public class Text2Html implements Converter2Html {
 	}
 	
 	@Override
-    public void convert(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
+    public void convert(MDocument data, InputStream is, OutputStream os) throws Exception {
 		String in = readStream(is);
 		// bad hack
 		in = in.replace('�', '∙');
 		
         //System.out.println(in);
-        StringBuilder result = SimpleHtmlRender.renderHdr(data);
+        StringBuilder result = DocumentRender.renderHdr(data);
         result.append(in);
 
-        result = SimpleHtmlRender.renderFtr(data, result);
+        result = DocumentRender.renderFtr(data, result);
  // FIXME CHARSET?    
         os.write(result.toString().getBytes());
       //  System.out.println(result.toString());
     }
 	@Override
-   public void convertText(SimpleHtml data, InputStream is, OutputStream os) throws Exception {
+   public void convertText(MDocument data, InputStream is, OutputStream os) throws Exception {
 		String in = readStream(is);
 		// bad hack
 		in = in.replace('�', '∙');		

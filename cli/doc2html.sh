@@ -17,4 +17,4 @@ export CLASSPATH
 
 
 ## call it
-java -cp $CLASSPATH main.java.com.extract.DocExtract html ${1}
+java -cp $CLASSPATH main.java.com.extract.YaDoc2Text html ${1}

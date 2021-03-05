@@ -1,7 +1,7 @@
 package main.java.com.extract.processor.render;
 
 import main.java.com.extract.processor.model.MHeader;
-import main.java.com.extract.processor.model.HtmlListElement;
+import main.java.com.extract.processor.model.MListElement;
 import main.java.com.extract.processor.model.MText;
 import main.java.com.extract.processor.render.TextRenderer;
 import main.java.com.extract.processor.utils.SimpleHtmlUtils;
@@ -10,7 +10,7 @@ public class HeaderRender {
     public static String render(MHeader header) {
         return "<h" + header.getLevel() + ">" + header.getText() + "</h" + header.getLevel() + ">";
     }
-    public static String render(HtmlListElement header) {
+    public static String render(MListElement header) {
         StringBuilder result = new StringBuilder();
         if (header.getTextList() != null) {
             for (MText text : header.getTextList()) {
@@ -26,11 +26,11 @@ public class HeaderRender {
     public static String renderText(MHeader header) {
         return header.getText() + "\n";
     }
-    public static String renderText(HtmlListElement header) {
+    public static String renderText(MListElement header) {
         StringBuilder result = new StringBuilder();
         if (header.getTextList() != null) {
             for (MText text : header.getTextList()) {
-                result.append(TextRenderer.render(text));
+                result.append(TextRenderer.renderText(text));
             }
         }
         int hdr_level = header.getLevel();

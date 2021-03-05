@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <welcome-file-list>
-    <welcome-file>/w/index.html</welcome-file>
+    <welcome-file>/index.html</welcome-file>
   </welcome-file-list>
   <servlet>
     <servlet-name>default</servlet-name>
@@ -18,13 +18,13 @@
  
   <servlet>
     <servlet-name>LoadUtil</servlet-name>
-    <servlet-class>main.java.com.extract.processor.utils.Servlet</servlet-class>
+    <servlet-class>main.java.com.extract.rest.Servlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
 
   <servlet>
-    <servlet-name>Extract WS</servlet-name>
+    <servlet-name>YaDoc2Text WS</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
    
      <init-param>
@@ -50,7 +50,7 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>Extract WS</servlet-name>
+    <servlet-name>YaDoc2Text WS</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
