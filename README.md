@@ -22,15 +22,8 @@ build and run locally
        mvn jetty:run -Djetty.port=8099
        old: mvn jetty:run -Dhttp.port=8099
        old: mvn jetty:run -Djetty.http.port=8099   
-    7. index is test page
+    7. index is test page for conversion (could use some additions)
 
-	Broken Build -in eclipse circular dependency in project
-	1. comment out code references to org.apache.pdfbox.* in ParsePdf.java
-		- imports and body of parseData() method
-	2. maven install
-	3. run in jetty
-	4. uncomment code
-	5. maven install again
     
 Supported Document Types
 
