@@ -1,4 +1,4 @@
-package org.apache.pdfbox.text;
+package main.java.com.yadoc.processor.utils;
 
 import main.java.com.yadoc.processor.model.MDocument;
 import main.java.com.yadoc.processor.model.MElement;
@@ -6,18 +6,19 @@ import main.java.com.yadoc.processor.model.MHeader;
 import main.java.com.yadoc.processor.model.MList;
 import main.java.com.yadoc.processor.model.MListElement;
 import main.java.com.yadoc.processor.model.MParagraph;
-import main.java.com.yadoc.processor.utils.PdfUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.pdfbox.contentstream.PDFStreamEngine;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.interactive.pagenavigation.PDThreadBead;
-
-
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
+import org.apache.pdfbox.text.TextPositionComparator;
 import org.apache.pdfbox.util.QuickSort;
 
 import java.io.*;
@@ -37,7 +38,7 @@ import java.util.regex.Pattern;
  *
  * @author Ben Litchfield
  */
-public class Stripper extends LegacyPDFStreamEngine {
+public class PdfCustomrStripper extends LegacyPDFStreamEngine {
 	private static final boolean DONT_ADD_FOOTERS = true;	// don't add page footers to content
 	
     private static float defaultIndentThreshold = 2.0f;
@@ -184,7 +185,7 @@ public class Stripper extends LegacyPDFStreamEngine {
      *
      * @throws IOException If there is an error loading the properties.
      */
-    public Stripper() throws IOException {
+    public PdfCustomrStripper() throws IOException {
     }
 
     /**
@@ -327,6 +328,7 @@ public class Stripper extends LegacyPDFStreamEngine {
             int originalSize = charactersByArticle.size();
             charactersByArticle.ensureCapacity(numberOfArticleSections);
             int lastIndex = Math.max(numberOfArticleSections, originalSize);
+
             for (int i = 0; i < lastIndex; i++) {
                 if (i < originalSize) {
                     charactersByArticle.get(i).clear();
@@ -334,7 +336,7 @@ public class Stripper extends LegacyPDFStreamEngine {
                     if (numberOfArticleSections < originalSize) {
                         charactersByArticle.remove(i);
                     } else {
-                        charactersByArticle.add(new ArrayList<TextPosition>());
+                       charactersByArticle.add(new ArrayList<TextPosition>());
                     }
                 }
             }
@@ -495,6 +497,7 @@ public class Stripper extends LegacyPDFStreamEngine {
                 TextPosition position = textIter.next();
                 PositionWrapper current = new PositionWrapper(position);
                 String characterValue = position.getUnicode();
+       //         System.out.println("   char: " + charactersByArticle.size());
 
                 // Resets the average character width when we see a change in font
                 // or a change in the font size

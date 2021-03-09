@@ -1,10 +1,10 @@
 package main.java.com.yadoc.processor.parse;
 
 import main.java.com.yadoc.processor.model.MDocument;
+import main.java.com.yadoc.processor.utils.PdfCustomrStripper;
 import main.java.com.yadoc.processor.utils.SimpleHtmlUtils;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.Stripper;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,10 +34,11 @@ public class ParsePdf implements YaParser {
     public MDocument parseData(InputStream is, OutputStream os) throws Exception {
 		
         PDDocument document = PDDocument.load(is);
-        Stripper stripper = new Stripper();
         StringWriter stringWriter = new StringWriter();
+        PdfCustomrStripper stripper = new PdfCustomrStripper();
         stripper.writeText(document, stringWriter);
-
+     
+        
         Calendar creation = document.getDocumentInformation().getCreationDate();
         Calendar modification = document.getDocumentInformation().getModificationDate();
        // document.getDocumentInformation().getCreator()
