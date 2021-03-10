@@ -8,7 +8,7 @@ build:
 
 
 
-DOCs (.doc, .docx)
+DOCs (.doc, .docx, .dot)
 
 	1) better testing for .dot and older formats of doc needed
 	2) image content not supported
