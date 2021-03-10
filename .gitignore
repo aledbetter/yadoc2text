@@ -3,6 +3,10 @@ bin/
 target/
 .DS_Store
 .DS_Store?
+.settings
+.classpath
+.project
+.vscode
 *.log
 *.jar
 *.war
