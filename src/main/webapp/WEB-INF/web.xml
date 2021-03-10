@@ -18,7 +18,7 @@
  
   <servlet>
     <servlet-name>LoadUtil</servlet-name>
-    <servlet-class>main.java.com.yadoc.rest.Servlet</servlet-class>
+    <servlet-class>org.sedro.yadoc.rest.Servlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -29,7 +29,7 @@
    
      <init-param>
         <param-name>jersey.config.server.provider.classnames</param-name>
-        <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature;main.java.com.sedro.util.CharsetResponseFilter</param-value>
+        <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
     </init-param>
 	<!--
     <init-param>
@@ -39,7 +39,7 @@
      -->
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>main.java.com.yadoc.rest</param-value>
+      <param-value>org.sedro.yadoc.rest</param-value>
     </init-param>
 
     <init-param>

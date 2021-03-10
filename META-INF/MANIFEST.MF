@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: yadoc2text
+Bundle-SymbolicName: yadoc2text
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: yadoc2text
+Export-Package: org.sedro.yadoc,
+ org.sedro.yadoc.model,
+ org.sedro.yadoc.parse,
+ org.sedro.yadoc.render,
+ org.sedro.yadoc.rest,
+ org.sedro.yadoc.utils,
+ org.sedro.yadoc.utils.rtf
