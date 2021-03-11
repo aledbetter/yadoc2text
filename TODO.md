@@ -1,11 +1,17 @@
 Bugs, changes and enhancements
 
-build:
 
-	issue with the org.apache.pdfbox.text class in maven build
-	- load, build class in eclipse, then build install generates code
-	- best fix would be to remove this method and call the PDF stripper directly
+List:
 
+	- improved web page, view html/view text/download each/view rendered html
+	- command line all files in directory
+	- better support for table content
+	- headings and list items from text in simplified HTML (have code in sedro)
+	- open office support
+	- ppt support
+	- improve HTML support: identify functional headers and paragraphs
+	- OCR for images, pdfs
+	- sound/video files to text
 
 
 DOCs (.doc, .docx, .dot)
