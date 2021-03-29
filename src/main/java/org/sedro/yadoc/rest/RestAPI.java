@@ -145,5 +145,123 @@ public class RestAPI {
 		}
         return response.type("application/octet-stream").build();
     }
+    
+	// CONVERT TO SIMPLE HTML
+    @POST
+    @Path("/json/convert")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadDocumentPostJSON(@Context UriInfo info,
+                                       @Context HttpServletRequest hsr,
+                                       @FormDataParam("language") String language,
+                                       @FormDataParam("lang_auto") String slang_auto,
+                                       @FormDataParam("template") String template,
+                                       
+                                       @FormDataParam("qqfile") InputStream qquploadedInputStream,
+                                       @FormDataParam("qqfile") FormDataContentDisposition qqfileDetail,
+                                       @FormDataParam("file") InputStream uploadedInputStream,
+                                       @FormDataParam("file") FormDataContentDisposition fileDetail,
+                                       @FormDataParam("atok") String access_key,
+                                       @CookieParam("atok") String cookie_access_key) {
+        if (qquploadedInputStream != null) {
+            uploadedInputStream = qquploadedInputStream;
+            fileDetail = qqfileDetail;
+        }
+        if (uploadedInputStream == null) {
+            return Response.status(404).build();
+        }
+
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
+        YaParser converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
+        if (converter == null) {
+            System.out.println("ERROR: not converter CONVERT FILE: " + fileDetail.getFileName());
+           return Response.status(500).build();
+        }
+		/* TODO set headers for cross-site scripting	 	
+		 * "Access-Control-Allow-Origin", "https://www.testing.com http://localhost:8080"
+		 * "Access-Control-Allow-Methods", "POST, OPTIONS"
+		 */
+        try {
+            converter.convertDataHtml(uploadedInputStream, data);
+        } catch (Exception e) {
+            System.err.println("CONVERT FILE ERROR: " + e.getMessage());
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+        
+		String str = null;		
+		try {
+			str = data.toString("UTF-8");		
+	       // System.out.println(str);
+	        System.out.println("CONVERT FILE txt complete1: " + fileDetail.getFileName());
+		} catch (UnsupportedEncodingException e) {
+			str = data.toString();
+	        System.out.println("CONVERT FILE txt complete2: " + fileDetail.getFileName());
+		}
+		
+		// make JSON
+		RestResp rp = new RestResp(info, hsr, str);
+		return rp.ret();
+    }
+
+    
+    // Extract TEXT
+    @POST
+    @Path("/json/extract")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadDocumentExtractPostJSON(@Context UriInfo info,
+                                       @Context HttpServletRequest hsr,
+                                       @FormDataParam("language") String language,
+                                       @FormDataParam("lang_auto") String slang_auto,
+                                       @FormDataParam("template") String template,
+                                       
+                                       @FormDataParam("qqfile") InputStream qquploadedInputStream,
+                                       @FormDataParam("qqfile") FormDataContentDisposition qqfileDetail,
+                                       @FormDataParam("file") InputStream uploadedInputStream,
+                                       @FormDataParam("file") FormDataContentDisposition fileDetail,
+                                       @FormDataParam("atok") String access_key,
+                                       @CookieParam("atok") String cookie_access_key) {
+        if (qquploadedInputStream != null) {
+            uploadedInputStream = qquploadedInputStream;
+            fileDetail = qqfileDetail;
+        }
+        if (uploadedInputStream == null) {
+            return Response.status(404).build();
+        }
+
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
+        YaParser converter = YaParserFactory.getConverterByFileName(fileDetail.getFileName());
+        if (converter == null) {
+            System.out.println("ERROR: not converter CONVERT FILE: " + fileDetail.getFileName());
+           return Response.status(500).build();
+        }
+		/* TODO set headers for cross-site scripting	 	
+		 * "Access-Control-Allow-Origin", "https://www.testing.com http://localhost:8080"
+		 * "Access-Control-Allow-Methods", "POST, OPTIONS"
+		 */
+        try {
+            converter.convertDataText(uploadedInputStream, data);
+        } catch (Exception e) {
+            System.err.println("CONVERT FILE txt ERROR: " + e.getMessage());
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+        
+		String str = null;		
+		try {
+			str = data.toString("UTF-8");		
+	       // System.out.println(str);
+	        System.out.println("CONVERT FILE txt complete1: " + fileDetail.getFileName());
+		} catch (UnsupportedEncodingException e) {
+			str = data.toString();
+	        System.out.println("CONVERT FILE txt complete2: " + fileDetail.getFileName());
+		}
+		
+		// make JSON
+		RestResp rp = new RestResp(info, hsr, str);
+		return rp.ret();
+    }
+
 
 }
