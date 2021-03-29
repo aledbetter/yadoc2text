@@ -17,7 +17,7 @@ public interface YaParser {
         os.write(DocumentRender.render(data).getBytes());
     }
     public default void convertText(MDocument data, InputStream is, OutputStream os) throws Exception {
-        os.write(DocumentRender.render(data).getBytes());
+        os.write(DocumentRender.renderText(data).getBytes());
     }
     
     public default void convertDataHtml(InputStream is, OutputStream os) throws Exception {
