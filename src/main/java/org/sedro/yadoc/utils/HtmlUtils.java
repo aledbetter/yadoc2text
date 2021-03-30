@@ -6,6 +6,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.sedro.yadoc.model.MDocument;
+import org.sedro.yadoc.model.MElement;
 import org.sedro.yadoc.model.MHeader;
 import org.sedro.yadoc.model.MList;
 import org.sedro.yadoc.model.MListElement;
@@ -236,7 +237,7 @@ public class HtmlUtils {
         }
     }
 
-    public static void simplify(Element element, List<org.sedro.yadoc.model.MElement> elements, MDocument simpleHtml) {   	
+    public static void simplify(Element element, List<MElement> elements, MDocument simpleHtml) {   	
         for (Element child : element.children()) {
             String tagName = child.tagName();
 
@@ -260,22 +261,31 @@ public class HtmlUtils {
         } 
     }
 
-    public static MParagraph processParagraph(Element element, List<org.sedro.yadoc.model.MElement> elements) {
+    public static MParagraph processParagraph(Element element, List<MElement> elements) {
         MParagraph paragraph = new MParagraph();
         paragraph.setTexts(processText(element, elements));
         return paragraph;
     }
 
-    public static MHeader processHeader(Element element, List<org.sedro.yadoc.model.MElement> elements) {
+    public static MHeader processHeader(Element element, List<MElement> elements) {
         MHeader header = new MHeader();
         header.setLevel(getHeaderLevel(element.tagName()));
+ 
         List<MText> tl = processText(element, elements);
         StringBuilder result = new StringBuilder();
         if (tl != null) {
             for (MText text : tl) {
                 result.append(TextRenderer.render(text));
             }
+            
+            // get the text info
+            MText ft = tl.get(0);
+            header.setFontSize(ft.getFontSize());
+            header.setBold(ft.isBold());
+            header.setItalic(ft.isItalic());
+            header.setUnderlined(ft.isUnderlined());
         }
+        
         header.setText(result.toString());
         return header;
     }
@@ -295,7 +305,7 @@ public class HtmlUtils {
         }
         return false;
     }
-    public static MList processList(Element element, List<org.sedro.yadoc.model.MElement> elements) {
+    public static MList processList(Element element, List<MElement> elements) {
 
         MList htmlList = new MList();
         htmlList.setTextList(new ArrayList<MText>());
@@ -347,7 +357,7 @@ public class HtmlUtils {
         return htmlList;
     }
 
-    public static MListElement processListElement(Element element, List<org.sedro.yadoc.model.MElement> elements) {
+    public static MListElement processListElement(Element element, List<MElement> elements) {
         MListElement result = new MListElement();
         result.setTextList(new ArrayList<MText>());    
         result.setTagName(element.tagName().toLowerCase());
@@ -371,7 +381,7 @@ public class HtmlUtils {
         return result;
     }
 
-    public static List<MText> processText(Element element, List<org.sedro.yadoc.model.MElement> elements) {
+    public static List<MText> processText(Element element, List<MElement> elements) {
         List<MText> result = new ArrayList<>();
         boolean first = true;
         for (Node node : element.childNodes()) {

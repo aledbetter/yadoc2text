@@ -5,6 +5,8 @@ public class MText {
     private boolean bold;
     private boolean italic;
     private boolean underlined;
+    private int fontSize;
+
     private String text;
     
 	public boolean isBold() {
@@ -25,10 +27,28 @@ public class MText {
 	public void setUnderlined(boolean underlined) {
 		this.underlined = underlined;
 	}
+	public int getFontSize() {
+		return fontSize;
+	}
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
 	public String getText() {
 		return text;
 	}
 	public void setText(String text) {
 		this.text = text;
 	}
+	
+	public boolean isUpper() {
+		int ccnt = 0;
+	    for (int i=0; i<text.length(); i++){
+	    	char c = text.charAt(i);
+	        if (Character.isLowerCase(c)) return false;
+	        if (Character.isLetter(c)) ccnt++;
+	    }
+	    if (ccnt < 1) return false;
+	    return true;
+	}	
+	
 }

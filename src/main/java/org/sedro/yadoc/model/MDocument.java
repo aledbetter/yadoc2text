@@ -1,7 +1,9 @@
 package org.sedro.yadoc.model;
 
 
+import java.util.HashMap;
 import java.util.List;
+
 
 public class MDocument {
     private String title;
@@ -14,8 +16,13 @@ public class MDocument {
     private List<MElement> headerList;
     private List<MElement> elementList;
     private List<MElement> footerList;
+    private HashMap<Integer, MStyle> styleSet = new HashMap<>(); 
     
-    
+    // set of styles
+	public HashMap<Integer, MStyle> getStyleSet() {
+		return styleSet;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

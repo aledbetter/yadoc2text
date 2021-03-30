@@ -18,6 +18,7 @@ import org.sedro.yadoc.model.MHeader;
 import org.sedro.yadoc.model.MList;
 import org.sedro.yadoc.model.MListElement;
 import org.sedro.yadoc.model.MParagraph;
+import org.sedro.yadoc.model.MStyle;
 
 import java.io.*;
 import java.text.Bidi;
@@ -678,11 +679,35 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
      * @param textPositions The TextPositions belonging to the text.
      * @throws IOException If there is an error when writing the text.
      */
+
+    
     protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
         if (textPositions.size() > 0) {
             TextPosition firstTextPosition = textPositions.get(0);
-       
-            if (PdfUtils.isHeader(firstTextPosition)) {
+            
+ // Find style: using only the fontsize TODO check full info           
+            int fsize = (int)firstTextPosition.getFontSize();      
+            MStyle ms = simpleHtml.getStyleSet().get(fsize);
+            boolean ishdr = PdfUtils.isHeader(simpleHtml.getStyleSet(), firstTextPosition, text);
+        	if (ishdr) lastHeadingLevel = PdfUtils.getLevelByFontSize(lastHeader, lastHeadingLevel, firstTextPosition);       	
+        	if (ms == null) {
+            	// add entry for size
+            	ms = new MStyle();
+            	simpleHtml.getStyleSet().put(fsize, ms);  
+            	if (ishdr) {
+                    ms.setLevel(lastHeadingLevel);
+            	} else {
+            		ms.setLevel(0);
+            	}
+            	//ms.setBold(ishdr);
+            	//ms.setItalic(ishdr);
+            	//ms.setUnderlined(ishdr);
+            	//ms.setUpper(ishdr);
+            }
+        	ms.setCount(ms.getCount()+1);
+        	ms.setCount_char(ms.getCount_char() + text.length());  
+// END            
+            if (ishdr) {
                 if (!listStack.empty()) {
                     // collapse nested lists
                     while (listStack.size() > 1) {
@@ -691,13 +716,15 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
                     simpleHtml.getElementList().add(listStack.pop());
                 }
                                
+                lastHeader = firstTextPosition;     
+                
                 MHeader header = new MHeader();
-                lastHeadingLevel = PdfUtils.getLevelByFontSize(lastHeader, lastHeadingLevel, firstTextPosition);
-                lastHeader = firstTextPosition;
                 header.setLevel(lastHeadingLevel);
- //               header.setFontSize(firstTextPosition);
+                header.setFontSize(fsize);
                 header.setText(text);
+                // TODO: add style info
                 simpleHtml.getElementList().add(header);
+                // TODO: like text this could be another text section on the same line as the last heading, need to merge 
                 
                 lastListTextEnd = lastListItemIntent = 0; // reset list
                 

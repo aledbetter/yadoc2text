@@ -1,9 +1,11 @@
 package org.sedro.yadoc.utils;
 
 import org.apache.pdfbox.text.TextPosition;
+import org.sedro.yadoc.model.MStyle;
 import org.sedro.yadoc.model.MText;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PdfUtils {
@@ -12,7 +14,24 @@ public class PdfUtils {
     public static final int HEADER_2_SIZE = 18;
     public static final int HEADER_3_SIZE = 16;
     public static final int HEADER_4_SIZE = 14;
-
+/*
+ HDR_1[34][0][12]
+ HDR_1[20][0][7]
+ HDR_1[25][0][9]
+ HDR_1[22][0][8]
+ HDR_1[17][0][6]
+ HDR_1[20][0][7]
+ 
+ HDR_1[22][0][7] Cisco Inc
+ HDR_1[19][0][6] Associate Recruiter
+ HDR_1[16][0][5] Apr 2016 - Sept 2020
+ HDR_1[17][0][6] Headed Engineering Development, QA and Operations/DevOps
+ HDR_1[17][0][6] First employee, responsible for building technical teams to 50 and releasing 4 products
+ HDR_1[17][0][6] Architected and documented cloud-based PBX, conference service, phone and messaging apps
+ HDR_1[17][0][6] Responsible for budgeting, working with external partners, BOD presentations
+ HDR_1[19][0][6] EDUCATION 
+ 
+ */
     public static final int HEADER_1_HEIGHT = 14;
     public static final int HEADER_2_HEIGHT = 12;
     public static final int HEADER_3_HEIGHT = 10;
@@ -44,20 +63,28 @@ public class PdfUtils {
     public static boolean isTextHeightHeader(int fontSize) {
         return fontSize >= HEADER_4_HEIGHT;
     }
+    
 
-    public static boolean isHeader(TextPosition textPosition) {
+    public static boolean isHeader(HashMap<Integer, MStyle> hmap, TextPosition textPosition, String text) {
         int fontSize = (int) textPosition.getFontSize();
-        int fontWeight = (int) textPosition.getFont().getFontDescriptor().getFontWeight();
+     //   int fontWeight = (int) textPosition.getFont().getFontDescriptor().getFontWeight();
         int textHeight = (int) textPosition.getHeight();
+        boolean isBold = isBold(textPosition);
+    		    	
         if (fontSize > 1) {
+ //       	int lvl = evalHdrs(hmap, fontSize, isBold, textHeight);
+//FIXME get level ..   
+ //       	System.out.println(" HDR_1["+fontSize+"]["+isBold+"]["+textHeight+"]["+isBold+"]-["+hmap.keySet().size()+"]["+lvl+"] " + text);
             return isHeader(fontSize);
-        } else if (fontWeight > 1) {
-            return isHeader(fontWeight);
+        } else if (isBold) {
+        	//System.out.println(" HDR_2["+fontSize+"]["+fontWeight+"]["+textHeight+"]");
+            return isBold;
         } else {
+        	//System.out.println(" HDR_3["+fontSize+"]["+fontWeight+"]["+textHeight+"]");
             return isTextHeightHeader(textHeight);
         }
     }
-// use past FIXME
+
     public static int getLevelByFontSize(TextPosition lastHeader, int lastHeadingLevel, TextPosition textPosition) {
     	// if no last then 1
     	// if last is 1, then 1 OR 2
@@ -125,13 +152,11 @@ public class PdfUtils {
         }
 
         int fontWeight = (int) textPosition.getFont().getFontDescriptor().getFontWeight();
-
         if (fontWeight > 680) {
             return true;
         }
 
         String fontName = textPosition.getFont().getName();
-
         if (fontName.toLowerCase().contains("bold")) {
             return true;
         }

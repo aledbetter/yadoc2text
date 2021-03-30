@@ -35,7 +35,7 @@ public class ParsePdf implements YaParser {
         StringWriter stringWriter = new StringWriter();
         PdfCustomrStripper stripper = new PdfCustomrStripper();
         stripper.writeText(document, stringWriter);
-     
+        
         
         Calendar creation = document.getDocumentInformation().getCreationDate();
         Calendar modification = document.getDocumentInformation().getModificationDate();
@@ -55,9 +55,7 @@ public class ParsePdf implements YaParser {
         }
         SimpleHtmlUtils.clearSimpleHtml(simpleHtml);
         SimpleHtmlUtils.optimizeSimpleHtml(simpleHtml);
-
+        document.close();
         return simpleHtml;
-        
-		//return null;
     }
 }

@@ -6,6 +6,7 @@ import org.apache.poi.openxml4j.opc.internal.PackagePropertiesPart;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.sedro.yadoc.model.MDocument;
 import org.sedro.yadoc.model.MElement;
@@ -124,7 +125,7 @@ public class ParseWord implements YaParser {
                     //System.out.println(" LIST["+paragraph.getRuns().size()+"][f:"+styleFontSize+"]["+paragraph.getText()+"]: ");
                     IBodyElement unused = WordUtils.processList(iterator, paragraph, simpleHtml.getElementList());
                     if (unused != null) return unused;
-                } else if (WordUtils.isHeader(defFontSize, styleFontSize)) {
+                } else if (WordUtils.isHeader(paragraph, defFontSize, styleFontSize)) {
                     //log.debug("header was found");    
                     //System.out.println(" HDR[f:"+styleFontSize+"/"+runFontSize+"/"+defFontSize+"]["+paragraph.getText()+"]: ");
                     simpleHtml.getElementList().add(WordUtils.processHeader(paragraph, styleFontSize));
@@ -138,7 +139,7 @@ public class ParseWord implements YaParser {
             //log.debug("table was found");
             XWPFTable table = (XWPFTable) element;
             int styleFontSize = WordUtils.getStyleFontSize(doc, table);
-            if (WordUtils.isHeader(defFontSize, styleFontSize) && table.getRows().size() == 1) {
+            if (WordUtils.isHeader(null, defFontSize, styleFontSize) && table.getRows().size() == 1) {
                 simpleHtml.getElementList().add(WordUtils.processTableHeader(table, styleFontSize));
             } else {
             	simpleHtml.getElementList().add(WordUtils.processTable(table));

@@ -39,7 +39,7 @@ public class WordUtils {
         }
     }
     
-    public static boolean isHeader(int defSize, int styleFontSize) {
+    public static boolean isHeader(XWPFParagraph wordParagraph, int defSize, int styleFontSize) {
         if (styleFontSize == -1) return false;
         if (styleFontSize > defSize) return true;
         return styleFontSize >= HEADER_4_SIZE;
@@ -84,6 +84,7 @@ public class WordUtils {
             text.setItalic(run.isItalic());
             text.setUnderlined(run.getUnderline() != UnderlinePatterns.NONE);
             text.setText(run.text());
+            text.setFontSize(run.getFontSize());
             textList.add(text);
         }
         paragraph.setTexts(textList);
@@ -106,6 +107,8 @@ public class WordUtils {
         header.setLevel(getLevelByFontSize(styleFontSize));
         header.setFontSize(styleFontSize);
         header.setText(table.getText());
+        // TODO: get bold/underline/italics from style
+        // table.getStyleID()
         return header;
     }
 
@@ -114,6 +117,14 @@ public class WordUtils {
         header.setLevel(getLevelByFontSize(styleFontSize));
         header.setFontSize(styleFontSize);
         header.setText(wordParagraph.getParagraphText());
+        
+        // use the first run to get info: should check the style as well
+        if (wordParagraph.getRuns().size() > 0) {
+	        XWPFRun run = wordParagraph.getRuns().get(0);
+	        header.setBold(run.isBold());
+	        header.setItalic(run.isItalic());
+	        header.setUnderlined(run.getUnderline() != UnderlinePatterns.NONE);
+        }
         //System.out.println("     header["+header.getLevel()+"]["+header.getText()+"]: ");
         return header;
     }
