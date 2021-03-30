@@ -2,6 +2,7 @@ package org.sedro.yadoc.model;
 
 public class MStyle {
 	private int level = 0;
+	private int fontSize = 0;
 	private int count = 0;
 	private int count_char = 0;
 	private boolean bold;
@@ -14,6 +15,12 @@ public class MStyle {
 	}
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	public int getFontSize() {
+		return fontSize;
+	}
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
 	}
 	public int getCount() {
 		return count;

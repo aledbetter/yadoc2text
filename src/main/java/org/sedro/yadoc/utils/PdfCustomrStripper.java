@@ -143,8 +143,8 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
     private MDocument simpleHtml;
     private Stack<MList> listStack;
     private int lastListItemIntent = 0;
-    private float lastListTextEnd = 0;
-    private float lastListTextH = 0;
+    private float lastTextEnd = 0;
+    private float lastTextH = 0;
     private float lastYPos = 0;
     private float lastPageEndY = 0;
     
@@ -686,7 +686,10 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
             TextPosition firstTextPosition = textPositions.get(0);
             
  // Find style: using only the fontsize TODO check full info           
-            int fsize = (int)firstTextPosition.getFontSize();      
+            int fsize = (int) firstTextPosition.getFontSize();  
+            if (fsize <= 1) {
+            	fsize = (int) firstTextPosition.getHeight();
+            }
             MStyle ms = simpleHtml.getStyleSet().get(fsize);
             boolean ishdr = PdfUtils.isHeader(simpleHtml.getStyleSet(), firstTextPosition, text);
         	if (ishdr) lastHeadingLevel = PdfUtils.getLevelByFontSize(lastHeader, lastHeadingLevel, firstTextPosition);       	
@@ -699,6 +702,7 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
             	} else {
             		ms.setLevel(0);
             	}
+            	ms.setFontSize(fsize);
             	//ms.setBold(ishdr);
             	//ms.setItalic(ishdr);
             	//ms.setUnderlined(ishdr);
@@ -722,11 +726,13 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
                 header.setLevel(lastHeadingLevel);
                 header.setFontSize(fsize);
                 header.setText(text);
+                header.setY((int)firstTextPosition.getEndY());
+
                 // TODO: add style info
                 simpleHtml.getElementList().add(header);
                 // TODO: like text this could be another text section on the same line as the last heading, need to merge 
                 
-                lastListTextEnd = lastListItemIntent = 0; // reset list
+                lastTextEnd = lastListItemIntent = 0; // reset list
                 
             } else if (PdfUtils.isListItem(text)) {
                 int currentListItemIntent = (int) firstTextPosition.getTextMatrix().getTranslateX();
@@ -766,7 +772,7 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
                 MListElement element = new MListElement();
                 element.setTextList(PdfUtils.convertText(textPositions));
             	//System.out.println("LI["+text+"] => " + element.getTextList().size());
-                lastListTextEnd = 0;
+                lastTextEnd = 0;
                 listStack.peek().getElementList().add(element);
 // FIXME check if this is a table! (so we know no wrap)                
             } else {
@@ -778,31 +784,33 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
 	               float ex = textPositions.get(textPositions.size()-1).getEndX();
 	               float ht = firstTextPosition.getHeight();
 	               // use height to spot non-normal text...
-                   if (lastListTextEnd > 0 && lastListTextH == ht) {
-     	                float ffw = PdfUtils.getWordWidth(textPositions);
+                   if (lastTextEnd > 0 && lastTextH == ht) {
+     	                	/*
+                	   float ffw = PdfUtils.getWordWidth(textPositions);
 
                 	    //float spx = firstTextPosition.getWidthOfSpace(); // 2.49504017829895
 		                float px = firstTextPosition.getPageWidth(); // 612.0
-		                float mx = ffw + lastListTextEnd;
+		                float mx = ffw + lastTextEnd;
 		                float stx = firstTextPosition.getEndX() - firstTextPosition.getWidth();
 		                // or check hieght different
 		            	if (mx >= px) {
-		    //            	System.out.println("TXT_W["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		    //            	System.out.println("TXT_W["+lastTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
 		            		oldP = true;
-		            	} else {
-		            		
-		                	//System.out.println("TXT__["+lastListTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
+		            	} else {	            		
+		                	//System.out.println("TXT__["+lastTextEnd+"]["+ex+"]["+mx+"]["+ffw+"]["+stx+"] [" + text+"]");
 		                	//System.out.println("TXT__["+firstTextPosition.getEndY()+"/"+firstTextPosition.getY()+"]["+firstTextPosition.getTextMatrix().getShearY()+"]pg["+firstTextPosition.getPageHeight()+"]h["+firstTextPosition.getHeight()+"] [" + text+"]");		                	
 		            		oldP = true;
 		            	}
+		            	*/
+	            		oldP = true;
                     } else {
 	                	//System.out.println("TXT_B["+ex+"]["+ht+"] [" + text+"]");
-//FIXME if line ended with new line, then NO save to lastListTextEnd
+//FIXME if line ended with new line, then NO save to lastTextEnd
                     }
-	            	lastListTextEnd = ex;
-	            	lastListTextH = ht;
+	            	lastTextEnd = ex;
+	            	lastTextH = ht;
                 } else {
-                	lastListTextEnd = 0;
+                	lastTextEnd = 0;
                 }
                 if (lastPageEndY > 0) {
 	                if (firstTextPosition.getEndY() < lastPageEndY) {
@@ -838,7 +846,7 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
                 
             }
         } else {
-        	lastListTextEnd = 0;        	
+        	lastTextEnd = 0;        	
         }
         writeString(text);
     }

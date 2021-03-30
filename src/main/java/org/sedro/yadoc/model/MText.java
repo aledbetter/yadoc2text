@@ -6,6 +6,7 @@ public class MText {
     private boolean italic;
     private boolean underlined;
     private int fontSize;
+    private int y; //coordinate
 
     private String text;
     
@@ -32,6 +33,12 @@ public class MText {
 	}
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
 	}
 	public String getText() {
 		return text;

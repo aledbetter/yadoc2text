@@ -72,15 +72,10 @@ public class PdfUtils {
         boolean isBold = isBold(textPosition);
     		    	
         if (fontSize > 1) {
- //       	int lvl = evalHdrs(hmap, fontSize, isBold, textHeight);
-//FIXME get level ..   
- //       	System.out.println(" HDR_1["+fontSize+"]["+isBold+"]["+textHeight+"]["+isBold+"]-["+hmap.keySet().size()+"]["+lvl+"] " + text);
             return isHeader(fontSize);
         } else if (isBold) {
-        	//System.out.println(" HDR_2["+fontSize+"]["+fontWeight+"]["+textHeight+"]");
             return isBold;
         } else {
-        	//System.out.println(" HDR_3["+fontSize+"]["+fontWeight+"]["+textHeight+"]");
             return isTextHeightHeader(textHeight);
         }
     }
@@ -206,6 +201,7 @@ public class PdfUtils {
         int len = 0;
         boolean cb = false;
         boolean ci = false;
+        int y = 0;
         // link together in chains... if format update then break 
         for (TextPosition textPosition : textPositions) {
         	boolean it = PdfUtils.isItalic(textPosition);
@@ -227,6 +223,7 @@ public class PdfUtils {
         		len++;
         		txt += textPosition.getUnicode();
         	}
+        	y = (int)textPosition.getEndY();
         }
         
     	if (len > 0) {
@@ -234,7 +231,8 @@ public class PdfUtils {
             txt = txt.replace("\t", " ").replace("§ ", "");
             simpleText.setText(txt);
             simpleText.setItalic(ci);
-            simpleText.setBold(cb);          
+            simpleText.setBold(cb);      
+            simpleText.setY(y);
             result.add(simpleText);
     	}
         return result;

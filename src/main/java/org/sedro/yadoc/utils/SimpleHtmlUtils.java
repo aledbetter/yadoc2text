@@ -9,6 +9,8 @@ import org.sedro.yadoc.model.*;
 
 
 public class SimpleHtmlUtils {
+	private static final int WRAP_CHARS = 79;
+	private static final int WRAP_CHARS_TEST = 65;
 
     public static void clearSimpleHtml(MDocument simpleHtml) {
         if (simpleHtml.getHeaderList() != null) {
@@ -105,21 +107,115 @@ public class SimpleHtmlUtils {
         return listElementIsEmpty;
     }
 
-    public static void optimizeSimpleHtml(MDocument simpleHtml) {   	
-    	optimizeSimpleHtmlList(simpleHtml.getHeaderList());
-    	optimizeSimpleHtmlList(simpleHtml.getElementList());
-    	optimizeSimpleHtmlList(simpleHtml.getFooterList());
+    public static void optimizeSimpleHtml(MDocument simpleHtml) {   
+    	mapHedersAndText(simpleHtml);
+    	optimizeSimpleHtmlList(simpleHtml, simpleHtml.getHeaderList());
+    	optimizeSimpleHtmlList(simpleHtml, simpleHtml.getElementList());
+    	optimizeSimpleHtmlList(simpleHtml, simpleHtml.getFooterList());
     }
     
     // merge adjacent text together for lists and paragraphs
-    private static void optimizeSimpleHtmlList(List<MElement> list) {
+    private static void optimizeSimpleHtmlList(MDocument simpleHtml, List<MElement> list) {
     	if (list == null || list.size() < 1) return;
     	
     	 // FIXME prevent headers from getting too long.. such as entire body   	
     	 // FIXME update headers vs text, merge into paragraphs? 	
+    	// finalize the styles: bold/uppercase/etc for each element
+    	// map the styles to correct headers
+    	// update headings to text or correct level
+    		// merge if text into correct paragraphs based on style
+    	//MStyle norm = simpleHtml.getStyleNormal();
+    	
+
+		/*
+		 * correct out of order..
+		DRt[2][25]y[376] [Cisco Inc]
+		HDRt[3][22]y[357] [Associate Recruiter]
+		HDRt[6][17]y[378] [APR 2016 - SEPT 2020]        		
+		 */	
+    	MElement lem = null;
+    	for (int i=0;i<list.size();i++) {
+    		MElement element = list.get(i);
+        	if (element instanceof MHeader) {
+        		MHeader h = (MHeader)element;
+        		if (lem != null && lem instanceof MText) {
+        			MText t = (MText)lem;
+        			if (t.getY() < h.getY() && t.getY() > 0) { 
+            			//System.out.println("HDR_order["+h.getLevel()+"]y["+h.getY()+" > "+t.getY()+"] [" + t.getText()+"]"); 
+            			list.remove(i);
+            			list.add(i-1, element);
+            			i--;
+        			}
+        		}
+        	}
+        	lem = element;
+    	}
     	
     	
+        // merge headers
+    	lem = null;
+    	Iterator<MElement> it = list.iterator();
+    	int lastLen = 0;
+    	while (it.hasNext()) {
+    		MElement element = it.next();
+        	if (element instanceof MHeader) {
+        		MHeader h = (MHeader)element;
+        		if (lem != null && lem instanceof MHeader) {
+        			MHeader t = (MHeader)lem;
+        	    	// merge headings: use y to determine if headings should merge (same line)
+        	// TODO: +/- X on same line (based on font size)
+        			if (t.getY() == h.getY() && t.getY() > 0) {
+    					// merge with last AS HEADING
+                    	if (addSpace(t.getText(), h.getText())) {
+                			t.setText(t.getText()+" "+h.getText());
+                    	} else {
+                			t.setText(t.getText()+h.getText());
+                    	}
+            			//System.out.println("HDR_m["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
+                    	t.setY(h.getY());
+                    	it.remove();
+                    	continue;				
+        			} else if (t.getLevel() == 0 && h.getLevel() == 0) {
+        				if (lastLen >= WRAP_CHARS) {
+                			lastLen = h.getText().length();
+    			
+	        				// merge with last as HEADING that is text
+	                    	if (addSpace(t.getText(), h.getText())) {
+	                			t.setText(t.getText()+" "+h.getText());
+	                    	} else {
+	                			t.setText(t.getText()+h.getText());
+	                    	}
+	            			//System.out.println("HDR_0["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
+	            			t.setY(h.getY());
+	            			it.remove();
+	                    	continue;	
+                    	    	
+        				} else if (lastLen > WRAP_CHARS_TEST && (lastLen + h.getText().length()) > WRAP_CHARS) {
+            				// wrap must check the first word in h.getText() to see if t.getText().length() + len >= WRAP_CHARS
+        					int idx = h.getText().indexOf(' ');
+        					if (idx < 0 || (idx > 0 && (lastLen + idx) > WRAP_CHARS)) {
+                    			lastLen = h.getText().length();
+                    			
+    	        				// merge with last as HEADING that is text
+    	                    	if (addSpace(t.getText(), h.getText())) {
+    	                			t.setText(t.getText()+" "+h.getText());
+    	                    	} else {
+    	                			t.setText(t.getText()+h.getText());
+    	                    	}
+            					//System.out.println("HDR_0["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"]["+t.getText().length()+"] [" + t.getText()+"]");   
+    	            			t.setY(h.getY());
+    	            			it.remove();       						
+    	                    	continue;	
+        					}
+        				}
+            			lastLen = h.getText().length();
+        			}
+        		}
+        	}
+        	lem = element;
+        } 	
     	
+    	// setup lists and paragraphs
         for (MElement element : list) {
             if (element instanceof MParagraph) {
                 MParagraph paragraph = (MParagraph) element;
@@ -206,47 +302,52 @@ public class SimpleHtmlUtils {
     }	
     
     
-    // eval levels and update based on new
-    public static int evalHdrs(HashMap<Integer, MStyle> hmap, int fontSize, boolean isBold, int textHeight) {
-    	if (hmap.size() < 1) return -1;
-    	int nlv = -1;
-    	MStyle max = null; // find most words (normal)
-    	
-    	// scan for where this size fits
-    	for (Integer fsz:hmap.keySet()) {
-    		MStyle hm = hmap.get(fsz);
-    		if (max == null || max.getCount_char() < hm.getCount_char()) {
-    			max = hm;
-    	    //	System.out.println("   norm["+max.count_char+"] TXT: " + max.ftxtp.getFontSize());
-    		}
-            
-    		if (fsz > fontSize) {
-    			if (nlv == -1 || nlv <= hm.getLevel()) {
-    				nlv = hm.getLevel()+1;
-    		    //	System.out.println("    Tst_0["+nlv+"]["+max.level+"] " + max.ftxtp.getFontSize());
-    			}   			
-    		} else if (fsz < fontSize) {
-    			// bigger
-    			if (nlv == -1 || nlv >= hm.getLevel()) {
-    				nlv = hm.getLevel()-1;
-    		  //  	System.out.println("    Tst_1["+nlv+"]["+max.level+"] " + max.ftxtp.getFontSize());
-    			}
-    		} else {
-    			return hm.getLevel();
-    		}
-    	}
-// FIXME reset those that are off
- //   	System.out.println("  Tst["+nlv+"]["+max.getLevel()+"] ");
-    	return nlv;
-    }
-    
 // FIXME correct all headers method -> this should be in HTML to work for all on end
     // move some to text...
     public static void mapHedersAndText(MDocument simpleHtml) {
-    	// correct MStyle
-    	// FIXME
-    	
     	HashMap<Integer, MStyle> smap = simpleHtml.getStyleSet();
+    	if (smap.keySet().size() < 1) return;
+    	
+    	List<MStyle> ol = new ArrayList<>();
+    	// Determine what is normal
+    	MStyle normal = null; // find most words (normal)
+    	for (Integer fsz:smap.keySet()) {
+    		MStyle hm = smap.get(fsz);
+    		if (normal == null || normal.getCount_char() < hm.getCount_char()) {
+    			normal = hm;
+    		}
+    		// TODO use the text to set the info   		
+        	//ms.setBold(ishdr);
+        	//ms.setItalic(ishdr);
+        	//ms.setUnderlined(ishdr);
+        	//ms.setUpper(ishdr);
+    		// add sorted by fontsize (short list so..)
+    		int i=0;
+    		for (;i<ol.size();i++) {
+    			if (ol.get(i).getFontSize() <= hm.getFontSize()) {
+    				break;
+    			}
+    		}
+    		ol.add(i, hm);
+    	}  
+    	simpleHtml.setStyleNormal(normal);
+    	//System.out.println("NORM["+normal.getFontSize()+"]");
+    	
+    	// update styles level for headings
+    	for (int i=0;i<ol.size();i++) {
+    		MStyle hm = ol.get(i);
+		//	if (hm.getFontSize() <= normal.getFontSize() && !hm.isBold() && !hm.isItalic() && !hm.isUpper() && !hm.isUnderlined()) {
+			if (hm.getFontSize() == normal.getFontSize()) {
+		    	//System.out.println(" norm["+hm.getFontSize()+"]");
+				hm.setLevel(0);
+			} else if (hm.getFontSize() < normal.getFontSize()) {
+				// smaller... ??
+				hm.setLevel(i+1);
+			} else {
+		    	//System.out.println(" hdr["+hm.getFontSize()+"]["+i+"]");
+				hm.setLevel(i+1);
+			}
+    	}  
     	
     	// check and update all 
     	for (MElement el:simpleHtml.getElementList()) {
@@ -254,13 +355,7 @@ public class SimpleHtmlUtils {
     			MHeader hdr = (MHeader) el;
     			MStyle hm = smap.get(hdr.getFontSize());
     			if (hm.getLevel() != hdr.getLevel()) {
-    				if (hm.getLevel() < 1) {
-    					// make text
- //FIXME   					
-    				} else {
-    					// update
-    					hdr.setLevel(hm.getLevel());
-    				}
+					hdr.setLevel(hm.getLevel());
     			}
     		}
     	}   	   	

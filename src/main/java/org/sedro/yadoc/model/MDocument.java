@@ -17,10 +17,17 @@ public class MDocument {
     private List<MElement> elementList;
     private List<MElement> footerList;
     private HashMap<Integer, MStyle> styleSet = new HashMap<>(); 
-    
+    private MStyle normal = null; // find most words (normal)
+
     // set of styles
 	public HashMap<Integer, MStyle> getStyleSet() {
 		return styleSet;
+	}
+	public MStyle getStyleNormal() {
+		return normal;
+	}
+	public void setStyleNormal(MStyle normal) {
+		this.normal = normal;
 	}
 	
 	public String getTitle() {
