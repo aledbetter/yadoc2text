@@ -118,14 +118,6 @@ public class SimpleHtmlUtils {
     private static void optimizeSimpleHtmlList(MDocument simpleHtml, List<MElement> list) {
     	if (list == null || list.size() < 1) return;
     	
-    	 // FIXME prevent headers from getting too long.. such as entire body   	
-    	 // FIXME update headers vs text, merge into paragraphs? 	
-    	// finalize the styles: bold/uppercase/etc for each element
-    	// map the styles to correct headers
-    	// update headings to text or correct level
-    		// merge if text into correct paragraphs based on style
-    	//MStyle norm = simpleHtml.getStyleNormal();
-    	
 
 		/*
 		 * correct out of order..
@@ -140,8 +132,8 @@ public class SimpleHtmlUtils {
         		MHeader h = (MHeader)element;
         		if (lem != null && lem instanceof MText) {
         			MText t = (MText)lem;
-        			if (t.getY() < h.getY() && t.getY() > 0) { 
-            			//System.out.println("HDR_order["+h.getLevel()+"]y["+h.getY()+" > "+t.getY()+"] [" + t.getText()+"]"); 
+        			if (t.getY() < (h.getY()-h.getFontSize()) && t.getY() > 0) { 
+            			//System.out.println("HDR_order["+h.getLevel()+"]["+t.getFontSize()+"/"+t.getFontSize()+"]y["+h.getY()+" > "+t.getY()+"] ["+h.getText()+"][" + t.getText()+"]"); 
             			list.remove(i);
             			list.add(i-1, element);
             			i--;
