@@ -684,6 +684,7 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
     protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
         if (textPositions.size() > 0) {
             TextPosition firstTextPosition = textPositions.get(0);
+            TextPosition lastTextPosition = textPositions.get(textPositions.size()-1);
             
  // Find style: using only the fontsize TODO check full info           
             int fsize = (int) firstTextPosition.getFontSize();  
@@ -727,6 +728,8 @@ public class PdfCustomrStripper extends LegacyPDFStreamEngine {
                 header.setFontSize(fsize);
                 header.setText(text);
                 header.setY((int)firstTextPosition.getEndY());
+                header.setStartX((int)(firstTextPosition.getEndX()-firstTextPosition.getWidth()));
+                header.setX((int)lastTextPosition.getEndX());
 
                 // TODO: add style info
                 simpleHtml.getElementList().add(header);

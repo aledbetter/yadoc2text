@@ -118,7 +118,7 @@ public class SimpleHtmlUtils {
     private static void optimizeSimpleHtmlList(MDocument simpleHtml, List<MElement> list) {
     	if (list == null || list.size() < 1) return;
     	
-
+    	HashMap<Integer, Integer> sSet = new HashMap<>();
 		/*
 		 * correct out of order..
 		DRt[2][25]y[376] [Cisco Inc]
@@ -128,22 +128,91 @@ public class SimpleHtmlUtils {
     	MElement lem = null;
     	for (int i=0;i<list.size();i++) {
     		MElement element = list.get(i);
+    		
+    		// colum checking
+        	if (element instanceof MText) {
+    			Integer c = sSet.get(((MText)element).getStartX());
+    			if (c == null) sSet.put(((MText)element).getStartX(), 1);
+    			else sSet.put(((MText)element).getStartX(), c+1);
+        	}
+
         	if (element instanceof MHeader) {
         		MHeader h = (MHeader)element;
+    			//System.out.println("HDR["+i+"]["+h.getLevel()+"]["+h.getFontSize()+"]x["+h.getStartX()+"-"+h.getX()+"]y["+h.getStartY()+"-"+h.getY()+"] ["+h.getText()+"]"); 
+
         		if (lem != null && lem instanceof MText) {
         			MText t = (MText)lem;
-        			if (t.getY() < (h.getY()-h.getFontSize()) && t.getY() > 0) { 
-            			//System.out.println("HDR_order["+h.getLevel()+"]["+t.getFontSize()+"/"+t.getFontSize()+"]y["+h.getY()+" > "+t.getY()+"] ["+h.getText()+"][" + t.getText()+"]"); 
+ /*       		
+  * BUGS: (generated PDF)
+  3) footer not in footer
+  	HDR[4][18]x[0-184]y[-10-8] [Created using Resumonk - Online Resume Builder]
+  4) identify colums
+  	if multiple offsets +/- then map as colums and don't merge content in the X accross columns
+  ??
+   - API to check if left justified / centered / right justified	
+  */    
+    				int overY = t.isOverlapY(h);
+    				int overX = t.isOverlapX(h);
+    				int maxOverY = 7; // FIXME number based on smaller font size
+
+        			if (t.getStartY() < h.getStartY() && t.getY() > 0 && overY < maxOverY) { 
+        				
+            			//System.out.println("HDR_order["+h.getLevel()+"]("+overX+"/"+overY+")["+h.getFontSize()+"/"+t.getFontSize()+"]y["+h.getY()+" > "+t.getY()+"]("+h.getStartY()+") ["+h.getText()+"][" + t.getText()+"]"); 
             			list.remove(i);
-            			list.add(i-1, element);
-            			i--;
-        			}
+            			// find where it should go
+            			int n=i-1;
+            			for (;n>0;n--) {
+            	    		MElement el = list.get(n);
+            	    		if (!(el instanceof MText)) continue;
+            	    		MText mt = ((MText)el);
+            	    		if (mt.getY() > 0 &&  mt.getStartY() >= h.getStartY()) {
+                    			//System.out.println("  HDR_nn["+mt.getFontSize()+"]("+n+"/"+i+")y["+mt.getStartY()+"]>["+h.getStartY()+"] [" + mt.getText()+"]"); 
+                    			n++; // add after the >=
+                    			break;
+            	    		}
+            			}
+            			list.add(n, element);
+            			i=n-1; // go back one extra to allow checking the X coordinate for reordering
+        			} else if (t.getStartY() == h.getStartY() && t.getY() > 0) { 
+        				// same line, from right to left order
+            			if (t.getX() > h.getX() && h.getX() > 0) { 
+                			//System.out.println("  HDR_xx["+h.getFontSize()+"]y["+t.getX()+"]["+h.getX()+"] [" + h.getText()+"]"); 
+                			list.remove(i);
+                			list.add(i-1, element);
+                			i--;  				
+            			}
+        			} else if (overY >= maxOverY) {  
+    					if (overX > 0) {
+         					// if both overlap, it's just a style.. keep the start first
+         				} else {
+         					// overlap use the X start to decide which is first
+                			if (t.getStartX() > h.getStartX() && h.getX() > 0) { 
+            					//System.out.println("  HDR_overlap["+h.getFontSize()+"]("+overX+"/"+overY+")y["+t.getY()+"]["+h.getY()+"] [" + h.getText()+"]["+t.getText()+"]"); 
+                    			list.remove(i);
+                    			list.add(i-1, element);
+                    			i--;  				
+                			}          					
+         				}
+    				}
         		}
         	}
         	lem = element;
     	}
     	
-    	
+    	// decide column base.. should use groupings and smallest number instead just the largest count
+    	int ccmax = 0, ccmaxs = 0;
+    	for (Integer cx:sSet.keySet()) {
+    		int cnt = sSet.get(cx);
+    		if (cnt < 3) continue;
+    		if (cnt > ccmax) {
+    			ccmax = cnt;
+    			ccmaxs = cx;
+    		}
+			//System.out.println(" XS["+cx+"] => ["+cnt+"]"); 
+    	}
+		//System.out.println(" XS_X["+ccmaxs+"] => ["+ccmax+"]"); 
+
+   	
         // merge headers
     	lem = null;
     	Iterator<MElement> it = list.iterator();
@@ -154,17 +223,29 @@ public class SimpleHtmlUtils {
         		MHeader h = (MHeader)element;
         		if (lem != null && lem instanceof MHeader) {
         			MHeader t = (MHeader)lem;
+    				int overY = t.isOverlapY(h);
+    				int overX = t.isOverlapX(h);
+    				int maxOverY = (h.getFontSize()/2)+1;
+    				if (t.getFontSize() > h.getFontSize()) maxOverY = (t.getFontSize()/2)+1;
+    				if (maxOverY < 4) maxOverY = 6;
+    				
+        			//System.out.println("HDR["+h.getLevel()+"]["+h.getFontSize()+"/"+t.getFontSize()+"]x["+h.getStartX()+"-"+h.getX()+"]y["+h.getStartY()+"-"+h.getY()+"]ty["+t.getY()+"]("+overX+"/"+overY+") ["+h.getText()+"]"); 
         	    	// merge headings: use y to determine if headings should merge (same line)
-        	// TODO: +/- X on same line (based on font size)
-        			if (t.getY() == h.getY() && t.getY() > 0) {
+    				// different columns ??
+        			// if exact getY() match
+        			// if overlap AND both in second colum / TODO make this more logical for multiple colums and less reliant on exact numbers
+        			if (overX <= 0 && overY >= maxOverY &&
+        					(t.getStartX() >= ccmaxs) || t.getY() == h.getY()) {
+            		//if (t.getY() == h.getY() && t.getY() > 0) {
     					// merge with last AS HEADING
                     	if (addSpace(t.getText(), h.getText())) {
                 			t.setText(t.getText()+" "+h.getText());
                     	} else {
                 			t.setText(t.getText()+h.getText());
                     	}
-            			//System.out.println("HDR_m["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
+            			//System.out.println("  HDR_m["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
                     	t.setY(h.getY());
+                    	t.setX(h.getX());
                     	it.remove();
                     	continue;				
         			} else if (t.getLevel() == 0 && h.getLevel() == 0) {
@@ -177,8 +258,9 @@ public class SimpleHtmlUtils {
 	                    	} else {
 	                			t.setText(t.getText()+h.getText());
 	                    	}
-	            			//System.out.println("HDR_0["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
+	            			//System.out.println("  HDR_0["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"] [" + t.getText()+"]");   
 	            			t.setY(h.getY());
+	                    	t.setX(h.getX());
 	            			it.remove();
 	                    	continue;	
                     	    	
@@ -194,9 +276,10 @@ public class SimpleHtmlUtils {
     	                    	} else {
     	                			t.setText(t.getText()+h.getText());
     	                    	}
-            					//System.out.println("HDR_0["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"]["+t.getText().length()+"] [" + t.getText()+"]");   
+            					//System.out.println("  HDR_1["+h.getLevel()+"]["+h.getFontSize()+"]y["+t.getY()+"/"+h.getY()+"]["+t.getText().length()+"] [" + t.getText()+"]");   
     	            			t.setY(h.getY());
-    	            			it.remove();       						
+    	                    	t.setX(h.getX());
+    	                    	it.remove();       						
     	                    	continue;	
         					}
         				}
