@@ -239,7 +239,7 @@ public class SimpleHtmlUtils {
             		//if (t.getY() == h.getY() && t.getY() > 0) {
     					// merge with last AS HEADING
                     	if (addSpace(t.getText(), h.getText())) {
-                			t.setText(t.getText()+" "+h.getText());
+                			t.setText(t.getText()+"    "+h.getText()); // multiple spaces as not together
                     	} else {
                 			t.setText(t.getText()+h.getText());
                     	}
@@ -249,6 +249,7 @@ public class SimpleHtmlUtils {
                     	it.remove();
                     	continue;				
         			} else if (t.getLevel() == 0 && h.getLevel() == 0) {
+        				// line wrap check
         				if (lastLen >= WRAP_CHARS) {
                 			lastLen = h.getText().length();
     			
@@ -265,6 +266,7 @@ public class SimpleHtmlUtils {
 	                    	continue;	
                     	    	
         				} else if (lastLen > WRAP_CHARS_TEST && (lastLen + h.getText().length()) > WRAP_CHARS) {
+        					// extended line wrap check
             				// wrap must check the first word in h.getText() to see if t.getText().length() + len >= WRAP_CHARS
         					int idx = h.getText().indexOf(' ');
         					if (idx < 0 || (idx > 0 && (lastLen + idx) > WRAP_CHARS)) {
