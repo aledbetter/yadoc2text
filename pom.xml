@@ -16,7 +16,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.8</java-version>
-		<jetty.version>9.4.10.v20180503</jetty.version>			
+		<jetty.version>9.4.41.v20210516</jetty.version>			
 		<jersey.version>2.29</jersey.version>
 		<buildNumber>G6660000230</buildNumber>
 	</properties>
