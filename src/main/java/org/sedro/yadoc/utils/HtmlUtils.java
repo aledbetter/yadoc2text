@@ -274,12 +274,12 @@ public class HtmlUtils {
         List<MText> tl = processText(element, elements);
         StringBuilder result = new StringBuilder();
         if (tl != null && tl.size() > 0) {
-            for (MText text : tl) {
+            MText ft = tl.get(0);
+           for (MText text : tl) {
                 result.append(TextRenderer.render(text));
             }
             
             // get the text info
-            MText ft = tl.get(0);
             header.setFontSize(ft.getFontSize());
             header.setBold(ft.isBold());
             header.setItalic(ft.isItalic());
@@ -537,7 +537,10 @@ public class HtmlUtils {
     	if (idx < 0) return null;
     	int b = idx+name.length()+1;
     	idx = style.indexOf(";", b);
-    	if (idx < 0) return style.substring(b, name.length()).trim();
+    	if (idx < 0) {
+    		if (idx >= name.length()) return null;
+    		return style.substring(b, name.length()).trim();
+    	}
     	return style.substring(b, idx).trim();
     }
     
