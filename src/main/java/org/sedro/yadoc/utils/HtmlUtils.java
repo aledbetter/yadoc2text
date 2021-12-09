@@ -273,7 +273,7 @@ public class HtmlUtils {
  
         List<MText> tl = processText(element, elements);
         StringBuilder result = new StringBuilder();
-        if (tl != null) {
+        if (tl != null && tl.size() > 0) {
             for (MText text : tl) {
                 result.append(TextRenderer.render(text));
             }
