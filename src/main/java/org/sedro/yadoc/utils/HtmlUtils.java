@@ -538,7 +538,7 @@ public class HtmlUtils {
     	int b = idx+name.length()+1;
     	idx = style.indexOf(";", b);
     	if (idx < 0) {
-    		if (idx >= name.length()) return null;
+    		if (b >= name.length()) return null;
     		return style.substring(b, name.length()).trim();
     	}
     	return style.substring(b, idx).trim();
