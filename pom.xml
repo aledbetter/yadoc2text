@@ -167,6 +167,19 @@
 	    </dependency>
 
 	</dependencies>
+	
+	<distributionManagement>
+	   <repository>
+	     <id>github</id>
+	     <name>YaDoc2Text release package</name>
+	     <url>https://maven.pkg.github.com/aledbetter/yadoc2text</url>
+	   </repository>
+	   <snapshotRepository>
+	     <id>github</id>
+	     <name>YaDoc2Text release package snapshot package</name>
+	     <url>https://maven.pkg.github.com/aledbetter/yadoc2text</url>
+	   </snapshotRepository>
+	</distributionManagement>	
 		
 	<build>
 		<plugins>
