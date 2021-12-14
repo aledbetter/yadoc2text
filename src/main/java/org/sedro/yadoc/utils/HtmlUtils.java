@@ -531,15 +531,17 @@ public class HtmlUtils {
         }
         return false;
     }
-    public static String getStyle(String style, String name) {
+    public static String getStyle(final String style, final String name) {
     	if (style == null) return null;
     	int idx = style.indexOf(name);
     	if (idx < 0) return null;
+    	
     	int b = idx+name.length()+1;
     	idx = style.indexOf(";", b);
     	if (idx < 0) {
-    		if (b >= name.length()) return null;
-    		return style.substring(b, name.length()).trim();
+    		int end = name.length();
+    		if (b >= end || end >= style.length()) return null;
+    		return style.substring(b, end).trim();
     	}
     	return style.substring(b, idx).trim();
     }
