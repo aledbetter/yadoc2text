@@ -141,9 +141,7 @@
 	      <artifactId>poi-ooxml</artifactId>
 	      <version>3.17</version>
 	    </dependency>
-	    <!-- PDF parse 
-	    	      <version>2.0.15</version>
-	    -->
+	    <!-- PDF parse  -->
 	    <dependency>
 	      <groupId>org.apache.pdfbox</groupId>
 	      <artifactId>pdfbox</artifactId>
@@ -153,7 +151,7 @@
 	    <dependency>
 	      <groupId>org.jsoup</groupId>
 	      <artifactId>jsoup</artifactId>
-	      <version>1.13.1</version>
+	      <version>1.14.3</version>
 	    </dependency>
 	    
 	    <!-- logging -->
