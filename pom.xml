@@ -157,11 +157,6 @@
 	    <!-- logging -->
 	    <dependency>
 	      <groupId>org.apache.logging.log4j</groupId>
-	      <artifactId>log4j-api</artifactId>
-	      <version>2.16.0</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.apache.logging.log4j</groupId>
 	      <artifactId>log4j-core</artifactId>
 	      <version>2.13.2</version>
 	    </dependency>
@@ -183,6 +178,7 @@
 		
 	<build>
 		<plugins>
+	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -198,7 +194,6 @@
 			</plugin>
 
 
-			<!-- to run jetty via war from command line/Procfile directly -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -223,7 +218,6 @@
 			</plugin>
 			
 		    
-			<!-- pluggin to run Java app workers of from the command line -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
