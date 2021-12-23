@@ -24,7 +24,8 @@ import java.io.UnsupportedEncodingException;
 @Path("/data/")
 @Produces(MediaType.APPLICATION_JSON)
 public class RestAPI {
-
+	private static int cfCnt = 0;
+	
 	// CONVERT TO SIMPLE HTML
     @POST
     @Path("/convert")
@@ -68,19 +69,17 @@ public class RestAPI {
             return Response.status(500).build();
         }
         
+        cfCnt++;
 		ResponseBuilder response = null;
 		try {
 			String str = data.toString("UTF-8");		
 			StringReader sr = new StringReader(str);
 	        response = Response.ok(sr);
-	    
-	       // System.out.println(str);
-
-	        System.out.println("CONVERT FILE complete1: " + fileDetail.getFileName());
+	        System.out.println("CONVERT FILE UTF-8["+cfCnt+"] " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 	        InputStream result = new ByteArrayInputStream(data.toByteArray());
 	        response = Response.ok(result);
-	        System.out.println("CONVERT FILE complete2: " + fileDetail.getFileName());
+	        System.out.println("CONVERT FILE byte["+cfCnt+"] " + fileDetail.getFileName());
 		}
         return response.type("application/octet-stream").build();
     }
@@ -129,19 +128,17 @@ public class RestAPI {
             return Response.status(500).build();
         }
         
+        cfCnt++;
 		ResponseBuilder response = null;
 		try {
 			String str = data.toString("UTF-8");		
 			StringReader sr = new StringReader(str);
-	        response = Response.ok(sr);
-	    
-	       // System.out.println(str);
-
-	        System.out.println("CONVERT FILE txt complete1: " + fileDetail.getFileName());
+	        response = Response.ok(sr);	    
+	        System.out.println("EXTRACT FILE UTF-8["+cfCnt+"] " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 	        InputStream result = new ByteArrayInputStream(data.toByteArray());
 	        response = Response.ok(result);
-	        System.out.println("CONVERT FILE txt complete2: " + fileDetail.getFileName());
+	        System.out.println("EXTRACT FILE byte["+cfCnt+"] " + fileDetail.getFileName());
 		}
         return response.type("application/octet-stream").build();
     }
@@ -189,14 +186,14 @@ public class RestAPI {
             return Response.status(500).build();
         }
         
+        cfCnt++;
 		String str = null;		
 		try {
 			str = data.toString("UTF-8");		
-	       // System.out.println(str);
-	        System.out.println("CONVERT FILE txt complete1: " + fileDetail.getFileName());
+	        System.out.println("JCONVERT FILE UTF-8["+cfCnt+"] " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 			str = data.toString();
-	        System.out.println("CONVERT FILE txt complete2: " + fileDetail.getFileName());
+	        System.out.println("JCONVERT FILE byte["+cfCnt+"] " + fileDetail.getFileName());
 		}
 		
 		// make JSON
@@ -247,15 +244,14 @@ public class RestAPI {
             e.printStackTrace();
             return Response.status(500).build();
         }
-        
+        cfCnt++;
 		String str = null;		
 		try {
 			str = data.toString("UTF-8");		
-	       // System.out.println(str);
-	        System.out.println("CONVERT FILE txt complete1: " + fileDetail.getFileName());
+	        System.out.println("JEXTRACT FILE UTF-8["+cfCnt+"] " + fileDetail.getFileName());
 		} catch (UnsupportedEncodingException e) {
 			str = data.toString();
-	        System.out.println("CONVERT FILE txt complete2: " + fileDetail.getFileName());
+	        System.out.println("JEXTRACT FILE byte["+cfCnt+"] " + fileDetail.getFileName());
 		}
 		
 		// make JSON
