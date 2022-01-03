@@ -28,6 +28,10 @@ public class DocumentRender {
             result
                     .append("<meta name=\"doc-name\" content=\"")
                     .append(simpleHtml.getName()).append("\"/>");
+        } else {
+            result
+            		.append("<meta name=\"doc-name\" content=\"")
+            		.append("unknown").append("\"/>");        	
         }
         if (simpleHtml.getCreated() != null) {
             result
