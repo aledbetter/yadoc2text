@@ -66,7 +66,10 @@
 			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-		  
+		
+		<!-- 
+		GPL 2.0 with Class-path Exception
+		 -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
@@ -88,6 +91,9 @@
 		    <version>2.32</version>
 		</dependency>
 
+		<!-- 
+		Apache License 2.0
+		 -->
 	    <dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
@@ -105,28 +111,36 @@
 		</dependency>	  
 
 
-		<!-- https://mvnrepository.com/artifact/org.jvnet.mimepull/mimepull -->
+		<!-- https://mvnrepository.com/artifact/org.jvnet.mimepull/mimepull 
+		GPL Version 2: classpath exception
+		-->
 		<dependency>
 		    <groupId>org.jvnet.mimepull</groupId>
 		    <artifactId>mimepull</artifactId>
 		    <version>1.9.15</version>
 		</dependency>
 		 
-		<!-- JSON read / convert -->
+		<!-- JSON read / convert 
+		free software
+		-->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20211205</version>
 		</dependency>
 
-	    <!-- apache web client for non standard methods -->
+	    <!-- apache web client for non standard methods 
+	    Apache License v2.0
+	    -->
 	    <dependency>
 	      <groupId>org.apache.httpcomponents</groupId>
 	      <artifactId>httpclient</artifactId>
 	      <version>4.5.13</version>
 	    </dependency>
 	
-	    <!-- READ Microsof Docs (needed for converter micro-service) -->  
+	    <!-- READ Microsof Docs (needed for converter micro-service) 
+	    Apache License v2.0
+	    -->  
 	    <dependency>
 	      <groupId>org.apache.poi</groupId>
 	      <artifactId>poi</artifactId>
@@ -137,13 +151,16 @@
 	      <artifactId>poi-ooxml</artifactId>
 	      <version>3.17</version>
 	    </dependency>
-	    <!-- PDF parse  -->
+	    <!-- PDF parse  
+	    Apache License v2.0
+	    -->
 	    <dependency>
 	      <groupId>org.apache.pdfbox</groupId>
 	      <artifactId>pdfbox</artifactId>
 	      <version>2.0.24</version>
 	    </dependency>
-	    <!-- HTML parse -->
+	    <!-- HTML parse 
+	    MIT license -->
 	    <dependency>
 	      <groupId>org.jsoup</groupId>
 	      <artifactId>jsoup</artifactId>
@@ -174,7 +191,6 @@
 		
 	<build>
 		<plugins>
-	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -331,9 +347,6 @@
 				    </execution>					  
 				 </executions>				
 			</plugin>
-
-
 		</plugins>
 	</build>
-
 </project>
