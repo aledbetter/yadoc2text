@@ -126,7 +126,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20211205</version>
+			<version>20230227</version>
 		</dependency>
 
 	    <!-- apache web client for non standard methods 
